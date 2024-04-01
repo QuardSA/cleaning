@@ -20,3 +20,16 @@ Route::get('/', function () {
 Route::get('/signin', function () {
     return view('signin');
 });
+
+Route::get('/personal', function () {
+    return view('personal');
+});
+
+Route::get('/profile', function () {
+    return view('profile');
+});
+
+
+Route::get('/admin', function () {
+    return view('admin.index');
+});

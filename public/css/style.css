@@ -49,12 +49,11 @@ button.ghost {
 
 .form_registration {
 	background-color: #fff;
-	border-radius: 10px;
   	box-shadow: 0 14px 28px rgba(0,0,0,0.25),
 			0 10px 10px rgba(0,0,0,0.22);
 	position: relative;
 	overflow: hidden;
-	width: 768px;
+	width: 100%;
 	max-width: 100%;
 	min-height: 480px;
 }
@@ -118,15 +117,15 @@ button.ghost {
 }
 
 .overlay {
-	background: #FF416C;
-	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background: #0080ff;
+	background: -webkit-linear-gradient(to right, #0080ff, #00d0ff);
+	background: linear-gradient(to right, #0088ff, #00c3ff);
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: 0 0;
 	color: #FFFFFF;
 	position: relative;
-	left: -100%;
+	left:-100%;
 	height: 100%;
 	width: 200%;
   	transform: translateX(0);
@@ -167,4 +166,33 @@ button.ghost {
 
 .form_registration.right-panel-active .overlay-right {
 	transform: translateX(20%);
+}
+
+/* Sidebar-admin */
+
+.logo .menu-icon{
+    cursor:pointer;
+}
+nav .sidebar{
+    left: -100%;
+    transition: all 0.25s ease;
+}
+nav.open .sidebar{
+    left: 0%;
+}
+.overlay_admin{
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 100%;
+    opacity: 0%;
+    transition: all 0.25s ease;
+    pointer-events: none;
+}
+
+nav.open ~ .overlay_admin{
+    left: 20%;
+    opacity: 1;
+    pointer-events: auto;
 }
