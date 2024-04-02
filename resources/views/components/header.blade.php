@@ -7,7 +7,7 @@
     <x-links></x-links>
     <title>Document</title>
 </head>
-<body>
+<body class="d-flex flex-column" style="min-height: 102vh">
     <nav class="navbar navbar-expand-sm mt-2">
         <div class="container">
           <a class="navbar-brand" href="/">Панель навигации</a>
@@ -22,30 +22,25 @@
               <li class="nav-item">
                 <a class="nav-link" href="/services">Услуги</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/profile">Отзывы</a>
-              </li>
             </ul>
             <ul class="navbar-nav gap-1">
                 <li class="nav-item">
-                    <button type="button" class="btn btn-outline-primary rounded-pill">
+                    <a role="button" href="/profile" class="btn btn-outline-primary rounded-pill">
                         Личный кабинет
-                    </button>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#regModal">
                         Регистрация
                     </button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-outline-danger rounded-pill">
+                    <a role="button" href="#" class="btn btn-outline-danger rounded-pill">
                         Выход
-                    </button>
+                    </a>
                 </li>
             </ul>
           </div>
         </div>
     </nav>
-    <div class="container">
-    <hr>
 <x-reg></x-reg>

@@ -37,6 +37,7 @@ Route::get('/services', function () {
     return view('services');
 });
 
+
 Route::get('/admin', function () {
     return view('admin.index');
 });

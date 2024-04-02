@@ -1,4 +1,5 @@
 <x-header></x-header>
+<div class="container">
     <div class="row">
         <div class="col-md-4 mt-2">
             <div class="card">
@@ -41,4 +42,6 @@
             </div>
         </div>
     </div>
+</div>
+
 <x-footer></x-footer>

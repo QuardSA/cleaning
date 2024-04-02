@@ -1,4 +1,12 @@
-
+/* services */
+.adptive-card{
+    width: 100%;
+}
+@media(min-width:576px){
+    .adptive-card{
+        width: 48%;
+    }
+}
 
 /* Регистрация и авторизация */
 h1 {

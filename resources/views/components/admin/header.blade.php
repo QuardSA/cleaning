@@ -22,19 +22,19 @@
                 <li class="list">
                     <a href="/admin" class="nav-link nav-style d-flex align-items-center p-3 gap-2">
                         <i class='bx bx-table bx-md icon'></i>
-                        <span class="link fs-4 fw-bold">Услуги</span>
+                        <span class="link fs-5 fw-bold">Услуги</span>
                     </a>
                 </li>
                 <li class="list">
                     <a href="/admin/orders" class="nav-link nav-style d-flex align-items-center p-3 gap-2">
                         <i class='bx bx-receipt bx-md icon'></i>
-                        <span class="link fs-4 fw-bold">Заявки</span>
+                        <span class="link fs-5 fw-bold">Заявки</span>
                     </a>
                 </li>
                 <li class="list">
                     <a href="/signout" class="nav-link nav-style d-flex align-items-center p-3 gap-2">
                         <i class='bx bxs-log-out bx-md icon'></i>
-                        <span class="link fs-4 fw-bold">Выход</span>
+                        <span class="link fs-5 fw-bold">Выход</span>
                     </a>
                 </li>
             </ul>
