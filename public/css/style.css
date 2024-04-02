@@ -179,8 +179,9 @@ nav .sidebar{
 }
 nav.open .sidebar{
     left: 0%;
+    height:100%;
 }
-.overlay_admin{
+/*.overlay_admin{
     position: fixed;
     top: 0;
     left: -100%;
@@ -189,10 +190,25 @@ nav.open .sidebar{
     opacity: 0%;
     transition: all 0.25s ease;
     pointer-events: none;
+    background:#eee;
 }
 
 nav.open ~ .overlay_admin{
-    left: 20%;
+    left: 15%;
     opacity: 1;
     pointer-events: auto;
 }
+*/
+.nav-style{
+    border-radius:15px;
+}
+
+.nav-style:hover{
+    background:#0d6efd;
+    color:#fff;
+    border-radius:15px;
+    transition: all 0.4s ease;
+}
+
+/*admin*/
+

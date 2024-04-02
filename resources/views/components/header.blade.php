@@ -20,7 +20,7 @@
                 <a class="nav-link active" aria-current="page" href="/">Главная</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/admin">Услуги</a>
+                <a class="nav-link" href="/services">Услуги</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="/profile">Отзывы</a>
