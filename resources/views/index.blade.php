@@ -61,6 +61,35 @@
                 </div>
             </div>
         </div>
+        <div class="services">
+            <h2 class="text-center">Услуги</h2>
+        </div>
+        <div class="slider w-75 mx-auto">
+            <div class="row mx-1">
+                <a href="#" class="text-decoration-none text-dark">
+                    <div class="col-md-12">
+                        <div class="border rounded">
+                            <div class="border-bottom bg-info">
+                                <h3 class="text-center fw-semibold text-white">Поддерживающая уборка</h3>
+                            </div>
+                            <div class="text-center mt-3">
+                                <span class="fs-5">Стандартный клининг всей квартиры</span>
+                            </div>
+                            <hr class="mx-auto" style="width: 95%">
+                            <ul class="">
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">1-2 исполнителя</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Удаляются легкие загрязнения</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Уборка до 1,8 метров</span></li>
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Работа 2-5 часов</span></li>
+                            </ul>
+                            <div class="text-end my-2 me-2 ">
+                                <span class="fs-5 fw-bold">от 500р</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
         <div class="mt-4 w-75 mx-auto">
             <h2 class="text-center">О Компании</h2>
         </div>
@@ -74,5 +103,5 @@
             </div>
         </div>
     </div>
-    <script src="/script/calculates.js"></script>
+
 <x-footer></x-footer>

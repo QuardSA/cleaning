@@ -33,11 +33,6 @@ Route::get('/profile', function () {
     return view('profile');
 });
 
-Route::get('/services', function () {
-    return view('services');
-});
-
-
 Route::get('/admin', function () {
     return view('admin.index');
 });
