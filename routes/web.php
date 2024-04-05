@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\http\Controllers\AdminController;
+use App\http\Controllers\AuthorizationController;
+use App\http\Controllers\MailingController;
+use App\http\Controllers\MainController;
+use App\http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,25 +19,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/',[MainController::class, "index"]);
 
-Route::get('/signin', function () {
-    return view('signin');
-});
+Route::post('/signup_validation',[AuthorizationController::class, "signup_validation"]);
+Route::post('/signin_validation',[AuthorizationController::class, "signin_validation"]);
+Route::get('/signout',[AuthorizationController::class, "signout"]);
+
+Route::post('/mailing_validation',[MailingController::class, "mailing_validation"]);
 
 Route::get('/object', function () {
     return view('object');
 });
 
-Route::get('/personal', function () {
-    return view('personal');
-});
-
-Route::get('/profile', function () {
-    return view('profile');
-});
+Route::get('/personal',[UserController::class, "personal"]);
+Route::get('/profile',[UserController::class, "profile"]);
+Route::post('/update_profile',[UserController::class, "update_profile"]);
 
 Route::get('/admin', function () {
     return view('admin.index');

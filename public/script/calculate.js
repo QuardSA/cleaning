@@ -1,12 +1,17 @@
-function calculate() {
-    var service = document.getElementById("service").value;
-    var size = document.getElementById("size").value;
-    var result = document.getElementById("result");
+    const sizeInput = document.getElementById('size');
+    const serviceSelect = document.getElementById('service');
+    const resultSpan = document.getElementById('result');
 
-    if (service == 0 || size <= 0) {
-        result.innerHTML = "Пожалуйста, выберите услугу и введите размер квартиры.";
-    } else {
-        var total = parseFloat(service) * parseFloat(size);
-        result.innerHTML = "Стоимость уборки: $" + total.toFixed(2);
+    function calculatePrice() {
+        const size = sizeInput.value;
+        const servicePrice = serviceSelect.value;
+
+        const totalPrice = size * servicePrice;
+
+        resultSpan.textContent ='от ' + totalPrice + ' рублей';
     }
-}
+
+    sizeInput.addEventListener('input', calculatePrice);
+    serviceSelect.addEventListener('change', calculatePrice);
+
+    calculatePrice();

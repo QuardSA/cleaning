@@ -2,51 +2,52 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4 mt-2">
-            <div class="card">
-                <div class="card-header">
+            <div class="card border-info">
+                <div class="card-header border-info bg-white fw-semibold">
                     Меню
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+                    <li class="list-group-item border-info">
                         <a href="/personal" class="text-decoration-none text-dark">Мои заказы</a>
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item border-info">
                         <a href="/profile" class="text-decoration-none text-dark">Настройки профиля</a>
                     </li>
-                    <li class="list-group-item">
+                    <li class="list-group-item border-info">
                         <a href="/signout" class="text-decoration-none text-dark">Выйти</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="col-md-8 mt-2">
-            <div class="card">
-                <div class="card-header">
+            <div class="card border-info">
+                <div class="card-header border-info bg-white fw-semibold">
                     Мой профиль
                 </div>
                 <div class="card-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="firstName" class="form-label">Имя</label>
-                            <input type="text" class="form-control" id="firstName" value="">
+                    <form action="/update_profile" method="POST">
+                        @csrf
+                        <div class="form-floating mt-2">
+                            <input type="text" class="form-control border-info" id="name" value="{{Auth::user()->name}}" placeholder="" name="name">
+                            <label for="name">Имя</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="lastName" class="form-label">Фамилия</label>
-                            <input type="text" class="form-control" id="lastName" value="">
+                        <div class="form-floating mt-2">
+                            <input type="text" class="form-control border-info" id="surname" value="{{Auth::user()->surname}}" placeholder="" name="surname">
+                            <label for="surname">Фамилия</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email адрес</label>
-                            <input type="email" class="form-control" id="email" value="">
+                        <div class="form-floating mt-2">
+                            <input type="text" class="form-control border-info" id="lastname" value="{{Auth::user()->lastname}}" placeholder="" name="lastname">
+                            <label for="lastname">Отчество</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Номер телефона</label>
-                            <input type="text" class="form-control" id="phone" value="">
+                        <div class="form-floating mt-2">
+                            <input type="email" class="form-control border-info" id="email" value="{{Auth::user()->email}}" placeholder="" name="email">
+                            <label for="email">Почта</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Адрес</label>
-                            <textarea class="form-control" id="address" rows="3"></textarea>
+                        <div class="form-floating mt-2">
+                            <input type="password" class="form-control border-info" id="password" value="" placeholder="" name="password">
+                            <label for="password">Пароль</label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                        <button type="submit" class="btn btn-info mt-2 text-white">Сохранить изменения</button>
                     </form>
                 </div>
             </div>

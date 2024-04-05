@@ -4,4 +4,4 @@
 <script type="text/javascript" src="/script/slick.min.js"></script>
 <script src="/script/script.js"></script>
 <script src="/script/slider.js"></script>
-{{-- <script src="/script/calculates.js"></script> --}}
+<script src="/script/calculate.js"></script>

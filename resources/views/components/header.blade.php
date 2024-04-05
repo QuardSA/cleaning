@@ -7,6 +7,7 @@
     <x-links></x-links>
     <title>Document</title>
 </head>
+<x-alerts></x-alerts>
 <body class="d-flex flex-column" style="min-height: 102vh">
     <nav class="navbar navbar-expand-sm mt-2">
         <div class="container">
@@ -19,28 +20,32 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="/">Главная</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/services">Услуги</a>
-              </li>
             </ul>
             <ul class="navbar-nav gap-1">
+                @guest
+                <li class="nav-item">
+                    <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#regModal">
+                        Регистрация
+                    </button>
+                </li>
+                @endguest
+                @auth
                 <li class="nav-item">
                     <a role="button" href="/profile" class="btn btn-outline-primary rounded-pill">
                         Личный кабинет
                     </a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#regModal">
-                        Регистрация
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <a role="button" href="#" class="btn btn-outline-danger rounded-pill">
+                    <a role="button" href="/signout" class="btn btn-outline-danger rounded-pill">
                         Выход
                     </a>
                 </li>
+                @endauth
             </ul>
           </div>
         </div>
     </nav>
+    <div class="container">
+        <hr>
+    </div>
 <x-reg></x-reg>

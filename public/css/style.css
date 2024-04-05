@@ -84,7 +84,7 @@ button.ghost {
 .auth_reg {
 	background-color: #FFFFFF;
 	display: flex;
-    gap: 1rem;
+    gap: 0.6rem;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
@@ -101,7 +101,7 @@ button.ghost {
 	overflow: hidden;
 	width: 100%;
 	max-width: 100%;
-	min-height: 480px;
+	min-height: 700px;
 }
 
 .form-container {
@@ -257,4 +257,3 @@ nav.open ~ .overlay_admin{
 }
 
 /*admin*/
-

@@ -4,10 +4,11 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <h5 class="text-white">Подпишитесь на рассылку</h5>
-                <form class="w-75">
+                <form class="w-75" action="/mailing_validation" method="POST">
+                    @csrf
                     <div class="input-group">
-                        <input type="email" class="form-control" placeholder="Введите ваш email" aria-label="Введите ваш email" aria-describedby="button-addon2">
-                        <button class="btn btn-primary" type="button" id="button-addon2">Подписаться</button>
+                        <input type="email" class="form-control" placeholder="Введите ваш email" aria-label="Введите ваш email" aria-describedby="button-addon2" name="email">
+                        <button type="submit" class="btn btn-primary" type="button" id="button-addon2">Подписаться</button>
                     </div>
                 </form>
             </div>

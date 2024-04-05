@@ -3,21 +3,73 @@
       <div class="modal-content">
             <div class="form_registration" id="form_registration">
                 <div class="form-container sign-up-container">
-                    <form action="#" class="auth_reg">
+                    <form action="/signup_validation" class="auth_reg" method="POST">
+                        @csrf
                         <h1 class="fw-bold">Создайте аккаунт</h1>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="text" placeholder="Имя" name="name"/>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="email" placeholder="Почта" name="email"/>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="password" placeholder="Пароль" name="password"/>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="password" placeholder="Повторите пароль" name="password_reqired"/>
-                        <button class="border rounded-pill bg-primary border-primary text-white px-4 py-2 fs-6 fw-bold">Зарегистрироваться</button>
+                        <div class="form-floating w-100">
+                            <input type="text" class="form-control border-info" id="name" value="" placeholder="{{old('name')}}" name="name">
+                            <label for="name">Ваше имя</label>
+                            @error('name')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="text" class="form-control border-info" id="surname" value="" placeholder="{{old('surname')}}" name="surname">
+                            <label for="surname">Фамилия</label>
+                            @error('surname')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="text" class="form-control border-info" id="lastname" value="" placeholder="{{old('lastname')}}" name="lastname">
+                            <label for="lastname">Отчество</label>
+                            @error('lastname')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="email" class="form-control border-info" id="email" value="" placeholder="{{old('email')}}" name="email">
+                            <label for="email">Почта</label>
+                            @error('email')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="password" class="form-control border-info" id="password" value="" placeholder="{{old('password')}}" name="password">
+                            <label for="password">Пароль</label>
+                            @error('password')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="password" class="form-control border-info" id="confirm_password" value="" placeholder="{{old('confirm_password')}}" name="confirm_password">
+                            <label for="confirm_password">Повторите пароль</label>
+                            @error('confirm_password')
+                                <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <button type="submit" class="border rounded-pill bg-info border-info text-white px-4 py-2 fs-6 fw-bold">Зарегистрироваться</button>
                     </form>
                 </div>
                 <div class="form-container sign-in-container">
-                    <form action="#" class="auth_reg">
+                    <form action="/signin_validation" class="auth_reg" method="POST">
+                        @csrf
                         <h1 class="fw-bold">Авторизируйтесь</h1>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="email" placeholder="Почта" name="email"/>
-                        <input class="border-0 px-1 py-2 w-100" style="background-color: #eee" type="password" placeholder="Пароль" name="password" />
-                        <button class="border rounded-pill bg-primary border-primary text-white px-4 py-2 fs-6 fw-bold">Авторизоваться</button>
+                        <div class="form-floating w-100">
+                            <input type="email" class="form-control border-info" id="email" value="" placeholder="{{old('email')}}" name="email">
+                            <label for="email">Почта</label>
+                            @error('email')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                        </div>
+                        <div class="form-floating w-100">
+                            <input type="password" class="form-control border-info" id="password" value="" placeholder="{{old('password')}}" name="password">
+                            <label for="password">Пароль</label>
+                            @error('password')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                        </div>
+                        <button type="submit" class="border rounded-pill bg-info border-info text-white px-4 py-2 fs-6 fw-bold">Авторизоваться</button>
                     </form>
                 </div>
                 <div class="overlay-container">

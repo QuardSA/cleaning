@@ -5,20 +5,20 @@
                 <div class="d-flex flex-column gap-3 mt-5">
                     <div class="form-outline">
                         <h2 class="fw-normal text-start">Чистота без забот</h2>
-                        <label class="form-label" for="Square">Укажите площадь квартиры</label>
-                        <input type="number" id="Square" min="10" max="999" class="form-control" />
+                        <label class="form-label" for="size">Укажите площадь квартиры</label>
+                        <input type="number" id="size" value="40" min="0" max="999" class="form-control" />
                     </div>
-                    <label for="Service">Выберите тип уборки</label>
-                    <select class="form-select" name="" id="Service">
+                    <label for="service">Выберите тип уборки</label>
+                    <select class="form-select" name="" id="service">
                         <option value="100">Послестроительная уборка</option>
                         <option value="250">Генеральная уборка</option>
                         <option value="400">Поддерживающая уборка</option>
                     </select>
                     <div class="d-flex justify-content-between fs-5">
                         <span class="text-start">Цена:</span>
-                        <span class="text-end fw-bold">55555</span>
+                        <span class="text-end fw-bold" id="result"></span>
                     </div>
-                    <button type="button" class="btn btn-primary">Заказать</button>
+                    <button type="button" class="btn btn-info text-white fw-semibold">Заказать</button>
                 </div>
             </div>
             <div class="col-md-6 mt-2">
@@ -66,7 +66,7 @@
         </div>
         <div class="slider w-75 mx-auto">
             <div class="row mx-1">
-                <a href="#" class="text-decoration-none text-dark">
+                <a href="/object" class="text-decoration-none text-dark">
                     <div class="col-md-12">
                         <div class="border rounded">
                             <div class="border-bottom bg-info">
