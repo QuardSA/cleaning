@@ -40,5 +40,5 @@ Route::get('/admin/orders',[AdminController::class, "orders"]);
 Route::get('/admin/addservice',[AdminController::class, "addservice"]);
 Route::post('/addservice_validate',[AdminController::class, "addservice_validate"]);
 Route::get('/admin/servicerdact/{id}',[AdminController::class, "service_redact"]);
-Route::post('/service_redact_validate',[AdminController::class, "service_redact_validate"]);
-Route::post('/admin/service_delete/{id}',[AdminController::class, "service_delete"])->name('sevice_delete');
+Route::put('/service_redact_validate/{id}',[AdminController::class, "service_redact_validate"]);
+Route::delete('/admin/service_delete/{id}',[AdminController::class, "service_delete"])->name('sevice_delete');

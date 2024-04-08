@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('titleservice');
             $table->text('description');
-            $table->string('features');
             $table->string('photo')->nullable();
             $table->string('cost');
             $table->timestamps();

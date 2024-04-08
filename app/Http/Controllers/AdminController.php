@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\service;
+use App\Models\Service;
+use App\Models\Feature;
 
 class AdminController extends Controller
 {
     public function index() {
-        $services = service::paginate(4);
+        $services = Service::paginate(4);
         return view('admin.index', compact('services'));
     }
     public function addservice() {
@@ -20,19 +21,17 @@ class AdminController extends Controller
             'titleservice' => 'required',
             'description' => 'required',
             'cost' => 'required|numeric',
-            'titlefeatures' => 'required|array|min:1',
             'photo' => 'image|mimes:jpeg,png,jpg',
         ], [
-            'titleservice.required' => 'Поле обязательно для заполнения',
-            'description.required' => 'Поле обязательно для заполнения',
-            'cost.required' => 'Поле обязательно для заполнения',
-            'cost.numeric' => 'Только числа',
-            'titlefeatures.required' => 'Поле обязательно для заполнения',
-            'photo.image' => 'Только картинки',
-            'photo.mimes' => 'Только jpeg, png, jpg'
+            'titleservice.required' => 'Поле "Название услуги" обязательно для заполнения',
+            'description.required' => 'Поле "Описание" обязательно для заполнения',
+            'cost.required' => 'Поле "Цена" обязательно для заполнения',
+            'cost.numeric' => 'Поле "Цена" должно быть числом',
+            'photo.image' => 'Загружаемый файл должен быть изображением',
+            'photo.mimes' => 'Поддерживаемые форматы изображений: jpeg, png, jpg'
         ]);
 
-        $service = new service();
+        $service = new Service();
         $service->titleservice = $request->input('titleservice');
         $service->description = $request->input('description');
         $service->cost = $request->input('cost');
@@ -40,19 +39,27 @@ class AdminController extends Controller
         if ($request->hasFile('photo')) {
             $name_photo = $request->file('photo')->hashName();
             $path_photo = $request->file('photo')->store('public/images');
-            $service->photo = $path_photo;
+            $service->photo = $name_photo;
         }
 
         $service->save();
 
-        $features = $request->input('titlefeatures');
-        $service->features()->attach($features);
+        $titleFeatures = $request->input('titlefeatures');
+        foreach ($titleFeatures as $titleFeature) {
+            $feature = new Feature();
+            $feature->titlefeatures = $titleFeature;
+            $feature->save();
+            $service->features()->attach($feature);
+        }
 
         return redirect('/admin')->with('success', 'Услуга успешно создана');
     }
 
+
+
+
     public function service_redact($id){
-        $service = service::findOrFali($id);
+        $service = Service::findOrFail($id);
         return view('admin.serviceredact',compact('service'));
     }
 
@@ -61,19 +68,17 @@ class AdminController extends Controller
             'titleservice' => 'required',
             'description' => 'required',
             'cost' => 'required|numeric',
-            'titlefeatures' => 'required|array|min:1',
             'photo' => 'image|mimes:jpeg,png,jpg',
         ], [
-            'titleservice.required' => 'Поле обязательно для заполнения',
-            'description.required' => 'Поле обязательно для заполнения',
-            'cost.required' => 'Поле обязательно для заполнения',
-            'cost.numeric' => 'Только числа',
-            'titlefeatures.required' => 'Поле обязательно для заполнения',
-            'photo.image' => 'Только картинки',
-            'photo.mimes' => 'Только jpeg, png, jpg'
+            'titleservice.required' => 'Поле "Название услуги" обязательно для заполнения',
+            'description.required' => 'Поле "Описание" обязательно для заполнения',
+            'cost.required' => 'Поле "Цена" обязательно для заполнения',
+            'cost.numeric' => 'Поле "Цена" должно быть числом',
+            'photo.image' => 'Загружаемый файл должен быть изображением',
+            'photo.mimes' => 'Поддерживаемые форматы изображений: jpeg, png, jpg'
         ]);
 
-        $service = service::findOrFail($id);
+        $service = Service::findOrFail($id);
         $service->titleservice = $request->input('titleservice');
         $service->description = $request->input('description');
         $service->cost = $request->input('cost');
@@ -81,19 +86,28 @@ class AdminController extends Controller
         if ($request->hasFile('photo')) {
             $name_photo = $request->file('photo')->hashName();
             $path_photo = $request->file('photo')->store('public/images');
-            $service->photo = $path_photo;
+            $service->photo = $name_photo;
         }
 
         $service->save();
 
-        $features = $request->input('titlefeatures');
-        $service->features()->attach($features);
+        $service->features()->detach();
 
-        return redirect('/admin')->with('success', 'Услуга успешно создана');
+        $titleFeatures = $request->input('titlefeatures');
+        foreach ($titleFeatures as $titleFeature) {
+            $feature = new Feature();
+            $feature->titlefeatures = $titleFeature;
+            $feature->save();
+            $service->features()->attach($feature);
+        }
+
+        return redirect('/admin')->with('success', 'Услуга успешно отредактирована');
     }
 
+
+
     public function service_delete($id){
-        $service = service::findOrFali($id);
+        $service = Service::findOrFail($id);
         $service->delete();
         return redirect()->back()->with('success','Вы успешно удалили услугу');
     }
