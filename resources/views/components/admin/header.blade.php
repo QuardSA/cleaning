@@ -15,7 +15,10 @@
     <div class="sidebar position-fixed top-0 h-100 px-2 shadow bg-white" style="width:15%">
         <div class="logo d-flex align-items-center mt-2 ms-2 gap-3">
             <i class="bx bx-menu menu-icon bx-lg"></i>
-            <span class="logo-name fs-4">Max-Cleaning</span>
+            <div class="d-flex flex-column">
+                <span class="logo-name fs-4">Смирнов Алексей</span>
+                <span class="logo-name fs-6">Администратор</span>
+            </div>
         </div>
         <div class="sidebar-content ">
             <ul class="lists list-group mt-3 gap-2">

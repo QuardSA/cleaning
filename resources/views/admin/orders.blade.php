@@ -21,28 +21,33 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Дата</th>
+                <th scope="col">ФИО</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Номер телефона</th>
+                <th scope="col">Услуга</th>
+                <th scope="col">Площадь</th>
+                <th scope="col">Цена</th>
+                <th scope="col">Адрес</th>
                 <th scope="col">Статус</th>
+                <th scope="col">Дата заказа</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <th scope="row">1</th>
-                <td>2024-03-30</td>
-                <td>В обработке</td>
+                <td>ФИО</td>
+                <td>E-mail</td>
+                <td>Номер телефона</td>
+                <td>Услуга</td>
+                <td>Площадь</td>
+                <td>Цена</td>
+                <td>Адрес</td>
+                <td>Статус</td>
+                <td>Дата заказа</td>
                 <td>
-                    <button type="button" class="btn btn-primary">Просмотреть</button>
-                    <button type="button" class="btn btn-danger">Удалить</button>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>2024-04-01</td>
-                <td>Выполнено</td>
-                <td>
-                    <button type="button" class="btn btn-primary">Просмотреть</button>
-                    <button type="button" class="btn btn-danger">Удалить</button>
+                    <button type="button" class="btn btn-primary">Статус</button>
+                    <button type="button" class="btn btn-danger">Отклонить</button>
                 </td>
             </tr>
         </tbody>

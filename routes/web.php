@@ -35,9 +35,10 @@ Route::get('/personal',[UserController::class, "personal"]);
 Route::get('/profile',[UserController::class, "profile"]);
 Route::post('/update_profile',[UserController::class, "update_profile"]);
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
-Route::get('/admin/orders', function () {
-    return view('admin.orders');
-});
+Route::get('/admin',[AdminController::class, "index"]);
+Route::get('/admin/orders',[AdminController::class, "orders"]);
+Route::get('/admin/addservice',[AdminController::class, "addservice"]);
+Route::post('/addservice_validate',[AdminController::class, "addservice_validate"]);
+Route::get('/admin/servicerdact/{id}',[AdminController::class, "service_redact"]);
+Route::post('/service_redact_validate',[AdminController::class, "service_redact_validate"]);
+Route::post('/admin/service_delete/{id}',[AdminController::class, "service_delete"])->name('sevice_delete');
