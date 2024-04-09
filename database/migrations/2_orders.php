@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user')->references('id')->on('users');
-            $table->foreignId('service')->references('id')->on('services');
-            $table->foreignId('status')->references('id')->on('orderstatuses');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('service_id')->constrained()->onDelete('cascade');
+            $table->foreignId('status_id')->constrained('orderstatuses')->onDelete('cascade');
+            $table->string('phone');
+            $table->string('address');
+            $table->integer('square');
+            $table->integer('cost');
+            $table->date('date');
             $table->timestamps();
         });
     }

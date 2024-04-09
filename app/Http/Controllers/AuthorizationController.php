@@ -14,32 +14,35 @@ class AuthorizationController extends Controller
     public function signup_validation(Request $request){
 
         $request->validate([
-            'name' => 'required|alpha',
-            'surname' => 'required|alpha',
-            'lastname' => 'required|alpha',
-            'email' => 'required|unique:users|email',
-            'password' => 'required',
+            'name' => 'required|alpha|max:100',
+            'surname' => 'required|alpha|max:100',
+            'lastname' => 'nullable|alpha|max:100',
+            'email' => 'required|string|email|max:100|unique:users,email,',
+            'password' => 'nullable|min:8',
             'confirm_password' => 'required|same:password',
-        ],[
-            'email.required' => 'Поле обязательно для заполнения',
-            'email.email' => 'Введите email',
-            'email.unique' => 'Данный email уже занят',
+        ], [
             'name.required' => 'Поле обязательно для заполнения',
-            'name.alpha' => 'Имя должно состоять только из букв',
-            'lastname.required' => 'Поле обязательно для заполнения',
-            'lastname.alpha' => 'Отчество должно состоять только из букв',
+            'name.string' => 'Поле должно состоять только из букв',
+            'name.max' => 'Поле не должно превышать 100 символов',
             'surname.required' => 'Поле обязательно для заполнения',
-            'surname.alpha' => 'Фамилия должна состоять только из букв',
-            'password.required' => 'Поле обязательно для заполнения',
+            'surname.string' => 'Поле должно состоять только из букв',
+            'surname.max' => 'Поле не должно превышать 100 символов',
+            'lastname.string' => 'Поле должно состоять только из букв',
+            'lastname.max' => 'Поле не должно превышать 100 символов',
+            'email.required' => 'Поле обязательно для заполнения',
+            'email.email' => 'Поле должно быть корректным адресом электронной почты',
+            'email.max' => 'Поле не должно превышать 100 символов',
+            'email.unique' => 'Пользователь с таким "Email" уже существует',
+            'password.min' => 'Пароль должен содержать как минимум 8 символов',
             'confirm_password.required' => 'Поле обязательно для заполнения',
             'confirm_password.same' => 'Пароли не совпадают',
         ]);
 
         $userInfo = $request->all();
         $userCreate = User::create([
-            'name'=> $userInfo['name'],
-            'surname'=> $userInfo['surname'],
-            'lastname'=> $userInfo['lastname'],
+            'name' => $userInfo['name'],
+            'surname' => $userInfo['surname'],
+            'lastname' => $userInfo['lastname'],
             'email' => $userInfo['email'],
             'password' => Hash::make($userInfo['password']),
             'role' => "1",
@@ -56,13 +59,13 @@ class AuthorizationController extends Controller
     public function signin_validation(Request $request){
 
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ],[
             'email.required' => 'Поле обязательно для заполнения',
+            'email.email' => 'Введите корректный Email',
             'password.required' => 'Поле обязательно для заполнения',
-        ],
-    );
+        ]);
 
         $user_authorization = $request->only("email","password");
 

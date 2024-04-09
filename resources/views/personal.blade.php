@@ -24,21 +24,25 @@
                 <div class="card-header border-info bg-white fw-semibold">
                     Мои заказы
                 </div>
+                @forelse ($orders as $order)
                 <div class="card-body">
                     <div class="card border-info">
                         <div class="card-header border-info bg-white fw-semibold">
-                            Заказ #12345
+                            Заказ {{$order->id}}
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>Дата заказа:</strong> 2024-03-30</li>
-                                <li class="list-group-item"><strong>Услуга:</strong> Генеральная уборка</li>
-                                <li class="list-group-item"><strong>Адрес:</strong> ул. Пушкина, дом Колотушкина</li>
-                                <li class="list-group-item"><strong>Статус:</strong> Выполнен</li>
+                                <li class="list-group-item"><strong>Заказ на число:</strong> {{$order->date}}</li>
+                                <li class="list-group-item"><strong>Услуга:</strong> {{$order->order_service->titleservice}}</li>
+                                <li class="list-group-item"><strong>Адрес:</strong> {{$order->address}}</li>
+                                <li class="list-group-item"><strong>Статус:</strong> {{$order->order_orderstatus->titlestatus}}</li>
                             </ul>
                         </div>
                     </div>
                 </div>
+                @empty
+                <div class="text-center">Вы не делали заказы!</div>
+                @endforelse
             </div>
         </div>
     </div>

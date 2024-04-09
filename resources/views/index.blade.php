@@ -2,23 +2,93 @@
     <div class="container fw-normal ">
         <div class="row">
             <div class="col-md-6 mt-2">
-                <div class="d-flex flex-column gap-3 mt-5">
-                    <div class="form-outline">
-                        <h2 class="fw-normal text-start">Чистота без забот</h2>
-                        <label class="form-label" for="size">Укажите площадь квартиры</label>
-                        <input type="number" id="size" value="40" min="0" max="999" class="form-control" />
+                <div class="">
+                    @forelse($services as $service)
+                    <form action="/create_order_validate" class="d-flex flex-column gap-3 mt-3" method="POST">
+                        @csrf
+                        <div class="form-outline">
+                            <h2 class="fw-normal text-start">Чистота без забот</h2>
+                            <label class="form-label" for="square">Укажите площадь квартиры</label>
+                            <input type="number" id="size" value="30" min="30" max="999" class="form-control form-control-lg" name="square"/>
+                            @error('square')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <select class="form-select form-control-lg" name="service" id="service">
+                            <option value="{{$service->cost}}">{{$service->titleservice}}</option>
+                        </select>
+                        @error('service')
+                        <span class="text-danger">{{$message}}</span>
+                        @enderror
+                        <div class="d-flex justify-content-between fs-5">
+                            <span class="text-start">Цена:</span>
+                            <span class="text-end fw-bold" id="result"></span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="form-floating w-100">
+                                <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date">
+                                <label for="date">Выберите дату</label>
+                                @error('date')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone">
+                                <label for="phone">Номер телефона</label>
+                                @error('phone')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control" id="adress" value="" placeholder="{{old('adress')}}" name="address">
+                                <label for="address">Адрес</label>
+                                @error('address')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info">Заказать</button>
+                    </form>
+                    @empty
+                    <div class="d-flex flex-column gap-3 mt-3">
+                        <div class="form-outline">
+                            <h2 class="fw-normal text-start">Чистота без забот</h2>
+                            <label class="form-label" for="size">Укажите площадь квартиры</label>
+                            <input type="number" id="size" value="30" min="30" max="999" class="form-control form-control-lg" />
+                        </div>
+                        <select class="form-select form-control-lg" name="" id="service">
+                            <option value="0">Услуги отсутствуют</option>
+                        </select>
+                        <div class="d-flex justify-content-between fs-5">
+                            <span class="text-start">Цена:</span>
+                            <span class="text-end fw-bold" id="result"></span>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="form-floating w-100">
+                                <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date">
+                                <label for="date">Выберите дату</label>
+                                @error('date')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone">
+                                <label for="phone">Номер телефона</label>
+                                @error('phone')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control" id="adress" value="" placeholder="{{old('adress')}}" name="adress">
+                                <label for="adress">Адрес</label>
+                                @error('adress')
+                                <span class="text-danger">{{$message}}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-info" disabled>Заказать</button>
                     </div>
-                    <label for="service">Выберите тип уборки</label>
-                    <select class="form-select" name="" id="service">
-                        <option value="100">Послестроительная уборка</option>
-                        <option value="250">Генеральная уборка</option>
-                        <option value="400">Поддерживающая уборка</option>
-                    </select>
-                    <div class="d-flex justify-content-between fs-5">
-                        <span class="text-start">Цена:</span>
-                        <span class="text-end fw-bold" id="result"></span>
-                    </div>
-                    <button type="button" class="btn btn-info text-white fw-semibold">Заказать</button>
+                    @endforelse
                 </div>
             </div>
             <div class="col-md-6 mt-2">
@@ -66,28 +136,31 @@
         </div>
         <div class="slider w-75 mx-auto">
             <div class="row mx-1">
-                <a href="/object" class="text-decoration-none text-dark">
-                    <div class="col-md-12">
+                <div class="col-md-12">
+                    @forelse ($services as $service)
+                    <a href="/object/{{$service->id}}" class="text-decoration-none text-dark">
                         <div class="border rounded">
                             <div class="border-bottom bg-info">
-                                <h3 class="text-center fw-semibold text-white">Поддерживающая уборка</h3>
+                                <h3 class="text-center fw-semibold text-white">{{$service->titleservice}}</h3>
                             </div>
                             <div class="text-center mt-3">
-                                <span class="fs-5">Стандартный клининг всей квартиры</span>
+                                <span class="fs-5">{{ Illuminate\Support\Str::limit($service->description, 40) }}</span>
                             </div>
                             <hr class="mx-auto" style="width: 95%">
-                            <ul class="">
-                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">1-2 исполнителя</span></li>
-                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Удаляются легкие загрязнения</span></li>
-                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Уборка до 1,8 метров</span></li>
-                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">Работа 2-5 часов</span></li>
+                            <ul>
+                                @foreach ($service->features as $feature)
+                                <li class="list-group-item d-flex align-items-center"><i class='bx bx-check text-success fs-3 me-2'></i><span class="fs-5">{{ $feature->titlefeatures }}</span></li>
+                                @endforeach
                             </ul>
                             <div class="text-end my-2 me-2 ">
-                                <span class="fs-5 fw-bold">от 500р</span>
+                                <span class="fs-5 fw-bold">от {{$service->cost}} р</span>
                             </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                    @empty
+                    Услуги отсутствуют
+                    @endforelse
+                 </div>
             </div>
         </div>
         <div class="mt-4 w-75 mx-auto">

@@ -16,8 +16,8 @@
         <div class="logo d-flex align-items-center mt-2 ms-2 gap-3">
             <i class="bx bx-menu menu-icon bx-lg"></i>
             <div class="d-flex flex-column">
-                <span class="logo-name fs-4">Смирнов Алексей</span>
-                <span class="logo-name fs-6">Администратор</span>
+                <span class="logo-name fs-4">{{Auth::user()->name}} {{Auth::user()->surname}}</span>
+                <span class="logo-name fs-6">{{Auth::user()->user_role->titlerole}}</span>
             </div>
         </div>
         <div class="sidebar-content ">

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Feature;
+use App\Models\Order;
+use App\Models\Orderstatus;
 
 class AdminController extends Controller
 {
@@ -55,9 +57,6 @@ class AdminController extends Controller
         return redirect('/admin')->with('success', 'Услуга успешно создана');
     }
 
-
-
-
     public function service_redact($id){
         $service = Service::findOrFail($id);
         return view('admin.serviceredact',compact('service'));
@@ -104,14 +103,51 @@ class AdminController extends Controller
         return redirect('/admin')->with('success', 'Услуга успешно отредактирована');
     }
 
-
-
     public function service_delete($id){
         $service = Service::findOrFail($id);
         $service->delete();
         return redirect()->back()->with('success','Вы успешно удалили услугу');
     }
-    public function orders(){
-        return view('admin.orders');
+
+
+    public function accept(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->status = 2;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Заказ успешно принят');
     }
+
+    public function deny(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->status = 3;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Заказ успешно отклонен');
+    }
+
+    public function orders(Request $request){
+        $orderstatuses = Orderstatus::all();
+        $query = Order::query();
+
+        // Применяем фильтр по дате, если он задан
+        if ($request->filled('date')) {
+            $date = $request->input('date');
+            $query->whereDate('date', $date);
+        }
+
+        // Применяем фильтр по статусу, если он задан
+        if ($request->filled('status')) {
+            $status = $request->input('status');
+            $query->where('status', $status);
+        }
+
+        // Получаем отфильтрованные заказы
+        $orders = $query->paginate(10);
+
+        return view('admin.orders', compact('orders', 'orderstatuses'));
+    }
+
 }

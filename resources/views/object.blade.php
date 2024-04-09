@@ -4,7 +4,7 @@
         <div class="col-md-6 mt-2">
             <div class="d-flex flex-column gap-3 mt-5">
                 <div class="form-outline">
-                    <h2 class="fw-normal text-start">Поддерживающая уборка</h2>
+                    <h2 class="fw-normal text-start">{{$services->titleservice}}</h2>
                     <label class="form-label" for="size">Укажите площадь квартиры</label>
                     <input type="number" id="size" value="10" min="10" max="999" class="form-control" />
                 </div>
@@ -19,12 +19,12 @@
             </div>
         </div>
         <div class="col-md-6 mt-2">
-            <img src="https://imgproxy.domovenok.ru/insecure/w:1280/gravity:sm/rt:fit/q:80/dpr:1/plain/https://s3.domovenok.su/pancake-public/192e986f-f6a0-42c3-8e39-c27509404111.jpg" class="img-fluid" alt="">
+            <img src="/storage/images/{{$services->photo}}" class="img-fluid" alt="">
         </div>
     </div>
     <h3 class="mt-2">Описание</h3>
     <div class="description">
-        <p class="text-start fs-5 fw">Клининговая услуга предусматривает устранение загрязнений на высоту до 180 см и включает более 20 работ. На поддерживающую уборку квартир цена зависит от размеров помещения, наличия дополнительных пожеланий. Для клиентов с регулярным графиком обслуживания действуют скидки.</p>
+        <p class="text-start fs-5 fw">{{$services->description}}</p>
     </div>
     <div class="mt-4 w-75 mx-auto">
         <h2 class="text-center">Преимущества клинингового сервиса "Домовёнок"</h2>

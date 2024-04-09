@@ -19,4 +19,8 @@ class service extends Model
     {
         return $this->belongsToMany(Feature::class);
     }
+
+    public function service(){
+        return $this->hasMany(Order::class, 'service','id');
+    }
 }

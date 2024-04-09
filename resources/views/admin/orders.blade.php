@@ -1,26 +1,26 @@
 <x-admin.header></x-admin.header>
 <div class="container mt-5">
     <h2 class="text-center mb-4">Заявки</h2>
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <label for="dateFilter" class="form-label">Фильтр по дате:</label>
-            <input type="date" class="form-control" id="dateFilter">
+    <form action="/admin/orders" method="GET">
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <label for="dateFilter" class="form-label">Фильтр по дате:</label>
+                <input type="date" class="form-control" id="dateFilter" name="date">
+            </div>
+            <div class="col-md-6">
+                <label for="statusFilter" class="form-label">Фильтр по статусу:</label>
+                <select class="form-select" id="statusFilter" name="status">
+                    @foreach ($orderstatuses as $orderstatus)
+                    <option value="{{$orderstatus->id}}">{{$orderstatus->titlestatus}}</option>
+                @endforeach
+                </select>
+            </div>
         </div>
-        <div class="col-md-6">
-            <label for="statusFilter" class="form-label">Фильтр по статусу:</label>
-            <select class="form-select" id="statusFilter">
-                <option selected>Выбрать статус...</option>
-                <option>Ождание</option>
-                <option>Принято</option>
-                <option>Выполнено</option>
-                <option>Отклонено</option>
-            </select>
-        </div>
-    </div>
-    <table class="table">
+        <button type="submit" class="btn btn-primary">Применить фильтр</button>
+    </form>
+    <table class="table mt-3">
         <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">ФИО</th>
                 <th scope="col">E-mail</th>
                 <th scope="col">Номер телефона</th>
@@ -30,26 +30,37 @@
                 <th scope="col">Адрес</th>
                 <th scope="col">Статус</th>
                 <th scope="col">Дата заказа</th>
-                <th scope="col">Действия</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
+            @forelse ($orders as $order)
+                <tr>
+                    <td>{{$order->order_user->name}} {{$order->order_user->surname}} {{$order->order_user->lastname}}</td>
+                    <td>{{$order->order_user->email}}</td>
+                    <td>{{$order->phone}}</td>
+                    <td>{{$order->order_service->titleservice}}</td>
+                    <td>{{$order->square}}</td>
+                    <td>{{$order->cost}}</td>
+                    <td>{{$order->address}}</td>
+                    <td>{{$order->order_orderstatus->titlestatus}}</td>
+                    <td>{{$order->date}}</td>
+                    <td>
+                        <form action="{{ route('orders.accept', $order->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Принять</button>
+                        </form>
+                        <form action="{{ route('orders.deny', $order->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Отклонить</button>
+                        </form>
+                    </td>
+                </tr>
+            @empty
             <tr>
-                <th scope="row">1</th>
-                <td>ФИО</td>
-                <td>E-mail</td>
-                <td>Номер телефона</td>
-                <td>Услуга</td>
-                <td>Площадь</td>
-                <td>Цена</td>
-                <td>Адрес</td>
-                <td>Статус</td>
-                <td>Дата заказа</td>
-                <td>
-                    <button type="button" class="btn btn-primary">Статус</button>
-                    <button type="button" class="btn btn-danger">Отклонить</button>
-                </td>
+                <td colspan="10" class="text-center">Заявки отсутствуют</td>
             </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
