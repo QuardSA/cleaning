@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 mt-2">
                 <div class="">
-                    @forelse($services as $service)
+
                     <form action="/create_order_validate" class="d-flex flex-column gap-3 mt-3" method="POST">
                         @csrf
                         <div class="form-outline">
@@ -15,7 +15,11 @@
                             @enderror
                         </div>
                         <select class="form-select form-control-lg" name="service" id="service">
-                            <option value="{{$service->cost}}">{{$service->titleservice}}</option>
+                            @forelse($services as $service)
+                            <option value="{{$service->cost}}" >{{$service->titleservice}}</option>
+                            @empty
+                            <option>Услуг нету</option>
+                            @endforelse
                         </select>
                         @error('service')
                         <span class="text-danger">{{$message}}</span>
@@ -26,69 +30,33 @@
                         </div>
                         <div class="d-flex gap-2">
                             <div class="form-floating w-100">
-                                <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date">
+                                <input type="date" class="form-control" id="date" placeholder="{{old('date')}}" name="date" min="{{ now()->toDateString() }}">
                                 <label for="date">Выберите дату</label>
                                 @error('date')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
                             <div class="form-floating w-100">
-                                <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone">
+                                <input type="text" class="form-control" id="phone" placeholder="{{old('phone')}}" name="phone" maxlength="11">
                                 <label for="phone">Номер телефона</label>
                                 @error('phone')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
                             <div class="form-floating w-100">
-                                <input type="text" class="form-control" id="adress" value="" placeholder="{{old('adress')}}" name="address">
+                                <input type="text" class="form-control" id="adress" placeholder="{{old('adress')}}" name="address">
                                 <label for="address">Адрес</label>
                                 @error('address')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-info">Заказать</button>
+                        @if (Auth::check())
+                            <button type="submit" class="btn btn-info">Заказать</button>
+                            @else
+                            <span class="text-cemter fs-5 text-danger">Чтобы сделать заказ Авторизируйтесь!</span>
+                        @endif
                     </form>
-                    @empty
-                    <div class="d-flex flex-column gap-3 mt-3">
-                        <div class="form-outline">
-                            <h2 class="fw-normal text-start">Чистота без забот</h2>
-                            <label class="form-label" for="size">Укажите площадь квартиры</label>
-                            <input type="number" id="size" value="30" min="30" max="999" class="form-control form-control-lg" />
-                        </div>
-                        <select class="form-select form-control-lg" name="" id="service">
-                            <option value="0">Услуги отсутствуют</option>
-                        </select>
-                        <div class="d-flex justify-content-between fs-5">
-                            <span class="text-start">Цена:</span>
-                            <span class="text-end fw-bold" id="result"></span>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <div class="form-floating w-100">
-                                <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date">
-                                <label for="date">Выберите дату</label>
-                                @error('date')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="form-floating w-100">
-                                <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone">
-                                <label for="phone">Номер телефона</label>
-                                @error('phone')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="form-floating w-100">
-                                <input type="text" class="form-control" id="adress" value="" placeholder="{{old('adress')}}" name="adress">
-                                <label for="adress">Адрес</label>
-                                @error('adress')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-info" disabled>Заказать</button>
-                    </div>
-                    @endforelse
                 </div>
             </div>
             <div class="col-md-6 mt-2">
@@ -135,11 +103,11 @@
             <h2 class="text-center">Услуги</h2>
         </div>
         <div class="slider w-75 mx-auto">
+            @forelse ($services as $service)
             <div class="row mx-1">
-                <div class="col-md-12">
-                    @forelse ($services as $service)
-                    <a href="/object/{{$service->id}}" class="text-decoration-none text-dark">
-                        <div class="border rounded">
+                <div class="col-md-12" >
+                    <a href="/object/{{$service->id}}" class="text-decoration-none text-dark" style="min-height: 100%">
+                        <div class="border rounded" >
                             <div class="border-bottom bg-info">
                                 <h3 class="text-center fw-semibold text-white">{{$service->titleservice}}</h3>
                             </div>
@@ -157,11 +125,11 @@
                             </div>
                         </div>
                     </a>
-                    @empty
-                    Услуги отсутствуют
-                    @endforelse
                  </div>
             </div>
+            @empty
+            Услуги отсутствуют
+            @endforelse
         </div>
         <div class="mt-4 w-75 mx-auto">
             <h2 class="text-center">О Компании</h2>
@@ -171,7 +139,7 @@
                 <img src="https://terem-ermaka.ru/wp-content/uploads/0/0/d/00d12db40b95545d6968b5b2b61d0961.jpeg" class="img-fluid border rounded" alt="">
             </div>
             <div class="col-md-6">
-                <p class="fw-semibold fs-5">Компания "АВИС Клининг" профессионально занимается наведением чистоты с 2009 года. Мы всегда готовы прийти на помощь и предоставить клининговые услуги любой сложности юридическим лицам и частным клиентам.</p>
+                <p class="fw-semibold fs-5">Компания "Чистый Дом" профессионально занимается наведением чистоты с 2009 года. Мы всегда готовы прийти на помощь и предоставить клининговые услуги любой сложности юридическим лицам и частным клиентам.</p>
                 <p class="fw-semibold fs-5">Доверяя заботу о чистоте нашим специалистам, Вы можете быть уверены, что все виды работ будут выполнены с отличным качеством. </p>
             </div>
         </div>

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('orderstatuses', function (Blueprint $table) {
             $table->id();
-            $table->string('titlestatus');
+            $table->string('titlestatus',100);
             $table->timestamps();
         });
         Artisan::call('db:seed', ['--class'=>OrderStatusSeeder::class]);

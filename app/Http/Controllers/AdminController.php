@@ -23,12 +23,13 @@ class AdminController extends Controller
             'titleservice' => 'required',
             'description' => 'required',
             'cost' => 'required|numeric',
-            'photo' => 'image|mimes:jpeg,png,jpg',
+            'photo' => 'required|image|mimes:jpeg,png,jpg',
         ], [
-            'titleservice.required' => 'Поле "Название услуги" обязательно для заполнения',
-            'description.required' => 'Поле "Описание" обязательно для заполнения',
-            'cost.required' => 'Поле "Цена" обязательно для заполнения',
-            'cost.numeric' => 'Поле "Цена" должно быть числом',
+            'titleservice.required' => 'Поле обязательно для заполнения',
+            'description.required' => 'Поле обязательно для заполнения',
+            'cost.required' => 'Поле обязательно для заполнения',
+            'cost.numeric' => 'Поле должно быть числом',
+            'photo.required' => 'Поле обязательно для заполнения',
             'photo.image' => 'Загружаемый файл должен быть изображением',
             'photo.mimes' => 'Поддерживаемые форматы изображений: jpeg, png, jpg'
         ]);
@@ -67,12 +68,13 @@ class AdminController extends Controller
             'titleservice' => 'required',
             'description' => 'required',
             'cost' => 'required|numeric',
-            'photo' => 'image|mimes:jpeg,png,jpg',
+            'photo' => 'required|image|mimes:jpeg,png,jpg',
         ], [
-            'titleservice.required' => 'Поле "Название услуги" обязательно для заполнения',
-            'description.required' => 'Поле "Описание" обязательно для заполнения',
-            'cost.required' => 'Поле "Цена" обязательно для заполнения',
-            'cost.numeric' => 'Поле "Цена" должно быть числом',
+            'titleservice.required' => 'Поле обязательно для заполнения',
+            'description.required' => 'Поле обязательно для заполнения',
+            'cost.required' => 'Поле обязательно для заполнения',
+            'cost.numeric' => 'Поле должно быть числом',
+            'photo.required' => 'Поле обязательно для заполнения',
             'photo.image' => 'Загружаемый файл должен быть изображением',
             'photo.mimes' => 'Поддерживаемые форматы изображений: jpeg, png, jpg'
         ]);
@@ -132,19 +134,16 @@ class AdminController extends Controller
         $orderstatuses = Orderstatus::all();
         $query = Order::query();
 
-        // Применяем фильтр по дате, если он задан
         if ($request->filled('date')) {
             $date = $request->input('date');
-            $query->whereDate('date', $date);
+            $query->whereDate('date','=', $date);
         }
 
-        // Применяем фильтр по статусу, если он задан
         if ($request->filled('status')) {
             $status = $request->input('status');
             $query->where('status', $status);
         }
 
-        // Получаем отфильтрованные заказы
         $orders = $query->paginate(10);
 
         return view('admin.orders', compact('orders', 'orderstatuses'));

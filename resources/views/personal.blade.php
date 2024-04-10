@@ -1,5 +1,5 @@
 <x-header></x-header>
-<div class="container">
+<div class="container mb-3">
     <div class="row">
         <div class="col-md-4 mt-2">
             <div class="card border-info">
@@ -28,7 +28,7 @@
                 <div class="card-body">
                     <div class="card border-info">
                         <div class="card-header border-info bg-white fw-semibold">
-                            Заказ {{$order->id}}
+                            Заказ № {{$order->id}}
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
@@ -43,6 +43,7 @@
                 @empty
                 <div class="text-center">Вы не делали заказы!</div>
                 @endforelse
+                {{ $orders->withQueryString()->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>

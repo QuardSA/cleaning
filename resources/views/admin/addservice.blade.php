@@ -21,7 +21,7 @@
         </div>
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="cost" placeholder="{{old('cost')}}" name="cost">
-            <label for="cost">Цена</label>
+            <label for="cost">Цена за кв.м</label>
             @error('cost')
             <span class="text-danger">{{$message}}</span>
             @enderror
@@ -37,10 +37,10 @@
         </div>
         <div class="input-group input-group-lg">
             <input type="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name="photo">
-            @error('photo')
-            <span class="text-danger">{{$message}}</span>
-            @enderror
         </div>
+        @error('photo')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
         <button type="submit" class="btn btn-info">Добавить</button>
     </form>
         <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить функции</button>

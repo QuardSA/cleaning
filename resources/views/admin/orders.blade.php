@@ -9,14 +9,16 @@
             </div>
             <div class="col-md-6">
                 <label for="statusFilter" class="form-label">Фильтр по статусу:</label>
-                <select class="form-select" id="statusFilter" name="status">
+                <select class="form-select" id="statusFilter" name="status" >
+                    <option selected disabled>Выберите статус</option>
                     @foreach ($orderstatuses as $orderstatus)
-                    <option value="{{$orderstatus->id}}">{{$orderstatus->titlestatus}}</option>
-                @endforeach
+                        <option value="{{$orderstatus->id}}">{{$orderstatus->titlestatus}}</option>
+                    @endforeach
                 </select>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Применить фильтр</button>
+        <a href="/admin/orders" class="btn btn-secondary">Сбросить фильтр</a>
     </form>
     <table class="table mt-3">
         <thead>
@@ -46,6 +48,7 @@
                     <td>{{$order->order_orderstatus->titlestatus}}</td>
                     <td>{{$order->date}}</td>
                     <td>
+                        @if ($order->status == 1)
                         <form action="{{ route('orders.accept', $order->id) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-success">Принять</button>
@@ -54,6 +57,7 @@
                             @csrf
                             <button type="submit" class="btn btn-danger">Отклонить</button>
                         </form>
+                        @endif
                     </td>
                 </tr>
             @empty
@@ -63,6 +67,7 @@
             @endforelse
         </tbody>
     </table>
+    {{ $orders->withQueryString()->links('pagination::bootstrap-5') }}
 </div>
 <script src="/script/sidebar.js"></script>
 </body>

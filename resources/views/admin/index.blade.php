@@ -48,8 +48,10 @@
                         <td colspan="6" class="text-center">Услуги отсутствуют</td>
                     </tr>
                     @endforelse
+
                 </tbody>
             </table>
+            {{ $services->withQueryString()->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

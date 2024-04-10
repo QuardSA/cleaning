@@ -43,10 +43,6 @@
                             <input type="email" class="form-control border-info" id="email" value="{{Auth::user()->email}}" placeholder="" name="email">
                             <label for="email">Почта</label>
                         </div>
-                        <div class="form-floating mt-2">
-                            <input type="password" class="form-control border-info" id="password" value="" placeholder="" name="password">
-                            <label for="password">Пароль</label>
-                        </div>
                         <button type="submit" class="btn btn-info mt-2 text-white">Сохранить изменения</button>
                     </form>
                 </div>

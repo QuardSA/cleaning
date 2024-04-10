@@ -9,7 +9,11 @@
                     <div class="input-group">
                         <input type="email" class="form-control" placeholder="Введите ваш email" aria-label="Введите ваш email" aria-describedby="button-addon2" name="email">
                         <button type="submit" class="btn btn-primary" type="button" id="button-addon2">Подписаться</button>
+
                     </div>
+                    @error('email')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
                 </form>
             </div>
             <div class="col-md-4 mb-3">

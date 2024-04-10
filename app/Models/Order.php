@@ -11,6 +11,8 @@ class Order extends Model
         'user',
         'service',
         'status',
+        'cost',
+        'square',
         'phone',
         'address',
         'date'

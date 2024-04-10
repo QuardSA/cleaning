@@ -10,14 +10,23 @@
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="titleservice" placeholder="" value="{{$service->titleservice}}" name="titleservice">
             <label for="titleservice">Название</label>
+            @error('titleservice')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
         </div>
         <div class="form-floating w-100">
             <textarea class="form-control" placeholder="" id="description"  style="height: 100px" name="description">{{$service->description}}</textarea>
             <label for="description">Описание</label>
+            @error('description')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
         </div>
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="cost" placeholder="" value="{{$service->cost}}"  name="cost">
-            <label for="cost">Цена</label>
+            <label for="cost">Цена за кв.м</label>
+            @error('cost')
+            <span class="text-danger">{{$message}}</span>
+            @enderror
         </div>
         <div id="featurescontainer" class="d-flex flex-column gap-3">
             @foreach ($service->features as $feature)
@@ -25,16 +34,21 @@
                     <input type="text" class="form-control" id="titlefeatures" placeholder="" value="{{$feature->titlefeatures}}" name="titlefeatures[]">
                     <label for="titlefeatures">Особенность</label>
                 </div>
+                @error('titlefeatures')
+                <span class="text-danger">{{$message}}</span>
+                @enderror
             @endforeach
         </div>
         <div class="input-group input-group-lg">
             <input type="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name="photo">
         </div>
+        @error('photo')
+        <span class="text-danger">{{$message}}</span>
+        @enderror
         <button type="submit" class="btn btn-info">Редактировать</button>
     </form>
         <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить функции</button>
 </div>
-
 
 <script src="/script/sidebar.js"></script>
 <script src="/script/features.js"></script>

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('service_id')->constrained()->onDelete('cascade');
-            $table->foreignId('status_id')->constrained('orderstatuses')->onDelete('cascade');
-            $table->string('phone');
-            $table->string('address');
+            $table->foreignId('user')->constrained()->onDelete('cascade');
+            $table->foreignId('service')->constrained()->onDelete('cascade');
+            $table->foreignId('status')->constrained('orderstatuses')->onDelete('cascade');
+            $table->string('phone',12);
+            $table->string('address',100);
             $table->integer('square');
             $table->integer('cost');
             $table->date('date');

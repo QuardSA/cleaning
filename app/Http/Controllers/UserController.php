@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function personal(){
         $user = Auth::user();
-        $orders = $user->user_order()->paginate(10);
+        $orders = $user->user_order()->paginate(2);
         return view('personal', compact('orders'));
     }
 
@@ -26,7 +26,6 @@ class UserController extends Controller
             'surname' => 'required|alpha|max:100',
             'lastname' => 'nullable|alpha|max:100',
             'email' => 'required|string|email|max:100|unique:users,email,' . Auth::user()->id,
-            'password' => 'nullable|min:8',
         ], [
             'name.required' => 'Поле обязательно для заполнения',
             'name.string' => 'Поле должно состоять только из букв',
@@ -40,17 +39,18 @@ class UserController extends Controller
             'email.email' => 'Поле должно быть корректным адресом электронной почты',
             'email.max' => 'Поле не должно превышать 100 символов',
             'email.unique' => 'Пользователь с таким "Email" уже существует',
-            'password.min' => 'Пароль должен содержать как минимум 8 символов',
         ]);
         $user = Auth::user();
         $user->name = $request->input('name');
         $user->surname = $request->input('surname');
         $user->lastname = $request->input('lastname');
         $user->email = $request->input('email');
-        if ($request->has('password')) {
-            $user->password = Hash::make($request->input('password'));
-        }
         $user->save();
-        return redirect()->back()->with('success', 'Данные успешно изменены');
+        if ($user->save()){
+            return redirect()->back()->with('success', 'Данные успешно изменены');
+        }else{
+            return redirect()->back()->with('error', 'Ошибка изменения данных');
+        }
+
     }
 }
