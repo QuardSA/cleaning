@@ -47,16 +47,18 @@
                     <td>{{$order->address}}</td>
                     <td>{{$order->order_orderstatus->titlestatus}}</td>
                     <td>{{$order->date}}</td>
-                    <td>
+                    <td >
                         @if ($order->status == 1)
-                        <form action="{{ route('orders.accept', $order->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-success">Принять</button>
-                        </form>
-                        <form action="{{ route('orders.deny', $order->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-danger">Отклонить</button>
-                        </form>
+                        <div class="d-flex gap-2">
+                            <form action="{{ route('orders.accept', $order->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-success">Принять</button>
+                            </form>
+                            <form action="{{ route('orders.deny', $order->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Отклонить</button>
+                            </form>
+                        </div>
                         @endif
                     </td>
                 </tr>

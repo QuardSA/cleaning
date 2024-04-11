@@ -23,7 +23,7 @@
                     <tr>
                         <td class="w-25"><img src="/storage/images/{{$service->photo}}" class="img-fluid"></td>
                         <td>{{ $service->titleservice }}</td>
-                        <td>{{ $service->description }}</td>
+                        <td>{{ Illuminate\Support\Str::limit($service->description, 441) }}</td>
                         <td>
                             <ul class="list-style-none">
                                 @forelse ($service->features as $feature)

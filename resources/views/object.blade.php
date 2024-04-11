@@ -43,10 +43,12 @@
                             @enderror
                         </div>
                     </div>
-                    @if (Auth::check())
+                    @if (Auth::check() && Auth::user()->role === 1)
                         <button type="submit" class="btn btn-info">Заказать</button>
+                        @elseif ((!Auth::check()))
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#regModal">Заказать</button>
                         @else
-                        <span class="text-cemter fs-5 text-danger">Чтобы сделать заказ Авторизируйтесь!</span>
+                        <span class="text-cemter fs-5 text-danger">Вы не можете сдлеать заказ являясь Администраторм</span>
                     @endif
                 </form>
             </div>

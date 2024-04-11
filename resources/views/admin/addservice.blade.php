@@ -43,7 +43,7 @@
         @enderror
         <button type="submit" class="btn btn-info">Добавить</button>
     </form>
-        <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить функции</button>
+        <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить особенность</button>
 </div>
 
 
