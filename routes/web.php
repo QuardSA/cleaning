@@ -20,6 +20,7 @@ use App\http\Controllers\UserController;
 */
 
 Route::get('/',[MainController::class, "index"]);
+Route::post('/comments_validate',[MainController::class, "comments_validate"]);
 Route::get('/object/{id}',[MainController::class, "object"]);
 Route::post('/create_order_validate',[MainController::class, "create_order_validate"]);
 

@@ -21,7 +21,7 @@
         </div>
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="cost" placeholder="{{old('cost')}}" name="cost">
-            <label for="cost">Цена за кв.м</label>
+            <label for="cost">Цена за кв.м (В рублях)</label>
             @error('cost')
             <span class="text-danger">{{$message}}</span>
             @enderror

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Service;
 use App\Models\Feature;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OrderShipped;
 
@@ -13,7 +14,25 @@ class MainController extends Controller
 {
     public function index(){
         $services = Service::all();
-        return view("index", compact('services'));
+        $comments = Comment::all();
+        return view("index", compact('services','comments'));
+    }
+
+    public function comments_validate(Request $request){
+        $request->validate([
+            'description' => 'required|string|max:255',
+        ], [
+            'description.required' => 'Поле обязательно для заполнения.',
+            'description.max' => 'Максимальная длина поля отзыва составляет 255 символов.',
+        ]);
+
+        $comment = new Comment();
+
+        $comment->user = Auth::id();
+
+        $comment->description = $request->input('description');
+        $comment->save();
+        return redirect()->back()->with('success', 'Вы оставили отзыв');
     }
 
     public function object($id){

@@ -57,7 +57,7 @@
                         <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#regModal">Заказать</button>
                         @else
                         <span class="text-cemter fs-5 text-danger">Вы не можете сдлеать заказ являясь Администраторм</span>
-                    @endif
+                        @endif
                     </form>
                 </div>
             </div>
@@ -145,6 +145,43 @@
                 <p class="fw-semibold fs-5">Доверяя заботу о чистоте нашим специалистам, Вы можете быть уверены, что все виды работ будут выполнены с отличным качеством. </p>
             </div>
         </div>
+
+        <h2 class="text-center mb-4">Отзывы наших клиентов</h2>
+        <div class="slider w-75 mx-auto">
+            @forelse ($comments as $comment)
+                <div class="row mx-1">
+                    <div class="col-md-12">
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <p class="card-text mt-0 fs-6">{{Illuminate\Support\Str::limit($comment->description, 100)}}</p>
+                        </div>
+                        <div class="card-footer">
+                          <small class="text-muted">{{$comment->comments_user->name}} {{$comment->comments_user->surname}}</small>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            @empty
+                Отзывы отсутсвуют
+            @endforelse
+        </div>
+        <form action="/comments_validate" method="POST" class="w-75 mx-auto mb-3">
+            @csrf
+            <div class="mb-3">
+                <label for="description" class="form-label">Напишите отзыв</label>
+                <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+                @error('description')
+                <span class="text-danger">{{$message}}</span>
+                @enderror
+            </div>
+            @if (Auth::check() && Auth::user()->role === 1)
+            <button type="submit" class="btn btn-info">Оставить отзыв</button>
+            @elseif ((!Auth::check()))
+            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#regModal">Оставить отзыв</button>
+            @else
+            <span class="text-cemter fs-5 text-danger">Вы не можете оставить отзыв являясь Администраторм</span>
+            @endif
+        </form>
     </div>
 
 <x-footer></x-footer>
