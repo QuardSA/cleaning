@@ -30,18 +30,30 @@
                         <div class="form-floating mt-2">
                             <input type="text" class="form-control border-info" id="name" value="{{Auth::user()->name}}" placeholder="" name="name">
                             <label for="name">Имя</label>
+                            @error('name')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
                         </div>
                         <div class="form-floating mt-2">
                             <input type="text" class="form-control border-info" id="surname" value="{{Auth::user()->surname}}" placeholder="" name="surname">
                             <label for="surname">Фамилия</label>
+                            @error('surname')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
                         </div>
                         <div class="form-floating mt-2">
                             <input type="text" class="form-control border-info" id="lastname" value="{{Auth::user()->lastname}}" placeholder="" name="lastname">
                             <label for="lastname">Отчество</label>
+                            @error('lastname')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
                         </div>
                         <div class="form-floating mt-2">
                             <input type="email" class="form-control border-info" id="email" value="{{Auth::user()->email}}" placeholder="" name="email">
                             <label for="email">Почта</label>
+                            @error('email')
+                            <span class="text-danger">{{$message}}</span>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-info mt-2 text-white">Сохранить изменения</button>
                     </form>

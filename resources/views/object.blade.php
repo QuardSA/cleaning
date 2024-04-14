@@ -22,14 +22,14 @@
                     </div>
                     <div class="d-flex gap-2">
                         <div class="form-floating w-100">
-                            <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date">
+                            <input type="date" class="form-control" id="date" value="" placeholder="{{old('date')}}" name="date" min="{{ now()->toDateString() }}">
                             <label for="date">Выберите дату</label>
                             @error('date')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="form-floating w-100">
-                            <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone">
+                            <input type="text" class="form-control" id="phone" value="" placeholder="{{old('phone')}}" name="phone" maxlength="11">
                             <label for="phone">Номер телефона</label>
                             @error('phone')
                             <span class="text-danger">{{$message}}</span>

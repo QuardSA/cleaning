@@ -6,7 +6,7 @@
     <form action="/addservice_validate" class="d-flex flex-column gap-3 mt-4 mx-auto w-50" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-floating w-100">
-            <input type="text" class="form-control" id="titleservice" placeholder="{{old('titleservice')}}" name="titleservice">
+            <input type="text" class="form-control" id="titleservice" value="{{old('titleservice')}}" placeholder="" name="titleservice">
             <label for="titleservice">Название</label>
             @error('titleservice')
             <span class="text-danger">{{$message}}</span>
@@ -30,7 +30,7 @@
             <div class="form-floating w-100">
                 <input type="text" class="form-control" id="titlefeatures" placeholder="" name="titlefeatures[]">
                 <label for="titlefeatures">Особенности</label>
-                @error('titlefeatures')
+                @error('titlefeatures[]')
                 <span class="text-danger">{{$message}}</span>
                 @enderror
             </div>
