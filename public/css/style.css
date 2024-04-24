@@ -1,5 +1,16 @@
 /* Главная */
-
+.bg{
+    width: 50%;
+    max-height: 20rem;
+}
+.bg-img{
+    background-image: url(/img/i1.webp);
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 1000px;
+    overflow: hidden;
+}
 /* Слайдер */
 .slick-list{
     overflow: hidden;
@@ -257,3 +268,10 @@ nav.open ~ .overlay_admin{
 }
 
 /*admin*/
+.box-link{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.box-link:hover{
+    box-shadow: inset 10rem 10rem rgba(0, 0, 0, 0.2);
+    transition-duration: 300ms;
+}

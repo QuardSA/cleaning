@@ -1,9 +1,14 @@
 <x-header></x-header>
-    <div class="container fw-normal ">
+{{-- <div class="bg-img">
+
+</div>
+<div class="container">
+
+</div> --}}
+<div class="container fw-normal ">
         <div class="row">
             <div class="col-md-6 mt-2">
                 <div class="">
-
                     <form action="/create_order_validate" class="d-flex flex-column gap-3 mt-3" method="POST">
                         @csrf
                         <div class="form-outline">

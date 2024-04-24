@@ -26,6 +26,12 @@
                 <li class="list">
                     <a href="/admin" class="nav-link nav-style d-flex align-items-center p-3 gap-2">
                         <i class='bx bx-table bx-md icon'></i>
+                        <span class="link fs-5 fw-bold">Главная</span>
+                    </a>
+                </li>
+                <li class="list">
+                    <a href="/admin/service" class="nav-link nav-style d-flex align-items-center p-3 gap-2">
+                        <i class='bx bx-table bx-md icon'></i>
                         <span class="link fs-5 fw-bold">Услуги</span>
                     </a>
                 </li>

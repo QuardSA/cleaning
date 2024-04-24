@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Feature;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Orderstatus;
 
 class AdminController extends Controller
 {
-    public function index() {
+    public function service() {
         $services = Service::paginate(4);
-        return view('admin.index', compact('services'));
+        return view('admin.service', compact('services'));
     }
     public function addservice() {
         return view('admin.addservice');
@@ -149,4 +150,7 @@ class AdminController extends Controller
         return view('admin.orders', compact('orders', 'orderstatuses'));
     }
 
+    public function index() {
+        return view('admin.index');
+    }
 }
