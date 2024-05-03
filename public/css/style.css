@@ -1,15 +1,17 @@
 /* Главная */
-.bg{
-    width: 50%;
-    max-height: 20rem;
-}
-.bg-img{
+.background-image-container {
     background-image: url(/img/i1.webp);
-    background-size: 100% auto;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
-    height: 1000px;
-    overflow: hidden;
+}
+.bg-img-container-about{
+    background-image: url(/img/patern-gray-new.jpg);
+    background-position: center;
+}
+.bg-img-container-comments{
+    background-image: url(/img/1582474059_60-p-fotografii-intererov-rossiiskikh-kvartir-100.jpg);
+    background-size: cover;
+    background-position: center;
 }
 /* Слайдер */
 .slick-list{
@@ -256,14 +258,10 @@ nav.open ~ .overlay_admin{
     pointer-events: auto;
 }
 */
-.nav-style{
-    border-radius:15px;
-}
 
 .nav-style:hover{
     background:#0d6efd;
     color:#fff;
-    border-radius:15px;
     transition: all 0.4s ease;
 }
 
@@ -273,5 +271,26 @@ nav.open ~ .overlay_admin{
 }
 .box-link:hover{
     box-shadow: inset 10rem 10rem rgba(0, 0, 0, 0.2);
+    transition-duration: 300ms;
+}
+
+.badge {
+    border-radius: 0;
+    font-size: 12px;
+    line-height: 1;
+    padding: .375rem .5625rem;
+    font-weight: normal;
+}
+
+
+.edit:hover{
+    color: rgb(3, 90, 3);
+    scale: 1.1;
+    transition-duration: 300ms;
+}
+
+.cancel:hover{
+    color: rgb(90, 3, 3);
+    scale: 1.1;
     transition-duration: 300ms;
 }

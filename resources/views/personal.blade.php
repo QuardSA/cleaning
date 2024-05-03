@@ -1,4 +1,5 @@
 <x-header></x-header>
+<body class="d-flex flex-column" style="min-height: 102vh">
 <div class="container mb-3">
     <div class="row">
         <div class="col-md-4 mt-2">
@@ -35,6 +36,7 @@
                                 <li class="list-group-item"><strong>Заказ на число:</strong> {{$order->date}}</li>
                                 <li class="list-group-item"><strong>Услуга:</strong> {{$order->order_service->titleservice}}</li>
                                 <li class="list-group-item"><strong>Адрес:</strong> {{$order->address}}</li>
+                                <li class="list-group-item"><strong>Минимальное время работы:</strong> {{$order->work_time}}</li>
                                 <li class="list-group-item"><strong>Статус:</strong> {{$order->order_orderstatus->titlestatus}}</li>
                             </ul>
                         </div>

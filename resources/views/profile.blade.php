@@ -1,4 +1,5 @@
 <x-header></x-header>
+<body class="d-flex flex-column" style="min-height: 102vh">
 <div class="container">
     <div class="row">
         <div class="col-md-4 mt-2">

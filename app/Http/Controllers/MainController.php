@@ -70,14 +70,17 @@ class MainController extends Controller
         $address = $request->input('address');
 
         $service = Service::where('cost', $serviceName)->first();
+        $service_work_time = Service::where('work_time', $serviceName)->first();
 
         $cost = $square * $service->cost;
+        $work_time = ($square * $service->work_time)/60;
 
         $order = new Order();
         $order->square = $square;
         $order->service = $service->id;
         $order->cost = $cost;
         $order->date = $date;
+        $order->work_time = $work_time;
         $order->phone = $phone;
         $order->address = $address;
         $order->status = 1;

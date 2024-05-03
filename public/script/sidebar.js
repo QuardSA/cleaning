@@ -6,4 +6,3 @@ menuButtons.forEach((menuButton)=>{
         navBar.classList.toggle("open");
     });
 });
-

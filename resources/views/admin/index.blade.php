@@ -8,7 +8,7 @@
                 <h3 class="text-white fw-semibold mt-2">150</h3>
                 <p class="text-white fs-5 mt-0 fw-semibold">Новые заявки</p>
             </div>
-            <a href="#"
+            <a href="/admin/orders"
                 class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
                 <span class="d-inline-block">Больше</span>
                 <i class='bx bxs-right-arrow-circle'></i>
@@ -19,7 +19,7 @@
                 <h3 class="text-white fw-semibold mt-2">44</h3>
                 <p class="text-white fs-5 mt-0 fw-semibold">Пользователи</p>
             </div>
-            <a href="#"
+            <a href="/admin/users"
                 class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
                 <span class="d-inline-block">Больше</span>
                 <i class='bx bxs-right-arrow-circle'></i>
@@ -30,7 +30,7 @@
                 <h3 class="text-white fw-semibold mt-2">14</h3>
                 <p class="text-white fs-5 mt-0 fw-semibold">Все услуги</p>
             </div>
-            <a href="#"
+            <a href="/admin/service"
                 class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
                 <span class="d-inline-block">Больше</span>
                 <i class='bx bxs-right-arrow-circle'></i>
@@ -41,7 +41,7 @@
                 <h3 class="text-white fw-semibold mt-2">189</h3>
                 <p class="text-white fs-5 mt-0 fw-semibold">Логи</p>
             </div>
-            <a href="#"
+            <a href="/admin/logs"
                 class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
                 <span class="d-inline-block">Больше</span>
                 <i class='bx bxs-right-arrow-circle'></i>
@@ -63,7 +63,6 @@
         </div>
     </div>
 </div>
-
 <script src="/script/sidebar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/script/chart.js"></script>

@@ -15,6 +15,7 @@
                         <th scope="col">Описание</th>
                         <th scope="col">Особенности</th>
                         <th scope="col">Цена/кв.м</th>
+                        <th scope="col">Время работы</th>
                         <th scope="col">Действия</th>
                     </tr>
                 </thead>
@@ -34,6 +35,7 @@
                             </ul>
                         </td>
                         <td>{{ $service->cost }} рублей</td>
+                        <td>{{ $service->work_time}} минут/кв.м</td>
                         <td>
                             <a href="/admin/servicerdact/{{$service->id}}" class="btn btn-outline-success mb-2">Редактировать</a>
                             <form action="{{ route('sevice_delete',$service->id)}}" method="POST">
@@ -45,7 +47,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Услуги отсутствуют</td>
+                        <td colspan="7" class="text-center">Услуги отсутствуют</td>
                     </tr>
                     @endforelse
 

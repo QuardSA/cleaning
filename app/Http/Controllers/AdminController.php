@@ -11,23 +11,45 @@ use App\Models\Orderstatus;
 
 class AdminController extends Controller
 {
-    public function service() {
+    public function index()
+    {
+        return view('admin.index');
+    }
+
+    public function users()
+    {
+        $users = User::paginate(20);
+        return view('admin.users',compact('users'));
+    }
+
+    public function logs()
+    {
+        return view('admin.logs');
+    }
+
+    public function service()
+    {
         $services = Service::paginate(4);
         return view('admin.service', compact('services'));
     }
-    public function addservice() {
+
+    public function addservice()
+    {
         return view('admin.addservice');
     }
 
-    public function addservice_validate(Request $request) {
+    public function addservice_validate(Request $request)
+    {
         $request->validate([
             'titleservice' => 'required',
             'description' => 'required',
+            'work_time' => 'required',
             'cost' => 'required|numeric',
             'photo' => 'required|image|mimes:jpeg,png,jpg',
         ], [
             'titleservice.required' => 'Поле обязательно для заполнения',
             'description.required' => 'Поле обязательно для заполнения',
+            'work_time.required' => 'Поле обязательно для заполнения',
             'cost.required' => 'Поле обязательно для заполнения',
             'cost.numeric' => 'Поле должно быть числом',
             'photo.required' => 'Поле обязательно для заполнения',
@@ -37,6 +59,7 @@ class AdminController extends Controller
 
         $service = new Service();
         $service->titleservice = $request->input('titleservice');
+        $service->work_time = $request->input('work_time');
         $service->description = $request->input('description');
         $service->cost = $request->input('cost');
 
@@ -56,15 +79,17 @@ class AdminController extends Controller
             $service->features()->attach($feature);
         }
 
-        return redirect('/admin')->with('success', 'Услуга успешно создана');
+        return redirect('/admin/service')->with('success', 'Услуга успешно создана');
     }
 
-    public function service_redact($id){
+    public function service_redact($id)
+    {
         $service = Service::findOrFail($id);
-        return view('admin.serviceredact',compact('service'));
+        return view('admin.serviceredact', compact('service'));
     }
 
-    public function service_redact_validate(Request $request, $id){
+    public function service_redact_validate(Request $request, $id)
+    {
         $request->validate([
             'titleservice' => 'required',
             'description' => 'required',
@@ -82,6 +107,7 @@ class AdminController extends Controller
 
         $service = Service::findOrFail($id);
         $service->titleservice = $request->input('titleservice');
+        $service->work_time = $request->input('work_time');
         $service->description = $request->input('description');
         $service->cost = $request->input('cost');
 
@@ -103,13 +129,14 @@ class AdminController extends Controller
             $service->features()->attach($feature);
         }
 
-        return redirect('/admin')->with('success', 'Услуга успешно отредактирована');
+        return redirect('/admin/service')->with('success', 'Услуга успешно отредактирована');
     }
 
-    public function service_delete($id){
+    public function service_delete($id)
+    {
         $service = Service::findOrFail($id);
         $service->delete();
-        return redirect()->back()->with('success','Вы успешно удалили услугу');
+        return redirect()->back()->with('success', 'Вы успешно удалили услугу');
     }
 
 
@@ -131,13 +158,14 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Заказ успешно отклонен');
     }
 
-    public function orders(Request $request){
+    public function orders(Request $request)
+    {
         $orderstatuses = Orderstatus::all();
         $query = Order::query();
 
         if ($request->filled('date')) {
             $date = $request->input('date');
-            $query->whereDate('date','=', $date);
+            $query->whereDate('date', '=', $date);
         }
 
         if ($request->filled('status')) {
@@ -148,9 +176,5 @@ class AdminController extends Controller
         $orders = $query->paginate(10);
 
         return view('admin.orders', compact('orders', 'orderstatuses'));
-    }
-
-    public function index() {
-        return view('admin.index');
     }
 }

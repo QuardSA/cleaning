@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('address',100);
             $table->integer('square');
             $table->integer('cost');
+            $table->float('work_time');
             $table->date('date');
             $table->timestamps();
         });

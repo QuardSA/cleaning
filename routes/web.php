@@ -39,6 +39,8 @@ Route::middleware(['CheckAuth'])->group(function () {
 
 Route::middleware(['CheckRole'])->group(function () {
     Route::get('/admin',[AdminController::class, "index"]);
+    Route::get('/admin/logs',[AdminController::class, "logs"]);
+    Route::get('/admin/users',[AdminController::class, "users"]);
     Route::get('/admin/service',[AdminController::class, "service"]);
     Route::get('/admin/orders',[AdminController::class, "orders"]);
     Route::get('/admin/addservice',[AdminController::class, "addservice"]);

@@ -1,60 +1,37 @@
 <x-admin.header></x-admin.header>
 
-<div class="container mt-4">
-    <a href="/admin/addservice" class="d-flex text-decoration-none text-dark align-items-center gap-2">
-        <i class='bx bx-plus-circle bx-sm'></i>
-        <span class="fs-5">Добавить услугу</span>
-    </a>
-    <div class="row mt-2">
-        <div class="col">
-            <table class="table">
-                <thead>
+<div class="container mt-5">
+    <h2 class="text-start">Пользователи</h2>
+    <div class="table-responsive mt-3">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Почта</th>
+                    <th>Роль</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($users as $user)
                     <tr>
-                        <th scope="col">ФИО</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Особенности</th>
-                        <th scope="col">Цена/кв.м</th>
-                        <th scope="col">Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($users as $user)
-                    <tr>
-                        <td class="w-25"><img src="/storage/images/{{$service->photo}}" class="img-fluid"></td>
-                        <td>{{ $service->titleservice }}</td>
-                        <td>{{ Illuminate\Support\Str::limit($service->description, 441) }}</td>
-                        <td>
-                            <ul class="list-style-none">
-                                @forelse ($service->features as $feature)
-                                <li class="list-group">{{ $feature->titlefeatures }}</li>
-                                @empty
-                                <li>нету особенностей</li>
-                                @endforelse
-                            </ul>
-                        </td>
-                        <td>{{ $service->cost }} рублей</td>
-                        <td>
-                            <a href="/admin/servicerdact/{{$service->id}}" class="btn btn-outline-success mb-2">Редактировать</a>
-                            <form action="{{ route('sevice_delete',$service->id)}}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger">Удалить</button>
-                            </form>
+                        <td>{{ $user->surname }} {{ $user->name }} {{ $user->lastname }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td>{{ $user->user_role->titlerole }}</td>
+                        <td class="d-flex gap-2"><a href=""><i class='edit bx bxs-edit bx-sm'
+                                    style='color:green'></i></a>
+                            <a href=""><i class='cancel bx bxs-x-circle bx-sm' style='color:red'></i></a>
                         </td>
                     </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center">Услуги отсутствуют</td>
-                    </tr>
-                    @endforelse
-
-                </tbody>
-            </table>
-            {{ $services->withQueryString()->links('pagination::bootstrap-5') }}
-        </div>
+                @empty
+                    <td colspan="4" class="text-center">Пользователи отсутствуют</td>
+                @endforelse
+                {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
+            </tbody>
+        </table>
     </div>
-</div>
 
-<script src="/script/sidebar.js"></script>
-</body>
-</html>
+    <script src="/script/sidebar.js"></script>
+    </body>
+
+    </html>

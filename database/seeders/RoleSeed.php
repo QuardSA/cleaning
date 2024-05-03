@@ -18,6 +18,7 @@ class RoleSeed extends Seeder
         DB::table('roles')->insert([
             ['titlerole'=>'Пользователь','created_at'=>$date,'updated_at'=>$date],
             ['titlerole'=>'Администратор','created_at'=>$date,'updated_at'=>$date],
+            ['titlerole'=>'Менеджер','created_at'=>$date,'updated_at'=>$date],
         ]);
     }
 }
