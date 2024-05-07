@@ -7,6 +7,7 @@ use App\http\Controllers\AuthorizationController;
 use App\http\Controllers\MailingController;
 use App\http\Controllers\MainController;
 use App\http\Controllers\UserController;
+use App\http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +40,12 @@ Route::middleware(['CheckAuth'])->group(function () {
 
 Route::middleware(['CheckRole'])->group(function () {
     Route::get('/admin',[AdminController::class, "index"]);
-    Route::get('/admin/logs',[AdminController::class, "logs"]);
+    Route::post('/admin/filter', [AdminController::class, "filterData"])->name('admin.filter');
+    Route::get('/admin/logs',[LogController::class, "logs"]);
     Route::get('/admin/users',[AdminController::class, "users"]);
+    Route::get('/admin/users/{id}/edit',[AdminController::class, "users_edit"]);
+    Route::put('/users_edit_validate/{id}',[AdminController::class, "users_edit_validate"]);
+    Route::get('/delete/{id}',[AdminController::class, "users_delete"]);
     Route::get('/admin/service',[AdminController::class, "service"]);
     Route::get('/admin/orders',[AdminController::class, "orders"]);
     Route::get('/admin/addservice',[AdminController::class, "addservice"]);

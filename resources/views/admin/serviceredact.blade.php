@@ -46,12 +46,6 @@
                 @enderror
             @endforeach
         </div>
-        <div class="input-group input-group-lg">
-            <input type="file" class="form-control" id="inputGroupFile03" aria-describedby="inputGroupFileAddon03" aria-label="Upload" name="photo">
-        </div>
-        @error('photo')
-        <span class="text-danger">{{$message}}</span>
-        @enderror
         <button type="submit" class="btn btn-info">Редактировать</button>
     </form>
         <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить функции</button>

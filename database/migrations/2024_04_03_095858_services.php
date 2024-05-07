@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('titleservice',100);
             $table->text('description');
             $table->float('work_time');
-            $table->string('photo',100)->nullable();
             $table->double('cost',100);
             $table->timestamps();
         });

@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 class AuthorizationController extends Controller
 
 {
-    public function signup_validation(Request $request){
-
+    public function signup_validation(Request $request)
+    {
         $request->validate([
             'name' => 'required|alpha|max:100',
             'surname' => 'required|alpha|max:100',
@@ -50,41 +51,68 @@ class AuthorizationController extends Controller
             'role' => "1",
         ]);
 
-        if($userCreate){
+        if ($userCreate) {
+            Log::info('Пользователь ' . $userCreate->email . 'Регистрация', [
+                'user_id' => $userCreate->id,
+                'user_email' => $userCreate->email,
+                'ip_address' => $request->ip(),
+                'action' => 'Регистрация',
+            ]);
             Auth::login($userCreate);
-            return redirect()->back()->with('success','Вы зарегистрировались');
-        }else{
-            return redirect()->back()->with('error','Ошибка регистрации');
+            return redirect()->back()->with('success', 'Вы зарегистрировались');
+        } else {
+            return redirect()->back()->with('error', 'Ошибка регистрации');
         }
     }
 
-    public function signin_validation(Request $request){
+
+    public function signin_validation(Request $request)
+    {
 
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-        ],[
+        ], [
             'email.required' => 'Поле обязательно для заполнения',
             'email.email' => 'Введите корректный Email',
             'password.required' => 'Поле обязательно для заполнения',
         ]);
 
-        $user_authorization = $request->only("email","password");
+        $user_authorization = $request->only("email", "password");
 
-        if(Auth::attempt(['email' => $user_authorization['email'], 'password' => $user_authorization['password']])){
-            if(Auth::user()->role == 2) {
-                return redirect('/admin')->with('success','Вы вошли как Администратор');
-            }else{
-                return redirect()->back()->with('success','Добро пожаловать');
+        if (Auth::attempt(['email' => $user_authorization['email'], 'password' => $user_authorization['password']])) {
+            Log::info('Пользователь ' . Auth::user()->email . 'Вход в систему', [
+                'user_id' => Auth::user()->id,
+                'user_email' => Auth::user()->email,
+                'ip_address' => $request->ip(),
+                'action' => 'Вход в систему',
+            ]);
+            if (Auth::user()->role == 2) {
+                return redirect('/admin')->with('success', 'Вы вошли как Администратор');
+            } else {
+                return redirect()->back()->with('success', 'Добро пожаловать');
             }
-        }else{
-            return redirect()->back()->with('error','Ошибка авторизации');
+        } else {
+            return redirect()->back()->with('error', 'Ошибка авторизации');
         }
     }
 
-    public function signout(){
+    public function signout(Request $request)
+    {
+        $user = Auth::user();
+
         Session::flush();
         Auth::logout();
-        return redirect('/')->with('success','Вы вышли из аккаунта');
+
+        if ($user) {
+            Log::info('Пользователь ' . $user->email . 'Выход из системы', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'ip_address' => $request->ip(),
+                'action' => 'Выход из системы',
+            ]);
+        }
+
+        return redirect('/')->with('success', 'Вы вышли из аккаунта');
     }
 }
