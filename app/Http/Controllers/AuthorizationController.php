@@ -68,7 +68,6 @@ class AuthorizationController extends Controller
 
     public function signin_validation(Request $request)
     {
-
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -89,6 +88,8 @@ class AuthorizationController extends Controller
             ]);
             if (Auth::user()->role == 2) {
                 return redirect('/admin')->with('success', 'Вы вошли как Администратор');
+            } elseif (Auth::user()->role == 3) {
+                return redirect()->back()->with('success', 'Вы вошли как Менеджер');
             } else {
                 return redirect()->back()->with('success', 'Добро пожаловать');
             }
@@ -100,10 +101,8 @@ class AuthorizationController extends Controller
     public function signout(Request $request)
     {
         $user = Auth::user();
-
         Session::flush();
         Auth::logout();
-
         if ($user) {
             Log::info('Пользователь ' . $user->email . 'Выход из системы', [
                 'user_id' => $user->id,

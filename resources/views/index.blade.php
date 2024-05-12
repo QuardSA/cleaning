@@ -30,7 +30,8 @@
                         </div>
                         <select class="form-select form-control-lg" name="service" id="service">
                             @forelse($services as $service)
-                                <option value="{{ $service->cost }}|{{ $service->work_time }}">{{ $service->titleservice }}</option>
+                                <option value="{{ $service->cost }}|{{ $service->work_time }}">
+                                    {{ $service->titleservice }}</option>
                             @empty
                                 <option selected value="0 | 0">Услуг нету</option>
                             @endforelse
@@ -47,8 +48,8 @@
                             <span class="text-start">Минимальное время работы:</span>
                             <span id="timeresult"></span>
                         </div>
-                        <div class="d-flex gap-2">
-                            <div class="form-floating w-100">
+                        <div class="d-flex w-100 input-date">
+                            <div class="form-floating">
                                 <input type="date" class="form-control" id="date"
                                     placeholder="{{ old('date') }}" name="date" min="{{ now()->toDateString() }}">
                                 <label for="date">Выберите дату</label>
@@ -56,6 +57,17 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-floating" style="min-width:130px">
+                                <input type="time" class="form-control" id="time"
+                                    placeholder="{{ old('time') }}" name="time">
+                                <label for="time">Выберите время</label>
+                                @error('time')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <input type="hidden" id="service_work_time" name="service_work_time" value="">
+                        </div>
+                        <div class="d-flex gap-2">
                             <div class="form-floating w-100">
                                 <input type="tel" class="form-control" id="phone"
                                     placeholder="{{ old('phone') }}" name="phone" maxlength="11">
@@ -270,4 +282,12 @@
             </div>
         </div>
     </div>
+    <script>
+        document.getElementById('service').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const serviceWorkTime = selectedOption.value.split('|')[1];
+
+            document.getElementById('service_work_time').value = serviceWorkTime;
+        });
+    </script>
     <x-footer></x-footer>

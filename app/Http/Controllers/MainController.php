@@ -80,29 +80,47 @@ class MainController extends Controller
                 'address.required' => 'Поле обязательно для заполнения',
             ],
         );
-
+        $service_work_time = $request->input('service_work_time');
         $square = $request->input('square');
         $serviceName = $request->input('service');
         $date = $request->input('date');
         $phone = $request->input('phone');
         $address = $request->input('address');
+        $is_time_busy = Order::whereDate('start_time', $date)
+            ->where(function ($query) use ($request, $service_work_time) {
+                $query
+                    ->where(function ($query) use ($request, $service_work_time) {
+                        $query->whereTime('start_time', '<=', $request->input('time'))->whereTime('start_time', '>=', date('H:i:s', strtotime($request->input('time') . ' - ' . $service_work_time . ' minutes')));
+                    })
+                    ->orWhere(function ($query) use ($request, $service_work_time) {
+                        $query->whereTime('start_time', '<=', date('H:i:s', strtotime($request->input('time') . ' + ' . $service_work_time . ' minutes')))->whereTime('start_time', '>=', $request->input('time'));
+                    });
+            })
+            ->exists();
 
+        if ($is_time_busy) {
+            return redirect()->back()->with('error', 'Выбранное время уже занято. Пожалуйста, выберите другое время.');
+        }
         $service = Service::where('cost', $serviceName)->first();
         $service_work_time = Service::where('work_time', $serviceName)->first();
 
         $cost = $square * $service->cost;
-        $work_time = ($square * $service->work_time) / 60;
+        $work_time = ($square * $service->work_time);
 
         $order = new Order();
         $order->square = $square;
         $order->service = $service->id;
         $order->cost = $cost;
-        $order->date = $date;
         $order->work_time = $work_time;
         $order->phone = $phone;
         $order->address = $address;
         $order->status = 1;
         $order->user = Auth::id();
+        $order->start_time = date('Y-m-d H:i:s', strtotime($date . ' ' . $request->input('time')));
+
+        $end_time = date('Y-m-d H:i:s', strtotime($order->start_time . ' + ' . $work_time . ' minutes'));
+        $order->end_time = $end_time;
+
         $order->save();
 
         $user = Auth::user();

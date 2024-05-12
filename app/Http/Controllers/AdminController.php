@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\Feature;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Comment;
 use App\Models\Role;
 use App\Models\Orderstatus;
 use Illuminate\Support\Facades\Log;
@@ -103,7 +104,7 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::paginate(20);
+        $users = User::with('user_role')->orderBy('role', 'desc')->paginate(20);
         $roles = Role::all();
         return view('admin.users', compact('users', 'roles'));
     }
@@ -156,15 +157,7 @@ class AdminController extends Controller
     public function users_delete($id)
     {
         $user = User::FindOrFail($id);
-
-        $userEmail = $user->email;
-        $userName = $user->name;
-        $userSurname = $user->surname;
-        $userLastname = $user->lastname;
-        $userRole = $user->user_role->titlerole;
-        $userId = $user->id;
-
-        $currentUser = Auth::user();
+        $user->user_comments()->delete();
 
         if ($user->delete()) {
             return redirect()->back()->with('success', 'Пользователь удалён');
@@ -173,10 +166,6 @@ class AdminController extends Controller
         }
     }
 
-    public function logs()
-    {
-        return view('admin.logs');
-    }
 
     public function service()
     {
@@ -301,55 +290,5 @@ class AdminController extends Controller
             'action' => 'Удаление услуги',
         ]);
         return redirect()->back()->with('success', 'Вы успешно удалили услугу');
-    }
-
-    public function accept(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
-        $order->status = 2;
-        $order->save();
-        $user = Auth::user();
-        Log::info('Пользователь ' . $user->email . 'Принял заявку ', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Принял заявку',
-        ]);
-        return redirect()->back()->with('success', 'Заказ успешно принят');
-    }
-
-    public function deny(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
-        $order->status = 3;
-        $order->save();
-        $user = Auth::user();
-        Log::info('Пользователь ' . $user->email . 'Отклонил заявку ', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Отклонил заявку',
-        ]);
-        return redirect()->back()->with('success', 'Заказ успешно отклонен');
-    }
-
-    public function orders(Request $request)
-    {
-        $orderstatuses = Orderstatus::all();
-        $query = Order::query();
-
-        if ($request->filled('date')) {
-            $date = $request->input('date');
-            $query->whereDate('date', '=', $date);
-        }
-
-        if ($request->filled('status')) {
-            $status = $request->input('status');
-            $query->where('status', $status);
-        }
-
-        $orders = $query->paginate(10);
-
-        return view('admin.orders', compact('orders', 'orderstatuses'));
     }
 }

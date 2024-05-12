@@ -38,7 +38,7 @@
             </div>
             <div class="rounded col-lg-3 col-6 bg-warning bg-gradient px-0" style="max-width: 310px">
                 <div class="inner px-2">
-                    <h3 class="text-white fw-semibold mt-2">{{$services}}</h3>
+                    <h3 class="text-white fw-semibold mt-2">{{ $services }}</h3>
                     <p class="text-white fs-5 mt-0 fw-semibold">Все услуги</p>
                 </div>
                 <a href="/admin/service"
@@ -89,35 +89,32 @@
             </div>
             <div class="col-lg-6">
                 <div class="order_chart border-none shadow rounded p-3">
-                    <h3>Продажи</h3>
-                    <canvas id="barChart"></canvas>
-                    <div class="d-flex gap-2 mt-1" role="group" aria-label="Управление графиком">
-                        {{-- <form action="/admin" class="d-flex gap-2 mt-1" method="GET">
-                        @csrf
-                        <select class="form-select" id="selectMonth">
-                            @forelse ($uniqueMonths as $month)
-                                <option value="{{ $month }}">{{ $month }}</option>
-                            @empty
-                                <option selected>Выберите месяц</option>
-                            @endforelse
-                        </select>
-                        <select class="form-select" id="selectYear">
-                            @forelse ($uniqueYears as $year)
-                                <option value="{{ $year }}">{{ $year }}</option>
-                            @empty
-                                <option selected>Выберите год</option>
-                            @endforelse
-                        </select>
-                        <button type="submit" class="btn btn-success">Применить</button>
-                    </form> --}}
+                    <h3 class="text-center">Отчёты</h3>
+                    <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
+                        <div class="border rounded p-1 d-flex align-items-center mt-1">
+                            <div class="d-flex flex-grow-1 align-items-center">
+                                <i class='bx bx-file bx-md'></i>
+                                <span>Тут названиен файла</span>
+                            </div>
+                            <i class='bx bxs-download bx-md'></i>
+                        </div>
                     </div>
+                    <form class="d-flex gap-2 mt-1" method="POST" id="">
+                        @csrf
+                        <select class="form-select" id="">
+                            <option value="">Отправитель</option>
+                        </select>
+                        <select class="form-select" id="">
+                            <option value="">Дата</option>
+                        </select>
+                        <button type="button" class="btn btn-success">Применить</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
     <script src="/script/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="/script/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const selectMonth = document.getElementById('selectMonth');
@@ -183,7 +180,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <x-links></x-links>
     <x-alerts></x-alerts>
     <title>Document</title>
@@ -24,34 +25,67 @@
                 </div>
             </div>
             <hr>
-            <div class="sidebar-content" style="height:82%">
-                <ul class="lists list-group mt-3 gap-1">
-                    <li class="nav-item">
-                        <a href="/admin" class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+            @if (Auth::user()->role == 2)
+                <div class="sidebar-content" style="height:82%">
+                    <ul class="lists list-group mt-3 gap-1">
+                        <li class="nav-item">
+                            <a href="/admin"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bxs-dashboard bx-sm'></i>
+                                Главная
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/users"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bx-group bx-sm'></i>
+                                Пользователи
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/service"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bx-table bx-sm icon'></i>
+                                Услуги
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/admin/logs"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bx-file bx-sm'></i>
+                                Логи
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+            @if (Auth::user()->role == 3)
+                <div class="sidebar-content" style="height:82%">
+                    <ul class="lists list-group mt-3 gap-1">
+                        <li class="nav-item">
+                        <li class="nav-item">
+                            <a href="/manager"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bxs-dashboard bx-sm'></i>
+                                Главная
+                            </a>
+                        </li>
+                        <a href="/manager/orders"
+                            class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
                             <i class='bx bxs-dashboard bx-sm'></i>
-                            Главная
+                            Заявки
                         </a>
-                    </li>
-                    <li>
-                        <a href="/admin/users" class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
-                            <i class='bx bx-group bx-sm'></i>
-                            Пользователи
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/service" class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
-                            <i class='bx bx-table bx-sm icon'></i>
-                            Услуги
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/admin/logs" class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
-                            <i class='bx bx-file bx-sm' ></i>
-                            Логи
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/manager/faq"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bxs-dashboard bx-sm'></i>
+                                FAQ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
             <hr>
             <div class="bottom mt-auto">
                 <a href="/signout" class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">

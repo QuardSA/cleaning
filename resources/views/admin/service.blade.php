@@ -10,7 +10,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Изображение</th>
                         <th scope="col">Название</th>
                         <th scope="col">Описание</th>
                         <th scope="col">Особенности</th>
@@ -22,7 +21,6 @@
                 <tbody>
                     @forelse ($services as $service)
                     <tr>
-                        <td class="w-25"><img src="/storage/images/{{$service->photo}}" class="img-fluid"></td>
                         <td>{{ $service->titleservice }}</td>
                         <td>{{ Illuminate\Support\Str::limit($service->description, 441) }}</td>
                         <td>
@@ -36,12 +34,13 @@
                         </td>
                         <td>{{ $service->cost }} рублей</td>
                         <td>{{ $service->work_time}} минут/кв.м</td>
-                        <td>
-                            <a href="/admin/servicerdact/{{$service->id}}" class="btn btn-outline-success mb-2">Редактировать</a>
+                        <td class="d-flex">
+                            <a href="/admin/servicerdact/{{$service->id}}"><i class='edit bx bxs-edit bx-md' style='color:green'></i></a>
                             <form action="{{ route('sevice_delete',$service->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger">Удалить</button>
+                                <button type="submit" class="border-0 bg-white"><i class='cancel bx bxs-x-circle bx-md'
+                                    style='color:red'></i></button>
                             </form>
                         </td>
                     </tr>

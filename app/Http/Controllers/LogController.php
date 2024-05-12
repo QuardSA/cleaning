@@ -26,7 +26,7 @@ class LogController extends Controller
                     $logData = json_decode(substr($line, strpos($line, '{')), true);
                     if (isset($logData['user_email'])) {
                         $user = User::where('email', $logData['user_email'])->first();
-                        if ($user && ($request->input('user_id') == '' || $request->input('user_id') == $user->id) && ($request->input('role_id') == '' || $request->input('role_id') == $user->role_id) && ($request->input('action') == '' || $request->input('action') == $logData['action'])) {
+                        if ($user && ($request->input('user_id') == '' || $request->input('user_id') == $user->id) && ($request->input('role_id') == '' || $request->input('role_id') == $user->role) && ($request->input('action') == '' || $request->input('action') == $logData['action'])) {
                             $filteredLogs[] = [
                                 'user_id' => $user ? $user->id : null,
                                 'user_email' => $logData['user_email'],
@@ -47,6 +47,4 @@ class LogController extends Controller
         }
         return view('admin.logs', compact('filteredLogs', 'users', 'roles'));
     }
-
-
 }

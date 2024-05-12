@@ -46,7 +46,7 @@
                     <td>{{$order->cost}}</td>
                     <td>{{$order->address}}</td>
                     <td>{{$order->order_orderstatus->titlestatus}}</td>
-                    <td>{{$order->date}}</td>
+                    <td>{{$order->start_time}}</td>
                     <td >
                         @if ($order->status == 1)
                         <div class="d-flex gap-2">

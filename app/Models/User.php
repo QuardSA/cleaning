@@ -57,4 +57,7 @@ class User extends Authenticatable
     public function user_comments(){
         return $this->hasMany(Comment::class, 'user', 'id');
     }
+    public function user_report(){
+        return $this->hasMany(Report::class, 'user', 'id');
+    }
 }

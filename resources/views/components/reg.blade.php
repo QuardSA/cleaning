@@ -7,16 +7,16 @@
                         @csrf
                         <h1 class="fw-bold">Создайте аккаунт</h1>
                         <div class="form-floating w-100">
-                            <input type="text" class="form-control border-info" id="name" value="" placeholder="{{old('name')}}" name="name">
-                            <label for="name">Имя</label>
-                            @error('name')
+                            <input type="text" class="form-control border-info" id="surname" value="" placeholder="{{old('surname')}}" name="surname">
+                            <label for="surname">Фамилия</label>
+                            @error('surname')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="form-floating w-100">
-                            <input type="text" class="form-control border-info" id="surname" value="" placeholder="{{old('surname')}}" name="surname">
-                            <label for="surname">Фамилия</label>
-                            @error('surname')
+                            <input type="text" class="form-control border-info" id="name" value="" placeholder="{{old('name')}}" name="name">
+                            <label for="name">Имя</label>
+                            @error('name')
                             <span class="text-danger">{{$message}}</span>
                             @enderror
                         </div>

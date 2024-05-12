@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Exports\Report;
+use App\Imports\ReportsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\http\Controllers\AdminController;
 use App\http\Controllers\AuthorizationController;
 use App\http\Controllers\MailingController;
 use App\http\Controllers\MainController;
+use App\http\Controllers\ManagerController;
 use App\http\Controllers\UserController;
 use App\http\Controllers\LogController;
 
@@ -47,13 +50,27 @@ Route::middleware(['CheckRole'])->group(function () {
     Route::put('/users_edit_validate/{id}',[AdminController::class, "users_edit_validate"]);
     Route::get('/delete/{id}',[AdminController::class, "users_delete"]);
     Route::get('/admin/service',[AdminController::class, "service"]);
-    Route::get('/admin/orders',[AdminController::class, "orders"]);
     Route::get('/admin/addservice',[AdminController::class, "addservice"]);
     Route::post('/addservice_validate',[AdminController::class, "addservice_validate"]);
     Route::post('/filter',[AdminController::class, "filter"]);
-    Route::post('/admin/orders/{id}/accept', [AdminController::class, "accept"])->name('orders.accept');
-    Route::post('/admin/orders/{id}/deny', [AdminController::class, "deny"])->name('orders.deny');
     Route::get('/admin/servicerdact/{id}',[AdminController::class, "service_redact"]);
     Route::put('/service_redact_validate/{id}',[AdminController::class, "service_redact_validate"]);
     Route::delete('/admin/service_delete/{id}',[AdminController::class, "service_delete"])->name('sevice_delete');
 });
+
+Route::get('/manager',[ManagerController::class, "index"]);
+Route::post('/manager/faq_create',[ManagerController::class, "faq_create"]);
+Route::put('/manager/faq_edit/{id}',[ManagerController::class, "faq_edit"]);
+Route::get('/faq_delete/{id}',[ManagerController::class, "faq_delete"]);
+Route::get('/manager',[ManagerController::class, "index"]);
+Route::get('/manager/faq',[ManagerController::class, "faq"]);
+Route::post('/mailing',[ManagerController::class, "mailing"]);
+Route::post('/mailing_edit/{id}',[ManagerController::class, "mailing_edit"]);
+Route::get('/mailing_repeat/{id}',[ManagerController::class, "mailing_repeat"]);
+Route::get('/mailing_delete/{id}',[ManagerController::class, "mailing_delete"]);
+Route::get('/manager/orders',[ManagerController::class, "orders"]);
+Route::post('/manager/orders/{id}/accept', [ManagerController::class, "accept"])->name('orders.accept');
+Route::post('/manager/orders/{id}/deny', [ManagerController::class, "deny"])->name('orders.deny');
+Route::get('/export', [ManagerController::class, "report"]);
+Route::get('/downloadReport/{filename}', [ManagerController::class, "downloadReport"]);
+Route::get('/deleteReport/{id}', [ManagerController::class, "deleteReport"]);

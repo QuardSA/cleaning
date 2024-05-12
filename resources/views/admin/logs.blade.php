@@ -34,12 +34,20 @@
                         <option value="Оставление отзыва" @if(request('action') == 'Оставление отзыва') selected @endif>Оставление отзыва</option>
                         <option value="Создание заказа" @if(request('action') == 'Создание заказа') selected @endif>Создание заказа</option>
                         <option value="Изменение профиля" @if(request('action') == 'Изменение профиля') selected @endif>Изменение профиля</option>
+                        <option value="Выход из системы" @if(request('action') == 'Выход из системы') selected @endif>Выход из системы</option>
+                        <option value="Регистрация" @if(request('action') == 'Регистрация') selected @endif>Регистрация</option>
+                        <option value="Вход в систему" @if(request('action') == 'Вход в систему') selected @endif>Вход в систему</option>
+                        <option value="Редактирование услуги" @if(request('action') == 'Редактирование услуги') selected @endif>Редактирование услуги</option>
+                        <option value="Создание услуги" @if(request('action') == 'Создание услуги') selected @endif>Создание услуги</option>
+                        <option value="Удаление услуги" @if(request('action') == 'Удаление услуги') selected @endif>Удаление услуги</option>
                     </select>
                 </div>
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Применить фильтр</button>
+        <a href="/admin/logs" class="btn btn-secondary mt-2">Сбросить фильтр</a>
     </form>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -69,26 +77,6 @@
         </table>
     </div>
 </div>
-
-
-
-
-{{-- <div class="container">
-    <h1>Логи аутентификации</h1>
-    <ul>
-        @foreach ($filteredLogs as $log)
-            <li>{{ $log }}</li>
-        @endforeach
-    </ul>
-</div> --}}
-
-
-
-
-
-
-
-
 <script src="/script/sidebar.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>

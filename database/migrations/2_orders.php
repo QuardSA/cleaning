@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('square');
             $table->integer('cost');
             $table->float('work_time');
-            $table->date('date');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time')->nullable();
             $table->timestamps();
         });
     }
