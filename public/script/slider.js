@@ -1,9 +1,17 @@
 $(document).ready(function(){
     $('.slider').slick({
         infinite: true,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        arrows: true,
-        slidesToShow:3,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        dots: true, // Включаем точки
+        responsive: [
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+        ]
     });
 });

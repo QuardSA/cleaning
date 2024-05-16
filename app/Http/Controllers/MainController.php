@@ -7,17 +7,22 @@ use App\Models\Order;
 use App\Models\Service;
 use App\Models\Feature;
 use App\Models\Comment;
+use App\Models\Additionalservice;
+use App\Models\Faq;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\OrderShipped;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class MainController extends Controller
 {
     public function index()
     {
+        $additionalservices = Additionalservice::all();
         $services = Service::all();
+        $faqs = Faq::all();
         $comments = Comment::all();
-        return view('index', compact('services', 'comments'));
+        return view('index', compact('services', 'faqs', 'comments', 'additionalservices'));
     }
 
     public function comments_validate(Request $request)
@@ -56,12 +61,90 @@ class MainController extends Controller
         return view('object', compact('services', 'service'));
     }
 
+    // public function create_order_validate(Request $request)
+    // {
+    //     $request->validate(
+    //         [
+    //             'square' => 'required|numeric|min:30|max:999',
+    //             'service' => 'required',
+    //             'date' => 'required|date',
+    //             'phone' => 'required|min:11|max:11',
+    //             'address' => 'required',
+    //         ],
+    //         [
+    //             'square.required' => 'Поле обязательно для заполнения',
+    //             'square.numeric' => 'Поле должно быть числом',
+    //             'square.min' => 'Минимальное значение поля - 30',
+    //             'square.max' => 'Максимальное значение поля - 999',
+    //             'service.required' => 'Поле обязательно для выбора',
+    //             'date.required' => 'Поле обязательно для заполнения',
+    //             'date.date' => 'Поле должно быть датой',
+    //             'phone.required' => 'Поле обязательно для заполнения',
+    //             'phone.max' => 'Поле не должно превышать 11 символов',
+    //             'phone.min' => 'Поле не должно быть меньше 11 символов',
+    //             'address.required' => 'Поле обязательно для заполнения',
+    //         ],
+    //     );
+    //     $service_work_time = $request->input('service_work_time');
+    //     $square = $request->input('square');
+    //     $serviceName = $request->input('service');
+    //     $date = $request->input('date');
+    //     $phone = $request->input('phone');
+    //     $address = $request->input('address');
+    //     $is_time_busy = Order::whereDate('start_time', $date)
+    //         ->where(function ($query) use ($request, $service_work_time) {
+    //             $query
+    //                 ->where(function ($query) use ($request, $service_work_time) {
+    //                     $query->whereTime('start_time', '<=', $request->input('time'))->whereTime('start_time', '>=', date('H:i:s', strtotime($request->input('time') . ' - ' . $service_work_time . ' minutes')));
+    //                 })
+    //                 ->orWhere(function ($query) use ($request, $service_work_time) {
+    //                     $query->whereTime('start_time', '<=', date('H:i:s', strtotime($request->input('time') . ' + ' . $service_work_time . ' minutes')))->whereTime('start_time', '>=', $request->input('time'));
+    //                 });
+    //         })
+    //         ->exists();
+
+    //     if ($is_time_busy) {
+    //         return redirect()->back()->with('error', 'Выбранное время уже занято. Пожалуйста, выберите другое время.');
+    //     }
+    //     $service = Service::where('cost', $serviceName)->first();
+    //     $service_work_time = Service::where('work_time', $serviceName)->first();
+
+    //     $cost = $square * $service->cost;
+    //     $work_time = ($square * $service->work_time);
+
+    //     $order = new Order();
+    //     $order->square = $square;
+    //     $order->service = $service->id;
+    //     $order->cost = $cost;
+    //     $order->work_time = $work_time;
+    //     $order->phone = $phone;
+    //     $order->address = $address;
+    //     $order->status = 1;
+    //     $order->user = Auth::id();
+    //     $order->start_time = date('Y-m-d H:i:s', strtotime($date . ' ' . $request->input('time')));
+
+    //     $end_time = date('Y-m-d H:i:s', strtotime($order->start_time . ' + ' . $work_time . ' minutes'));
+    //     $order->end_time = $end_time;
+
+    //     $order->save();
+
+    //     $user = Auth::user();
+    //     Log::info('Пользователь ' . $user->email . ' создал заказ на услугу ' . $serviceName, [
+    //         'user_id' => $user->id,
+    //         'user_email' => $user->email,
+    //         'ip_address' => request()->ip(),
+    //         'action' => 'Создание заказа',
+    //     ]);
+    //     $user->notify(new OrderShipped($order));
+
+    //     return redirect()->back()->with('success', 'Вы сделали заказ');
+    // }
     public function create_order_validate(Request $request)
     {
         $request->validate(
             [
                 'square' => 'required|numeric|min:30|max:999',
-                'service' => 'required',
+                'service' => 'required|exists:services,id',
                 'date' => 'required|date',
                 'phone' => 'required|min:11|max:11',
                 'address' => 'required',
@@ -72,6 +155,7 @@ class MainController extends Controller
                 'square.min' => 'Минимальное значение поля - 30',
                 'square.max' => 'Максимальное значение поля - 999',
                 'service.required' => 'Поле обязательно для выбора',
+                'service.exists' => 'Выбранная услуга не существует',
                 'date.required' => 'Поле обязательно для заполнения',
                 'date.date' => 'Поле должно быть датой',
                 'phone.required' => 'Поле обязательно для заполнения',
@@ -80,20 +164,32 @@ class MainController extends Controller
                 'address.required' => 'Поле обязательно для заполнения',
             ],
         );
-        $service_work_time = $request->input('service_work_time');
+
+        $service = Service::find($request->input('service'));
+        $additionalServices = AdditionalService::whereIn('id', $request->input('additionalservices', []))->get();
+
         $square = $request->input('square');
-        $serviceName = $request->input('service');
         $date = $request->input('date');
         $phone = $request->input('phone');
         $address = $request->input('address');
+
+        $baseCost = $square * $service->cost;
+        $baseWorkTime = $square * $service->work_time;
+
+        $additionalCost = $additionalServices->sum('cost');
+        $additionalWorkTime = $additionalServices->sum('work_time');
+
+        $totalCost = $baseCost + $additionalCost;
+        $totalWorkTime = $baseWorkTime + $additionalWorkTime;
+
         $is_time_busy = Order::whereDate('start_time', $date)
-            ->where(function ($query) use ($request, $service_work_time) {
+            ->where(function ($query) use ($request, $totalWorkTime) {
                 $query
-                    ->where(function ($query) use ($request, $service_work_time) {
-                        $query->whereTime('start_time', '<=', $request->input('time'))->whereTime('start_time', '>=', date('H:i:s', strtotime($request->input('time') . ' - ' . $service_work_time . ' minutes')));
+                    ->where(function ($query) use ($request, $totalWorkTime) {
+                        $query->whereTime('start_time', '<=', $request->input('time'))->whereTime('start_time', '>=', date('H:i:s', strtotime($request->input('time') . ' - ' . $totalWorkTime . ' minutes')));
                     })
-                    ->orWhere(function ($query) use ($request, $service_work_time) {
-                        $query->whereTime('start_time', '<=', date('H:i:s', strtotime($request->input('time') . ' + ' . $service_work_time . ' minutes')))->whereTime('start_time', '>=', $request->input('time'));
+                    ->orWhere(function ($query) use ($request, $totalWorkTime) {
+                        $query->whereTime('start_time', '<=', date('H:i:s', strtotime($request->input('time') . ' + ' . $totalWorkTime . ' minutes')))->whereTime('start_time', '>=', $request->input('time'));
                     });
             })
             ->exists();
@@ -101,30 +197,25 @@ class MainController extends Controller
         if ($is_time_busy) {
             return redirect()->back()->with('error', 'Выбранное время уже занято. Пожалуйста, выберите другое время.');
         }
-        $service = Service::where('cost', $serviceName)->first();
-        $service_work_time = Service::where('work_time', $serviceName)->first();
-
-        $cost = $square * $service->cost;
-        $work_time = ($square * $service->work_time);
 
         $order = new Order();
         $order->square = $square;
         $order->service = $service->id;
-        $order->cost = $cost;
-        $order->work_time = $work_time;
+        $order->cost = $totalCost;
+        $order->work_time = $totalWorkTime;
         $order->phone = $phone;
         $order->address = $address;
         $order->status = 1;
         $order->user = Auth::id();
         $order->start_time = date('Y-m-d H:i:s', strtotime($date . ' ' . $request->input('time')));
 
-        $end_time = date('Y-m-d H:i:s', strtotime($order->start_time . ' + ' . $work_time . ' minutes'));
+        $end_time = date('Y-m-d H:i:s', strtotime($order->start_time . ' + ' . $totalWorkTime . ' minutes'));
         $order->end_time = $end_time;
 
         $order->save();
 
         $user = Auth::user();
-        Log::info('Пользователь ' . $user->email . ' создал заказ на услугу ' . $serviceName, [
+        Log::info('Пользователь ' . $user->email . ' создал заказ на услугу ' . $service->titleservice, [
             'user_id' => $user->id,
             'user_email' => $user->email,
             'ip_address' => request()->ip(),
@@ -133,5 +224,25 @@ class MainController extends Controller
         $user->notify(new OrderShipped($order));
 
         return redirect()->back()->with('success', 'Вы сделали заказ');
+    }
+
+    public function cancelOrder(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        if (!in_array($order->status, [1, 2])) {
+            return redirect()->back()->with('error', 'Заказ нельзя отменить.');
+        }
+
+        $currentDate = Carbon::now();
+        $orderDate = Carbon::parse($order->start_time);
+
+        if ($orderDate->diffInDays($currentDate) < 2) {
+            return redirect()->back()->with('error', 'До исполнения заказа остается меньше 2 дней, его нельзя отменить.');
+        }
+        $order->status = 4;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Заказ успешно отменен.');
     }
 }

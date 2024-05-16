@@ -9,15 +9,7 @@
             <ul class="navbar-nav">
             </ul>
             <ul class="navbar-nav gap-1">
-                @guest
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-outline-primary rounded-pill" data-bs-toggle="modal"
-                            data-bs-target="#regModal">
-                            Регистрация
-                        </button>
-                    </li>
-                @endguest
-                @auth
+                @if (Auth::user()->role == 1)
                     <li class="nav-item">
                         <a role="button" href="/profile" class="btn btn-outline-primary rounded-pill">
                             Личный кабинет
@@ -28,7 +20,7 @@
                             Выход
                         </a>
                     </li>
-                @endauth
+                @endif
             </ul>
         </div>
     </div>

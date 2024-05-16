@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class LogController extends Controller
 {
@@ -45,6 +46,14 @@ class LogController extends Controller
             }
             fclose($file);
         }
-        return view('admin.logs', compact('filteredLogs', 'users', 'roles'));
+        $filteredLogs = array_reverse($filteredLogs);
+
+        $perPage = 14;
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageLogs = array_slice($filteredLogs, ($currentPage - 1) * $perPage, $perPage);
+        $paginatedLogs = new LengthAwarePaginator($currentPageLogs, count($filteredLogs), $perPage);
+        $paginatedLogs->setPath($request->url());
+
+        return view('admin.logs', compact('paginatedLogs', 'users', 'roles'));
     }
 }

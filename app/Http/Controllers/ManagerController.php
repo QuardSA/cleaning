@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Report;
 use App\Models\Order;
 use App\Models\Faq;
+use App\Models\User;
 use App\Models\Mailing;
 use App\Models\Mailingsend;
 use App\Models\Orderstatus;
@@ -19,13 +20,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ManagerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reports = Report::where('user', auth()->user()->id)->get();
+        $reportsQuery = Report::query();
+
+        // Фильтрация по дате
+        if ($request->has('date') && $request->date != '') {
+            $reportsQuery->whereDate('created_at', $request->date);
+        }
+
+        $reports = $reportsQuery->where('user', auth()->user()->id)->get();
+
+        // Получение пользователей с ролью 2
+        $usersWithRole2 = User::where('role', 2)->get();
+
+        // Прочие данные для представления
         $faqs = Faq::all()->count();
         $mailings = Mailingsend::all();
         $newOrdersCount = Order::where('status', '1')->count();
-        return view('manager.index', compact('newOrdersCount', 'mailings', 'faqs', 'reports'));
+
+        return view('manager.index', compact('newOrdersCount', 'mailings', 'faqs', 'reports', 'usersWithRole2'));
     }
 
     public function orders(Request $request)

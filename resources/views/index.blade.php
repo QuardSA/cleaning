@@ -5,14 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <x-links></x-links>
+
     <title>Document</title>
+    <x-links></x-links>
 </head>
 
 <body class="d-flex flex-column" style="min-height: 102vh">
     <x-alerts></x-alerts>
     <div class="background-image-container d-flex flex-column pb-3">
-        <x-header></x-header>
+        <x-headerindex></x-headerindex>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -30,15 +31,35 @@
                         </div>
                         <select class="form-select form-control-lg" name="service" id="service">
                             @forelse($services as $service)
-                                <option value="{{ $service->cost }}|{{ $service->work_time }}">
-                                    {{ $service->titleservice }}</option>
+                                <option value="{{ $service->id }}" data-cost="{{ $service->cost }}"
+                                    data-work-time="{{ $service->work_time }}">
+                                    {{ $service->titleservice }}
+                                </option>
                             @empty
-                                <option selected value="0 | 0">Услуг нету</option>
+                                <option selected value="0" data-cost="0" data-work-time="0">Услуг нету</option>
                             @endforelse
                         </select>
                         @error('service')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
+                        <div class="form-outline">
+                            <h3 class="fw-normal text-start">Дополнительные услуги</h3>
+                            @forelse($additionalservices as $additionalservice)
+                                <div class="form-check">
+                                    <input class="form-check-input additional-service" type="checkbox"
+                                        value="{{ $additionalservice->id }}" data-cost="{{ $additionalservice->cost }}"
+                                        data-work-time="{{ $additionalservice->work_time }}"
+                                        id="additionalservice{{ $additionalservice->id }}" name="additionalservices[]">
+                                    <label class="form-check-label"
+                                        for="additionalservice{{ $additionalservice->id }}">
+                                        {{ $additionalservice->titleadditionalservices }}
+                                    </label>
+                                </div>
+                            @empty
+                                <span>Дополнительных услуг нет</span>
+                            @endforelse
+                        </div>
+
                         <div class="d-flex justify-content-between fs-5">
                             <span class="text-start">Цена:</span>
                             <span class="text-end fw-bold" id="result"></span>
@@ -48,10 +69,12 @@
                             <span class="text-start">Минимальное время работы:</span>
                             <span id="timeresult"></span>
                         </div>
+
                         <div class="d-flex w-100 input-date">
                             <div class="form-floating">
                                 <input type="date" class="form-control" id="date"
-                                    placeholder="{{ old('date') }}" name="date" min="{{ now()->toDateString() }}">
+                                    placeholder="{{ old('date') }}" name="date"
+                                    min="{{ now()->toDateString() }}">
                                 <label for="date">Выберите дату</label>
                                 @error('date')
                                     <span class="text-danger">{{ $message }}</span>
@@ -67,6 +90,7 @@
                             </div>
                             <input type="hidden" id="service_work_time" name="service_work_time" value="">
                         </div>
+
                         <div class="d-flex gap-2">
                             <div class="form-floating w-100">
                                 <input type="tel" class="form-control" id="phone"
@@ -77,24 +101,24 @@
                                 @enderror
                             </div>
                             <div class="form-floating w-100">
-                                <input type="text" class="form-control" id="adress"
-                                    placeholder="{{ old('adress') }}" name="address">
+                                <input type="text" class="form-control" id="address"
+                                    placeholder="{{ old('address') }}" name="address">
                                 <label for="address" class="text-black">Адрес</label>
                                 @error('address')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
+
                         @if (Auth::check() && Auth::user()->role === 1)
                             <button type="submit" class="btn btn-info">Заказать</button>
                         @elseif (!Auth::check())
                             <button type="button" class="btn btn-info" data-bs-toggle="modal"
                                 data-bs-target="#regModal">Заказать</button>
                         @else
-                            <span class="text-cemter fs-5 text-danger">Вы не можете сдлеать заказ являясь
-                                Администраторм</span>
                         @endif
                     </form>
+
                 </div>
                 {{-- <div class="col-md-6 mt-2">
                     <img src="/img/cleaner2.png" class="img-fluid" alt="">
@@ -147,32 +171,29 @@
     </div>
     <div class="slider w-75 mx-auto">
         @forelse ($services as $service)
-            <div class="row mx-1">
-                <div class="col-md-12">
-                    <a href="/object/{{ $service->id }}" class="text-decoration-none text-dark"
-                        style="min-height: 100%">
-                        <div class="border rounded" style="height: 400px">
-                            <div class="border-bottom bg-info">
-                                <h3 class="text-center fw-semibold text-white">{{ $service->titleservice }}</h3>
-                            </div>
-                            <div class="text-center mt-3">
-                                <span
-                                    class="fs-5">{{ Illuminate\Support\Str::limit($service->description, 40) }}</span>
-                            </div>
-                            <hr class="mx-auto" style="width: 95%">
-                            <ul>
-                                @foreach ($service->features as $feature)
-                                    <li class="list-group-item d-flex align-items-center"><i
-                                            class='bx bx-check text-success fs-3 me-2'></i><span
-                                            class="fs-5">{{ $feature->titlefeatures }}</span></li>
-                                @endforeach
-                            </ul>
-                            <div class="text-end my-2 me-2 ">
-                                <span class="fs-5 fw-bold">от {{ $service->cost }} р</span>
-                            </div>
+            <div class="slide-item">
+                <a href="/object/{{ $service->id }}" class="text-decoration-none text-dark">
+                    <div class="service-card border rounded h-100">
+                        <div class="service-header border-bottom bg-info p-3">
+                            <h3 class="text-center fw-semibold text-white">{{ $service->titleservice }}</h3>
                         </div>
-                    </a>
-                </div>
+                        <div class="service-description text-center mt-3">
+                            <span class="fs-5">{{ Illuminate\Support\Str::limit($service->description, 40) }}</span>
+                        </div>
+                        <hr class="mx-auto" style="width: 95%">
+                        <ul class="list-unstyled">
+                            @foreach ($service->features as $feature)
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class='bx bx-check text-success fs-3 me-2'></i>
+                                    <span class="fs-5">{{ $feature->titlefeatures }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                        <div class="service-cost text-end my-2 me-2">
+                            <span class="fs-5 fw-bold">от {{ $service->cost }} р</span>
+                        </div>
+                    </div>
+                </a>
             </div>
         @empty
             Услуги отсутствуют
@@ -256,8 +277,6 @@
                         data-bs-target="#regModal">Оставить
                         отзыв</button>
                 @else
-                    <span class="text-cemter fs-5 text-danger">Вы не можете оставить отзыв являясь
-                        Администраторм</span>
                 @endif
             </form>
         </div>
@@ -265,23 +284,133 @@
     <div class="container mt-5 py-2">
         <h2 class="text-center mb-4">Часто задаваемые вопросы</h2>
         <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        В чем преимущество использования услуг горничных по уборке дома
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                    data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Служба уборки дома экономит ваше драгоценное время, выполняя уборку, позволяя вам
-                        сосредоточиться на других задачах и занятиях.
+            @foreach ($faqs as $index => $faq)
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ $index }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse{{ $index }}" aria-expanded="true"
+                            aria-controls="collapse{{ $index }}">
+                            {{ $faq->titlefaq }}
+                        </button>
+                    </h2>
+                    <div id="collapse{{ $index }}" class="accordion-collapse collapse"
+                        aria-labelledby="heading{{ $index }}" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            {{ $faq->description }}
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+    <div class="modal fade" id="regModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="form_registration" id="form_registration">
+                    <div class="form-container sign-up-container">
+                        <form action="/signup_validation" class="auth_reg" method="POST">
+                            @csrf
+                            <h1 class="fw-bold">Создайте аккаунт</h1>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control border-info" id="surname" value=""
+                                    placeholder="{{ old('surname') }}" name="surname">
+                                <label for="surname">Фамилия</label>
+                                @error('surname')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control border-info" id="name" value=""
+                                    placeholder="{{ old('name') }}" name="name">
+                                <label for="name">Имя</label>
+                                @error('name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="text" class="form-control border-info" id="lastname" value=""
+                                    placeholder="{{ old('lastname') }}" name="lastname">
+                                <label for="lastname">Отчество</label>
+                                @error('lastname')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="email" class="form-control border-info" id="email" value=""
+                                    placeholder="{{ old('email') }}" name="email">
+                                <label for="email">Почта</label>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="password" class="form-control border-info" id="password"
+                                    value="" placeholder="{{ old('password') }}" name="password">
+                                <label for="password">Пароль</label>
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="password" class="form-control border-info" id="confirm_password"
+                                    value="" placeholder="{{ old('confirm_password') }}"
+                                    name="confirm_password">
+                                <label for="confirm_password">Повторите пароль</label>
+                                @error('confirm_password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <button type="submit"
+                                class="border rounded-pill bg-info border-info text-white px-4 py-2 fs-6 fw-bold">Зарегистрироваться</button>
+                        </form>
+                    </div>
+                    <div class="form-container sign-in-container">
+                        <form action="/signin_validation" class="auth_reg" method="POST">
+                            @csrf
+                            <h1 class="fw-bold">Авторизируйтесь</h1>
+                            <div class="form-floating w-100">
+                                <input type="email" class="form-control border-info" id="email" value=""
+                                    placeholder="{{ old('email') }}" name="email">
+                                <label for="email">Почта</label>
+                                @error('email')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-floating w-100">
+                                <input type="password" class="form-control border-info" id="password"
+                                    value="" placeholder="{{ old('password') }}" name="password">
+                                <label for="password">Пароль</label>
+                                @error('password')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <button type="submit"
+                                class="border rounded-pill bg-info border-info text-white px-4 py-2 fs-6 fw-bold">Авторизоваться</button>
+                        </form>
+                    </div>
+                    <div class="overlay-container">
+                        <div class="overlay">
+                            <div class="overlay-panel overlay-left">
+                                <h1>Вы вернулись!</h1>
+                                <p>Что-бы зайти в свой аккаунт введите свою почту и пароль</p>
+                                <button class="ghost border rounded-pill border-white px-4 py-1 text-white"
+                                    id="signIn">Войти</button>
+                            </div>
+                            <div class="overlay-panel overlay-right">
+                                <h1>Добро пожаловать!</h1>
+                                <p>Введите свои персональные данные и присоединяйтесь к нам</p>
+                                <button class="ghost border rounded-pill border-white px-4 py-1 text-white"
+                                    id="signUp">Зарегистрироваться</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <x-scripts></x-scripts>
+    <x-footer></x-footer>
     <script>
         document.getElementById('service').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -290,4 +419,20 @@
             document.getElementById('service_work_time').value = serviceWorkTime;
         });
     </script>
-    <x-footer></x-footer>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.slider').slick({
+                infinite: true,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                dots: true, // Включаем точки
+                responsive: [{
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                }]
+            });
+        });
+    </script>

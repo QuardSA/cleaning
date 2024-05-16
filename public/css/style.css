@@ -1,63 +1,113 @@
 /* Главная */
 .background-image-container {
-    background-image: url(/img/i1.webp);
+    position: relative;
+    background-image: url('/img/i1.webp');
     background-size: cover;
     background-position: center;
 }
-.bg-img-container-about{
-    background-image: url(/img/patern-gray-new.jpg);
+
+.background-image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.bg-img-container-about {
+    position: relative;
+    background-image: url('/img/patern-gray-new.jpg');
     background-position: center;
 }
-.bg-img-container-comments{
-    background-image: url(/img/1582474059_60-p-fotografii-intererov-rossiiskikh-kvartir-100.jpg);
+
+.bg-img-container-comments {
+    position: relative;
+    background-image: url('/img/1582474059_60-p-fotografii-intererov-rossiiskikh-kvartir-100.jpg');
     background-size: cover;
     background-position: center;
+}
+
+.bg-img-container-comments::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.background-image-container > *,
+.bg-img-container-comments > * {
+    position: relative;
+    z-index: 2;
 }
 
 /* Слайдер */
-.slick-list{
+.slick-list {
     overflow: hidden;
 }
-.slick-track{
+
+.slick-track {
     display: flex;
 }
 
-.slider{
+.slider {
     min-width: 0;
     position: relative;
     padding: 0 50px;
 }
 
-.slider .slick-arrow{
-    position: absolute;
-    top: 50%;
-    margin: -30px 0 0 0;
-    z-index: 10;
+.slide-item {
+    padding: 0 5px;
+}
+
+.service-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-header {
+    padding: 10px 0;
+}
+
+.service-description {
+    padding: 10px;
+}
+
+.service-cost {
+    padding: 10px;
+}
+
+.slick-dots {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.slick-dots li {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.slick-dots li button {
     font-size: 0;
-    width: 30px;
-    height: 60px;
+    width: 10px;
+    height: 10px;
+    background-color: black; /* Цвет точек */
+    border-radius: 50%;
     border: none;
+    cursor: pointer;
+    padding: 5px;
 }
 
-.slider .slick-arrow.slick-prev{
-    left: 0;
-    background: url(/img/aiga_left_arrow.svg) 0 0 / 100% no-repeat;
-}
-
-.slider .slick-arrow.slick-next{
-    right: 0;
-    background: url(/img/aiga_right_arrow.svg) 0 0 / 100% no-repeat;
-}
-
-
-/* services */
-.adptive-card{
-    width: 100%;
-}
-@media(min-width:576px){
-    .adptive-card{
-        width: 48%;
-    }
+.slick-dots li.slick-active button {
+    background-color: gray; /* Цвет активной точки */
 }
 
 /* Регистрация и авторизация */
@@ -241,29 +291,17 @@ nav.open .sidebar{
     left: 0%;
     height:100%;
 }
-/*.overlay_admin{
-    position: fixed;
-    top: 0;
-    left: -100%;
-    height: 100%;
-    width: 100%;
-    opacity: 0%;
-    transition: all 0.25s ease;
-    pointer-events: none;
-    background:#eee;
-}
-
-nav.open ~ .overlay_admin{
-    left: 15%;
-    opacity: 1;
-    pointer-events: auto;
-}
-*/
 
 .nav-style:hover{
     background:#0d6efd;
     color:#fff;
     transition: all 0.4s ease;
+}
+@media(max-width: 768px) {
+    nav.open .sidebar {
+        min-width: 100%;
+        left: 0;
+    }
 }
 
 /*admin*/

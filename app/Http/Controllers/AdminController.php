@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\Feature;
 use App\Models\Order;
+use App\Models\Report;
+use App\Models\Additionalservice;
 use App\Models\User;
 use App\Models\Comment;
 use App\Models\Role;
@@ -13,16 +15,33 @@ use App\Models\Orderstatus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\Console\Input\Input;
 
 class AdminController extends Controller
 {
     public function index(Request $request)
     {
+        Carbon::setLocale('ru');
+
         $newOrdersCount = Order::where('status', '1')->count();
+
+        $reportsQuery = Report::query();
+        if ($request->has('user') && $request->user != '') {
+            $reportsQuery->where('user', $request->user);
+        }
+        if ($request->has('date') && $request->date != '') {
+            $reportsQuery->whereDate('created_at', $request->date);
+        }
+        $reports = $reportsQuery->get();
+        $usersWithRole2 = User::where('role', 2)->get();
+
         $users = User::count();
+        $additionalservices = Additionalservice::count();
         $services = Service::count();
         $orders = Order::all();
         $totalCostByDate = [];
+
         if ($request->ajax()) {
             $month = $request->month;
             $year = $request->year;
@@ -44,7 +63,7 @@ class AdminController extends Controller
         $uniqueMonths = $orders
             ->pluck('updated_at')
             ->map(function ($date) {
-                return Carbon::parse($date)->format('F');
+                return Carbon::parse($date)->translatedFormat('F');
             })
             ->unique();
 
@@ -62,7 +81,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services'), [
+        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services', 'reports', 'usersWithRole2', 'additionalservices'), [
             'labels' => json_encode($labels),
             'data' => json_encode($data),
             'uniqueMonths' => $uniqueMonths,
@@ -102,12 +121,26 @@ class AdminController extends Controller
         ]);
     }
 
-    public function users()
+    public function users(Request $request)
     {
-        $users = User::with('user_role')->orderBy('role', 'desc')->paginate(20);
+        $query = User::query();
+
+        if ($request->filled('user_id')) {
+            $query->where('id', $request->user_id);
+        }
+
+        if ($request->filled('role')) {
+            $query->whereHas('user_role', function ($q) use ($request) {
+                $q->where('id', $request->role);
+            });
+        }
+
+        $users = $query->paginate(14);
         $roles = Role::all();
+
         return view('admin.users', compact('users', 'roles'));
     }
+
 
     public function users_edit_validate(Request $request, $id)
     {
@@ -117,6 +150,8 @@ class AdminController extends Controller
                 'surname' => 'required|alpha|max:100',
                 'lastname' => 'nullable|alpha|max:100',
                 'email' => 'required|string|email|max:100',
+                'role' => 'required|exists:roles,id',
+                'password' => 'nullable|string|min:8',
             ],
             [
                 'name.required' => 'Поле обязательно для заполнения',
@@ -130,29 +165,35 @@ class AdminController extends Controller
                 'email.required' => 'Поле обязательно для заполнения',
                 'email.email' => 'Поле должно быть корректным адресом электронной почты',
                 'email.max' => 'Поле не должно превышать 100 символов',
-            ],
+                'role.required' => 'Поле обязательно для заполнения',
+                'role.exists' => 'Выбранная роль не существует',
+                'password.min' => 'Пароль должен быть не менее 8 символов',
+            ]
         );
 
-        $user = User::FindOrFail($id);
+        $user = User::findOrFail($id);
         $user->name = $request->input('name');
         $user->surname = $request->input('surname');
         $user->lastname = $request->input('lastname');
         $user->email = $request->input('email');
         $user->role = $request->input('role');
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
         $user->save();
 
-        if ($user) {
-            Log::info('Пользователь ' . $user->email . ' изменил данные', [
-                'user_id' => $user->id,
-                'user_email' => $user->email,
-                'ip_address' => $request->ip(),
-                'action' => 'Изменение данных',
-            ]);
-            return redirect()->back()->with('success', 'Данные успешно изменены');
-        } else {
-            return redirect()->back()->with('error', 'Ошибка изменения данных');
-        }
+        Log::info('Пользователь ' . $user->email . ' изменил данные', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'action' => 'Изменение данных',
+        ]);
+
+        return redirect()->back()->with('success', 'Данные успешно изменены');
     }
+
 
     public function users_delete($id)
     {
@@ -169,9 +210,10 @@ class AdminController extends Controller
 
     public function service()
     {
-        $services = Service::paginate(4);
+        $services = Service::paginate(10);
         return view('admin.service', compact('services'));
     }
+
 
     public function addservice()
     {
@@ -290,5 +332,95 @@ class AdminController extends Controller
             'action' => 'Удаление услуги',
         ]);
         return redirect()->back()->with('success', 'Вы успешно удалили услугу');
+    }
+    public function additional_service()
+    {
+        $additionalservices = Additionalservice::paginate(10);
+        return view('admin.additional_service', compact('additionalservices'));
+    }
+    public function add_additional_service()
+    {
+        return view('admin.add_additional_service');
+    }
+
+    public function add_additional_service_validate(Request $request)
+    {
+        $request->validate(
+            [
+                'titleadditionalservices' => 'required',
+                'work_time' => 'required',
+                'cost' => 'required|numeric',
+            ],
+            [
+                'titleservice.required' => 'Поле обязательно для заполнения',
+                'work_time.required' => 'Поле обязательно для заполнения',
+                'cost.required' => 'Поле обязательно для заполнения',
+                'cost.numeric' => 'Поле должно быть числом',
+            ],
+        );
+
+        $additionalservice = new Additionalservice();
+        $additionalservice->titleadditionalservices = $request->input('titleadditionalservices');
+        $additionalservice->work_time = $request->input('work_time');
+        $additionalservice->cost = $request->input('cost');
+
+        $additionalservice->save();
+        $user = Auth::user();
+        Log::info('Пользователь ' . $user->email . ' создал услугу ' . $additionalservice->titleservice, [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'action' => 'Создание услуги',
+        ]);
+        return redirect('/admin/additional_service')->with('success', 'Услуга успешно создана');
+    }
+    public function additionalservice_delete($id)
+    {
+        $additionalservice = Additionalservice::findOrFail($id);
+        $titleService = $additionalservice->titleadditionalservices;
+        $additionalservice->delete();
+        $user = Auth::user();
+        Log::info('Пользователь ' . $user->email . 'Удалил услугу ' . $titleService, [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => request()->ip(),
+            'action' => 'Удаление услуги',
+        ]);
+        return redirect()->back()->with('success', 'Вы успешно удалили услугу');
+    }
+    public function additionalservice_redact($id)
+    {
+        $additionalservice = Additionalservice::findOrFail($id);
+        return view('admin.additional_service_redact', compact('additionalservice'));
+    }
+
+    public function additionalservice_validate(Request $request, $id)
+    {
+        $request->validate(
+            [
+                'titleadditionalservices' => 'required',
+                'cost' => 'required|numeric',
+            ],
+            [
+                'titleadditionalservices.required' => 'Поле обязательно для заполнения',
+                'cost.required' => 'Поле обязательно для заполнения',
+                'cost.numeric' => 'Поле должно быть числом',
+            ],
+        );
+
+        $additionalservice = Additionalservice::findOrFail($id);
+        $additionalservice->titleadditionalservices = $request->input('titleadditionalservices');
+        $additionalservice->work_time = $request->input('work_time');
+        $additionalservice->cost = $request->input('cost');
+
+        $additionalservice->save();
+        $user = Auth::user();
+        Log::info('Пользователь ' . $user->email . 'Отредактировал услугу ' . $additionalservice->titleservice, [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'action' => 'Редактирование услуги',
+        ]);
+        return redirect('/admin/additional_service')->with('success', 'Услуга успешно отредактирована');
     }
 }

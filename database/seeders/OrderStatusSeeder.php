@@ -19,6 +19,7 @@ class OrderStatusSeeder extends Seeder
             ['titlestatus'=>'Новое','created_at'=>$date,'updated_at'=>$date],
             ['titlestatus'=>'Принято','created_at'=>$date,'updated_at'=>$date],
             ['titlestatus'=>'Отклонено','created_at'=>$date,'updated_at'=>$date],
+            ['titlestatus'=>'Отменено пользователем','created_at'=>$date,'updated_at'=>$date],
         ]);
     }
 }

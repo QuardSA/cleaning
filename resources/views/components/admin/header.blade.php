@@ -12,11 +12,11 @@
 </head>
 
 <body>
-    <nav class="navbar-admin position-fixed top-0 start-0 d-flex align-items-center" style="width:15%">
+    <nav class="navbar-admin position-fixed top-0 start-0 d-flex align-items-center">
         <div class="logo d-flex align-items-center mt-2 ms-2 gap-3">
             <i class="bx bx-menu menu-icon bx-lg"></i>
         </div>
-        <div class="sidebar position-fixed top-0 h-100 px-2 shadow bg-white" style="width:15%">
+        <div class="sidebar position-fixed top-0 h-100 px-2 shadow bg-white" >
             <div class="logo d-flex align-items-center mt-2 ms-2 gap-3">
                 <i class="bx bx-menu menu-icon bx-lg"></i>
                 <div class="d-flex flex-column">
@@ -62,7 +62,6 @@
             @if (Auth::user()->role == 3)
                 <div class="sidebar-content" style="height:82%">
                     <ul class="lists list-group mt-3 gap-1">
-                        <li class="nav-item">
                         <li class="nav-item">
                             <a href="/manager"
                                 class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">

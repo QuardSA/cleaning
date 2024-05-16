@@ -32,27 +32,27 @@
             <div class="order_chart border-none shadow rounded p-3">
                 <h3 class="text-center">Отчёты</h3>
                 <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
-                    @foreach ($reports as $report)
+                    @forelse ($reports as $report)
                         <div class="border rounded p-1 d-flex align-items-center mt-1">
                             <div class="d-flex flex-grow-1 align-items-center gap-1">
                                 <i class='bx bx-file bx-md'></i>
                                 <span>{{ $report->file }}</span>
                             </div>
-                            <a href="/downloadReport/{{$report->file}}" class="text-success">
+                            <a href="/downloadReport/{{ $report->file }}" class="text-success">
                                 <i class='bx bxs-download bx-md'></i>
                             </a>
-                            <a href="/deleteReport/{{$report->id}}" class="text-danger">
+                            <a href="/deleteReport/{{ $report->id }}" class="text-danger">
                                 <i class='cancel bx bxs-x-circle bx-md'></i>
                             </a>
                         </div>
-                    @endforeach
+                    @empty
+                        <span class="text-center">Отчётов нет</span>
+                    @endforelse
                 </div>
-                <form class="d-flex gap-2 mt-1" method="POST" id="">
+                <form class="d-flex gap-2 mt-1" method="GET">
                     @csrf
-                    <select class="form-select" id="">
-                        <option value="">Дата</option>
-                    </select>
-                    <button type="button" class="btn btn-success">Применить</button>
+                    <input type="date" class="form-control" id="date" name="date">
+                    <button type="submit" class="btn btn-success">Применить</button>
                 </form>
             </div>
         </div>
@@ -144,9 +144,10 @@
         </div>
     </div>
 @endforeach
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+</script>
 <script src="/script/sidebar.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <x-scripts></x-scripts>
 
 </html>

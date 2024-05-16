@@ -13,19 +13,8 @@
 <body>
     <div class="container mt-5">
         <h2 class="text-start">Панель администратора</h2>
-        <div class="row gap-2 mt-3 justify-content-center">
-            <div class="rounded col-lg-3 col-6 bg-primary bg-gradient px-0" style="max-width: 310px">
-                <div class="inner px-2">
-                    <h3 class="text-white fw-semibold mt-2">{{ $newOrdersCount }}</h3>
-                    <p class="text-white fs-5 mt-0 fw-semibold">Новые заявки</p>
-                </div>
-                <a href="/admin/orders"
-                    class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
-                    <span class="d-inline-block">Больше</span>
-                    <i class='bx bxs-right-arrow-circle'></i>
-                </a>
-            </div>
-            <div class="rounded col-lg-3 col-6 bg-success bg-gradient px-0" style="max-width: 310px">
+        <div class="row mt-3 gap-1">
+            <div class="rounded col  bg-success bg-gradient px-0" style="">
                 <div class="inner px-2">
                     <h3 class="text-white fw-semibold mt-2">{{ $users }}</h3>
                     <p class="text-white fs-5 mt-0 fw-semibold">Пользователи</p>
@@ -36,7 +25,7 @@
                     <i class='bx bxs-right-arrow-circle'></i>
                 </a>
             </div>
-            <div class="rounded col-lg-3 col-6 bg-warning bg-gradient px-0" style="max-width: 310px">
+            <div class="rounded col  bg-warning bg-gradient px-0" style="">
                 <div class="inner px-2">
                     <h3 class="text-white fw-semibold mt-2">{{ $services }}</h3>
                     <p class="text-white fs-5 mt-0 fw-semibold">Все услуги</p>
@@ -47,7 +36,18 @@
                     <i class='bx bxs-right-arrow-circle'></i>
                 </a>
             </div>
-            <div class="rounded col-lg-3 col-6 bg-danger bg-gradient px-0" style="max-width: 310px">
+            <div class="rounded col  bg-warning bg-gradient px-0" style="">
+                <div class="inner px-2">
+                    <h3 class="text-white fw-semibold mt-2">{{ $additionalservices }}</h3>
+                    <p class="text-white fs-5 mt-0 fw-semibold">Доп.услуги</p>
+                </div>
+                <a href="/admin/additional_service"
+                    class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
+                    <span class="d-inline-block">Больше</span>
+                    <i class='bx bxs-right-arrow-circle'></i>
+                </a>
+            </div>
+            <div class="rounded col  bg-danger bg-gradient px-0" style="">
                 <div class="inner px-2">
                     <h3 class="text-white fw-semibold mt-2 p-1 mb-5">Логи</h3>
                 </div>
@@ -91,28 +91,36 @@
                 <div class="order_chart border-none shadow rounded p-3">
                     <h3 class="text-center">Отчёты</h3>
                     <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
-                        <div class="border rounded p-1 d-flex align-items-center mt-1">
-                            <div class="d-flex flex-grow-1 align-items-center">
-                                <i class='bx bx-file bx-md'></i>
-                                <span>Тут названиен файла</span>
+                        @forelse ($reports as $report)
+                            <div class="border rounded p-1 d-flex align-items-center mt-1">
+                                <div class="d-flex flex-grow-1 align-items-center">
+                                    <i class='bx bx-file bx-md'></i>
+                                    <span>{{ $report->file }}</span>
+                                </div>
+                                <a href="/downloadReport/{{ $report->file }}" class="text-success">
+                                    <i class='bx bxs-download bx-md'></i>
+                                </a>
                             </div>
-                            <i class='bx bxs-download bx-md'></i>
-                        </div>
+                        @empty
+                        <span class="text-center">Отчётов нет</span>
+                        @endforelse
                     </div>
-                    <form class="d-flex gap-2 mt-1" method="POST" id="">
+                    <form class="d-flex gap-2 mt-1" method="GET" id="">
                         @csrf
-                        <select class="form-select" id="">
+                        <select class="form-select" id="user" name="user">
                             <option value="">Отправитель</option>
+                            @foreach($usersWithRole2 as $user)
+                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                            @endforeach
                         </select>
-                        <select class="form-select" id="">
-                            <option value="">Дата</option>
-                        </select>
-                        <button type="button" class="btn btn-success">Применить</button>
+                        <input type="date" class="form-control" id="date" name="date">
+                        <button type="submit" class="btn btn-success">Применить</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="/script/sidebar.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>

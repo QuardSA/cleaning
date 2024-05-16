@@ -33,14 +33,14 @@ class OrderShipped extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail($notifiable)
     {
-        return (new MailMessage)
-                ->subject('Ваш заказ успешно размещен')
-                ->line('Вы заказали услугу!')
-                ->line('Номер вашего заказа: ' . $this->order->id)
-                ->line('Сумма заказа: ' . $this->order->cost . ' руб.')
-                ->line('Спасибо за то, что вы выбрали "Чистый дом"');
+        return (new MailMessage())
+            ->subject('Ваш заказ успешно размещен')
+            ->view('emails.notifications', [
+                'user' => $notifiable,
+                'order' => $this->order,
+            ]);
     }
 
     /**
@@ -51,7 +51,7 @@ class OrderShipped extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 }

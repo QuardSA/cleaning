@@ -1,50 +1,64 @@
-const sizeInput = document.getElementById('size');
-const serviceSelect = document.getElementById('service');
-const resultSpan = document.getElementById('result');
-const resultTime = document.getElementById('timeresult');
-sizeInput.addEventListener('input', calculatePrice);
-sizeInput.addEventListener('input', calculateTime);
+document.addEventListener('DOMContentLoaded', function () {
+    const sizeInput = document.getElementById('size');
+    const serviceSelect = document.getElementById('service');
+    const additionalServiceCheckboxes = document.querySelectorAll('.additional-service');
+    const resultSpan = document.getElementById('result');
+    const resultTime = document.getElementById('timeresult');
 
-serviceSelect.addEventListener('change', calculatePrice);
+    function calculatePrice() {
+        const selectedService = serviceSelect.options[serviceSelect.selectedIndex];
+        const servicePrice = parseFloat(selectedService.dataset.cost);
+        const size = parseFloat(sizeInput.value);
 
-function calculatePrice() {
-    const selectedOption = serviceSelect.value.split('|');
-    const servicePrice = parseFloat(selectedOption[0]);
+        let totalPrice = size * servicePrice;
+        additionalServiceCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const additionalServicePrice = parseFloat(checkbox.dataset.cost);
+                totalPrice += additionalServicePrice;
+            }
+        });
 
-    const size = sizeInput.value;
-    const totalPrice = size * servicePrice;
-
-    resultSpan.textContent = 'от ' + totalPrice + ' рублей';
-}
-
-function calculateTime() {
-    const selectedOption = serviceSelect.value.split('|');
-    const serviceTime = parseFloat(selectedOption[1]);
-
-    const size = sizeInput.value;
-    const time = (size * serviceTime)/60;
-
-    let timeText;
-    switch (true) {
-        case time === 1:
-            timeText = 'часа';
-            break;
-        case time === 1:
-            timeText = 'часа';
-            break;
-        case time >= 2 && time <= 100:
-            timeText = 'часов';
-            break;
-        default:
-            timeText = 'часов';
-            break;
+        resultSpan.textContent = 'от ' + totalPrice + ' рублей';
     }
 
-    resultTime.textContent = 'от ' + time + ' ' + timeText;
-}
+    function calculateTime() {
+        const selectedService = serviceSelect.options[serviceSelect.selectedIndex];
+        const serviceTime = parseFloat(selectedService.dataset.workTime);
+        const size = parseFloat(sizeInput.value);
 
-sizeInput.addEventListener('input', calculatePrice);
-serviceSelect.addEventListener('change', calculatePrice);
+        let totalTime = (size * serviceTime) / 60;
+        additionalServiceCheckboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const additionalServiceTime = parseFloat(checkbox.dataset.workTime);
+                totalTime += additionalServiceTime / 60;
+            }
+        });
 
-calculatePrice();
-calculateTime();
+        let timeText;
+        switch (true) {
+            case totalTime === 1:
+                timeText = 'час';
+                break;
+            case totalTime >= 2 && totalTime <= 4:
+                timeText = 'часа';
+                break;
+            default:
+                timeText = 'часов';
+                break;
+        }
+
+        resultTime.textContent = 'от ' + totalTime.toFixed(2) + ' ' + timeText;
+    }
+
+    sizeInput.addEventListener('input', calculatePrice);
+    sizeInput.addEventListener('input', calculateTime);
+    serviceSelect.addEventListener('change', calculatePrice);
+    serviceSelect.addEventListener('change', calculateTime);
+    additionalServiceCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', calculatePrice);
+        checkbox.addEventListener('change', calculateTime);
+    });
+
+    calculatePrice();
+    calculateTime();
+});

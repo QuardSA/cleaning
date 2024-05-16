@@ -25,7 +25,8 @@
                                     data-bs-target="#editFAQModal{{ $faq->id }}">
                                     <i class='edit bx bxs-edit bx-sm' style='color:green'></i>
                                 </button>
-                                <a href="/faq_delete/{{$faq->id}}"><i class='cancel bx bxs-x-circle bx-sm' style='color:red'></i></a>
+                                <a href="/faq_delete/{{ $faq->id }}"><i class='cancel bx bxs-x-circle bx-sm'
+                                        style='color:red'></i></a>
                             </td>
                         </tr>
                     @empty
@@ -98,6 +99,9 @@
         </div>
     </div>
 @endforeach
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+</script>
 <script src="/script/sidebar.js"></script>
 <x-scripts></x-scripts>
 </body>
