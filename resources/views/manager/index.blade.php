@@ -90,7 +90,7 @@
                         <label for="editQuestion" class="form-label">Тема рассылки</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <textarea class="form-control" id="editAnswer" name="description" style="height: 100px" required></textarea>
+                        <textarea class="form-control" id="editAnswer" name="description" style="height: 150px" required></textarea>
                         <label for="editAnswer" class="form-label">Описание</label>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                             <label for="editQuestion" class="form-label">Тема рассылки</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" id="editAnswer" name="description" style="height: 100px" required>{{ $mailing->description }}</textarea>
+                            <textarea class="form-control" id="editAnswer" name="description" style="height: 150px" required>{{ $mailing->description }}</textarea>
                             <label for="editAnswer" class="form-label">Описание</label>
                         </div>
                     </div>

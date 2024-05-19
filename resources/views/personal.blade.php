@@ -66,7 +66,7 @@
                                         <li class="list-group-item"><strong>Статус:</strong>
                                             {{ $order->order_orderstatus->titlestatus }}</li>
                                     </ul>
-                                    @if ($order->status !== 4 && $order->status !== 3)
+                                    @if ($order->status !== 4 && $order->status !== 3 && $order->status !== 5)
                                         <form action="{{ route('cancel-order', $order->id) }}" method="POST"
                                             class="d-inline-block">
                                             @csrf

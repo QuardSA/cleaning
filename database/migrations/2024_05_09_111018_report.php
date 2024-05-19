@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->string('file',100);
-            $table->foreignId('user')->references('id')->on('users');
+            // $table->foreignId('user')->references('id')->on('users');
             $table->timestamps();
         });
     }

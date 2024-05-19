@@ -36,7 +36,7 @@ class AdminController extends Controller
         $usersWithRole3 = User::where('role', 3)->get();
 
         $faqs = Faq::all()->count();
-        $users = User::where('role',3)->count();
+        $users = User::where('role', 3)->count();
         $additionalservices = Additionalservice::count();
         $services = Service::count();
         $orders = Order::where('status', '5')->get();
@@ -82,7 +82,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services', 'reports', 'usersWithRole3', 'additionalservices','faqs'), [
+        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services', 'reports', 'usersWithRole3', 'additionalservices', 'faqs'), [
             'labels' => json_encode($labels),
             'data' => json_encode($data),
             'uniqueMonths' => $uniqueMonths,
@@ -121,123 +121,6 @@ class AdminController extends Controller
             'data' => $data,
         ]);
     }
-
-    public function users(Request $request)
-    {
-        $query = User::where('role',3);
-
-        $users = $query->paginate(14);
-
-        return view('admin.users', compact('users'));
-    }
-
-    public function users_create_validate(Request $request)
-    {
-        $request->validate(
-            [
-                'name' => 'required|alpha|max:100',
-                'surname' => 'required|alpha|max:100',
-                'lastname' => 'nullable|alpha|max:100',
-                'email' => 'required|string|email|max:100',
-                'password' => 'nullable|string|min:8',
-            ],
-            [
-                'name.required' => 'Поле обязательно для заполнения',
-                'name.alpha' => 'Поле должно состоять только из букв',
-                'name.max' => 'Поле не должно превышать 100 символов',
-                'surname.required' => 'Поле обязательно для заполнения',
-                'surname.alpha' => 'Поле должно состоять только из букв',
-                'surname.max' => 'Поле не должно превышать 100 символов',
-                'lastname.alpha' => 'Поле должно состоять только из букв',
-                'lastname.max' => 'Поле не должно превышать 100 символов',
-                'email.required' => 'Поле обязательно для заполнения',
-                'email.email' => 'Поле должно быть корректным адресом электронной почты',
-                'email.max' => 'Поле не должно превышать 100 символов',
-                'password.min' => 'Пароль должен быть не менее 8 символов',
-            ]
-        );
-
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->surname = $request->input('surname');
-        $user->lastname = $request->input('lastname');
-        $user->email = $request->input('email');
-        $user->password = $request->input('password');
-        $user->role = 3;
-
-        $user->save();
-
-        Log::info('Пользователь ' . $user->email . 'Добавил модератора', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Добавил модератора',
-        ]);
-
-        return redirect()->back()->with('success', 'Модератор успешно добавлен');
-    }
-    public function users_edit_validate(Request $request, $id)
-    {
-        $request->validate(
-            [
-                'name' => 'required|alpha|max:100',
-                'surname' => 'required|alpha|max:100',
-                'lastname' => 'nullable|alpha|max:100',
-                'email' => 'required|string|email|max:100',
-                'password' => 'nullable|string|min:8',
-            ],
-            [
-                'name.required' => 'Поле обязательно для заполнения',
-                'name.alpha' => 'Поле должно состоять только из букв',
-                'name.max' => 'Поле не должно превышать 100 символов',
-                'surname.required' => 'Поле обязательно для заполнения',
-                'surname.alpha' => 'Поле должно состоять только из букв',
-                'surname.max' => 'Поле не должно превышать 100 символов',
-                'lastname.alpha' => 'Поле должно состоять только из букв',
-                'lastname.max' => 'Поле не должно превышать 100 символов',
-                'email.required' => 'Поле обязательно для заполнения',
-                'email.email' => 'Поле должно быть корректным адресом электронной почты',
-                'email.max' => 'Поле не должно превышать 100 символов',
-                'password.min' => 'Пароль должен быть не менее 8 символов',
-            ]
-        );
-
-        $user = User::findOrFail($id);
-        $user->name = $request->input('name');
-        $user->surname = $request->input('surname');
-        $user->lastname = $request->input('lastname');
-        $user->email = $request->input('email');
-
-        if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
-        }
-
-        $user->save();
-
-        Log::info('Пользователь ' . $user->email . ' изменил данные', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Изменение данных',
-        ]);
-
-        return redirect()->back()->with('success', 'Данные успешно изменены');
-    }
-
-
-    public function users_delete($id)
-    {
-        $user = User::FindOrFail($id);
-        $user->user_comments()->delete();
-
-        if ($user->delete()) {
-            return redirect()->back()->with('success', 'Пользователь удалён');
-        } else {
-            return redirect()->back()->with('error', 'Ошибка удаления пользователя');
-        }
-    }
-
-
     public function service()
     {
         $services = Service::paginate(10);
@@ -363,6 +246,124 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Вы успешно удалили услугу');
     }
+
+    public function users(Request $request)
+    {
+        $query = User::where('role', 3);
+
+        $users = $query->paginate(14);
+
+        return view('admin.users', compact('users'));
+    }
+
+    public function users_create_validate(Request $request)
+    {
+        $request->validate(
+            [
+                'name' => 'required|alpha|max:100',
+                'surname' => 'required|alpha|max:100',
+                'lastname' => 'nullable|alpha|max:100',
+                'email' => 'required|string|email|max:100',
+                'password' => 'nullable|string|min:8',
+            ],
+            [
+                'name.required' => 'Поле обязательно для заполнения',
+                'name.alpha' => 'Поле должно состоять только из букв',
+                'name.max' => 'Поле не должно превышать 100 символов',
+                'surname.required' => 'Поле обязательно для заполнения',
+                'surname.alpha' => 'Поле должно состоять только из букв',
+                'surname.max' => 'Поле не должно превышать 100 символов',
+                'lastname.alpha' => 'Поле должно состоять только из букв',
+                'lastname.max' => 'Поле не должно превышать 100 символов',
+                'email.required' => 'Поле обязательно для заполнения',
+                'email.email' => 'Поле должно быть корректным адресом электронной почты',
+                'email.max' => 'Поле не должно превышать 100 символов',
+                'password.min' => 'Пароль должен быть не менее 8 символов',
+            ]
+        );
+
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->surname = $request->input('surname');
+        $user->lastname = $request->input('lastname');
+        $user->email = $request->input('email');
+        $user->password = $request->input('password');
+        $user->role = 3;
+
+        $user->save();
+
+        Log::info('Пользователь ' . $user->email . 'Добавил модератора', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'action' => 'Добавил модератора',
+        ]);
+
+        return redirect()->back()->with('success', 'Модератор успешно добавлен');
+    }
+    public function users_edit_validate(Request $request, $id)
+    {
+        $request->validate(
+            [
+                'name' => 'required|alpha|max:100',
+                'surname' => 'required|alpha|max:100',
+                'lastname' => 'nullable|alpha|max:100',
+                'email' => 'required|string|email|max:100',
+                'password' => 'nullable|string|min:8',
+            ],
+            [
+                'name.required' => 'Поле обязательно для заполнения',
+                'name.alpha' => 'Поле должно состоять только из букв',
+                'name.max' => 'Поле не должно превышать 100 символов',
+                'surname.required' => 'Поле обязательно для заполнения',
+                'surname.alpha' => 'Поле должно состоять только из букв',
+                'surname.max' => 'Поле не должно превышать 100 символов',
+                'lastname.alpha' => 'Поле должно состоять только из букв',
+                'lastname.max' => 'Поле не должно превышать 100 символов',
+                'email.required' => 'Поле обязательно для заполнения',
+                'email.email' => 'Поле должно быть корректным адресом электронной почты',
+                'email.max' => 'Поле не должно превышать 100 символов',
+                'password.min' => 'Пароль должен быть не менее 8 символов',
+            ]
+        );
+
+        $user = User::findOrFail($id);
+        $user->name = $request->input('name');
+        $user->surname = $request->input('surname');
+        $user->lastname = $request->input('lastname');
+        $user->email = $request->input('email');
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->save();
+
+        Log::info('Пользователь ' . $user->email . ' изменил данные', [
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'ip_address' => $request->ip(),
+            'action' => 'Изменение данных',
+        ]);
+
+        return redirect()->back()->with('success', 'Данные успешно изменены');
+    }
+
+
+    public function users_delete($id)
+    {
+        $user = User::FindOrFail($id);
+        $user->user_comments()->delete();
+
+        if ($user->delete()) {
+            return redirect()->back()->with('success', 'Пользователь удалён');
+        } else {
+            return redirect()->back()->with('error', 'Ошибка удаления пользователя');
+        }
+    }
+
+
+
     public function additional_service()
     {
         $additionalservices = Additionalservice::paginate(10);

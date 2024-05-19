@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 
@@ -26,16 +27,16 @@ class ManagerController extends Controller
 {
     public function index(Request $request)
     {
-        $reportsQuery = Report::query();
-        if ($request->has('date') && $request->date != '') {
-            $reportsQuery->whereDate('created_at', $request->date);
-        }
-        $reports = $reportsQuery->where('user', auth()->user()->id)->get();
-        $usersWithRole2 = User::where('role', 2)->get();
+        // $reportsQuery = Report::query();
+        // if ($request->has('date') && $request->date != '') {
+        //     $reportsQuery->whereDate('created_at', $request->date);
+        // }
+        // $reports = $reportsQuery->where('user', auth()->user()->id)->get();
+        // $usersWithRole2 = User::where('role', 2)->get();
         $mailings = Mailingsend::all();
         $newOrdersCount = Order::where('status', '1')->count();
 
-        return view('manager.index', compact('newOrdersCount', 'mailings', 'reports', 'usersWithRole2'));
+        return view('manager.index', compact('newOrdersCount', 'mailings'));
     }
 
     public function orders(Request $request)
@@ -138,15 +139,14 @@ class ManagerController extends Controller
         $mailing->description = $request['description'];
         $mailing->save();
 
-        $mails = Mailing::all();
         $title = $request['titlemailing'];
         $description = $request['description'];
 
         $mailMessage = new MailingMail($title, $description);
 
-        foreach ($mails as $mail) {
-            Mail::to($mail->email)->send($mailMessage);
-        }
+        $emails = Mailing::pluck('email')->toArray();
+
+        Mail::to($emails)->send($mailMessage);
 
         return redirect()->back()->with('success', 'Рассылка успешно создана');
     }
@@ -169,14 +169,13 @@ class ManagerController extends Controller
     public function mailing_repeat($id)
     {
         $mailing = Mailingsend::findOrFail($id);
-        $mails = Mailing::all();
+
         $title = $mailing->titlemailing;
         $description = $mailing->description;
         $mailMessage = new MailingMail($title, $description);
+        $emails = Mailing::pluck('email')->toArray();
+        Mail::to($emails)->send($mailMessage);
 
-        foreach ($mails as $mail) {
-            Mail::to($mail->email)->send($mailMessage);
-        }
 
         return redirect()->back()->with('success', 'Рассылка повторно отправлена');
     }
