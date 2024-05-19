@@ -1,12 +1,11 @@
 <x-admin.header></x-admin.header>
 
-<div class="container mt-4">
-    <a href="/admin/addservice" class="d-flex text-decoration-none text-dark align-items-center gap-2">
+<div class="container mt-5">
+    <a href="/admin/addservice" class="d-flex text-decoration-none text-dark align-items-center gap-2 ">
         <i class='bx bx-plus-circle bx-sm'></i>
         <span class="fs-5">Добавить услугу</span>
     </a>
-    <div class="row mt-2">
-        <div class="col">
+    <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
@@ -34,7 +33,7 @@
                         </td>
                         <td>{{ $service->cost }} рублей</td>
                         <td>{{ $service->work_time}} минут/кв.м</td>
-                        <td class="d-flex">
+                        <td class="">
                             <a href="/admin/servicerdact/{{$service->id}}"><i class='edit bx bxs-edit bx-md' style='color:green'></i></a>
                             <form action="{{ route('sevice_delete',$service->id)}}" method="POST">
                                 @csrf
@@ -53,7 +52,6 @@
                 </tbody>
             </table>
             {{ $services->withQueryString()->links('pagination::bootstrap-5') }}
-        </div>
     </div>
 </div>
 

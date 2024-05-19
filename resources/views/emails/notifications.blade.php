@@ -18,11 +18,22 @@
                     <div class="card-body">
                         <h1 class="card-title">Заказ успешно размещен</h1>
 
-                        <p>Здравствуйте, {{ $user->name }},</p>
+                        <p>Здравствуйте,{{ $user->surname }} {{ $user->name }} {{ $user->lastname }},</p>
 
                         <p>Ваш заказ с номером {{ $order->id }} успешно размещен.</p>
 
                         <p>Сумма вашего заказа: {{ $order->cost }} рублей.</p>
+
+                        <p>Вы заказали услугу: {{ $order->order_service->titleservice }}</p>
+
+                        <p>Дополнительные услуги:
+                            @forelse ($order->additionalServices as $additionalService)
+                                {{ $additionalService->titleadditionalservices }}
+                            @empty
+                                Доп.услуги отсутствуют
+                            @endforelse
+                        </p>
+                        <p>Время начала работ: {{$order->start_time}} </p>
 
                         <p>Спасибо, что выбрали "Чистый дом"!</p>
                     </div>

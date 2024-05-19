@@ -1,6 +1,6 @@
 <x-admin.header></x-admin.header>
 
-<div class="container mt-4">
+<div class="container mt-5">
     <a href="/admin/add_additional_service" class="d-flex text-decoration-none text-dark align-items-center gap-2">
         <i class='bx bx-plus-circle bx-sm'></i>
         <span class="fs-5">Добавить доп.услугу</span>
@@ -11,7 +11,7 @@
                 <thead>
                     <tr>
                         <th scope="col">Название</th>
-                        <th scope="col">Цена/кв.м</th>
+                        <th scope="col">Цена</th>
                         <th scope="col">Время работы</th>
                         <th scope="col">Действия</th>
                     </tr>
@@ -21,7 +21,7 @@
                     <tr>
                         <td>{{ $additionalservice->titleadditionalservices }}</td>
                         <td>{{ $additionalservice->cost }} рублей</td>
-                        <td>{{ $additionalservice->work_time}} минут/кв.м</td>
+                        <td>{{ $additionalservice->work_time}} минут</td>
                         <td class="d-flex">
                             <a href="/admin/additional_service_redact/{{$additionalservice->id}}"><i class='edit bx bxs-edit bx-md' style='color:green'></i></a>
                             <form action="{{ route('additionalservice_delete',$additionalservice->id)}}" method="POST">

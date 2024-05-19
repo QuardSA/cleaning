@@ -14,14 +14,14 @@
         </div>
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="cost" placeholder="{{old('cost')}}" name="cost">
-            <label for="cost">Цена за кв.м (В рублях)</label>
+            <label for="cost">Цена(В рублях)</label>
             @error('cost')
             <span class="text-danger">{{$message}}</span>
             @enderror
         </div>
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="work_time" placeholder="{{old('work_time')}}" name="work_time">
-            <label for="work_time">Время работы(в минутах за 1кв.м)</label>
+            <label for="work_time">Время работы(в минутах)</label>
             @error('work_time')
             <span class="text-danger">{{$message}}</span>
             @enderror

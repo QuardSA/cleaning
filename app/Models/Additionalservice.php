@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Additionalservice extends Model
 {
-    protected $fillable = ['titleadditionalservices','work_time','cost'];
+    protected $fillable = ['titleadditionalservices', 'work_time', 'cost'];
+
+    public function additionalServices_order()
+    {
+        return $this->hasMany(Order::class, 'order');
+    }
 }

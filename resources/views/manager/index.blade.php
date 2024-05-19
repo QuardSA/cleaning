@@ -3,7 +3,7 @@
 <div class="container mt-5">
     <h2 class="text-start">Панель Менеджера</h2>
     <div class="row gap-2 mt-3 justify-content-start">
-        <div class="rounded col-lg-3 col-6 bg-primary bg-gradient px-0" style="max-width: 310px">
+        <div class="rounded col bg-primary bg-gradient px-0" style="max-width: 310px">
             <div class="inner px-2">
                 <h3 class="text-white fw-semibold mt-2">{{ $newOrdersCount }}</h3>
                 <p class="text-white fs-5 mt-0 fw-semibold">Новые заявки</p>
@@ -14,21 +14,10 @@
                 <i class='bx bxs-right-arrow-circle'></i>
             </a>
         </div>
-        <div class="rounded col-lg-3 col-6 bg-secondary bg-gradient px-0" style="max-width: 310px">
-            <div class="inner px-2">
-                <h3 class="text-white fw-semibold mt-2">{{ $faqs }}</h3>
-                <p class="text-white fs-5 mt-0 fw-semibold">FAQ</p>
-            </div>
-            <a href="/manager/faq"
-                class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
-                <span class="d-inline-block">Больше</span>
-                <i class='bx bxs-right-arrow-circle'></i>
-            </a>
-        </div>
     </div>
-    <a href="/export" class="btn btn-primary mt-3">Создать отчёт</a>
+    {{-- <a href="/export" class="btn btn-primary mt-3">Создать отчёт</a> --}}
     <div class="row mt-5">
-        <div class="col-lg-6">
+        {{-- <div class="col-lg-6">
             <div class="order_chart border-none shadow rounded p-3">
                 <h3 class="text-center">Отчёты</h3>
                 <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
@@ -55,7 +44,7 @@
                     <button type="submit" class="btn btn-success">Применить</button>
                 </form>
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-6">
             <div class="order_chart border-none shadow rounded p-3">
                 <h3 class="text-center">Рассылка</h3>

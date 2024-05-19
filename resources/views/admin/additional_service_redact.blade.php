@@ -22,7 +22,7 @@
             @enderror
         </div>
         <div class="form-floating w-100">
-            <input type="text" class="form-control" id="work_time" placeholder="{{$additionalservice->work_time}}" name="work_time">
+            <input type="text" class="form-control" id="work_time" value="{{$additionalservice->work_time}}" name="work_time">
             <label for="work_time">Время работы(в минутах за 1кв.м)</label>
             @error('work_time')
             <span class="text-danger">{{$message}}</span>

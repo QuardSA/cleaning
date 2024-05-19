@@ -33,21 +33,39 @@ document.addEventListener('DOMContentLoaded', function () {
                 totalTime += additionalServiceTime / 60;
             }
         });
+        function roundWorkTime(hours) {
+            const floorHours = Math.floor(hours);
+            const decimalPart = hours - floorHours;
+            let result;
 
-        let timeText;
-        switch (true) {
-            case totalTime === 1:
-                timeText = 'час';
-                break;
-            case totalTime >= 2 && totalTime <= 4:
-                timeText = 'часа';
-                break;
-            default:
-                timeText = 'часов';
-                break;
+            if (decimalPart <= 0.01) {
+                result = floorHours;
+            } else if (decimalPart <= 0.25) {
+                result = floorHours;
+            } else if (decimalPart <= 0.5) {
+                result = floorHours + ' часов 30 минут';
+            } else {
+                result = Math.ceil(hours);
+            }
+
+            if (typeof result === 'number') {
+                result = result + ' ' + getCorrectHoursDeclension(result);
+            }
+
+            return result;
         }
 
-        resultTime.textContent = 'от ' + totalTime.toFixed(2) + ' ' + timeText;
+        function getCorrectHoursDeclension(hours) {
+            if (hours % 10 === 1 && hours % 100 !== 11) {
+                return 'часа';
+            } else if (hours % 10 >= 2 && hours % 10 <= 4 && (hours % 100 < 10 || hours % 100 >= 20)) {
+                return 'часов';
+            } else {
+                return 'часов';
+            }
+        }
+
+        resultTime.textContent = 'от ' + roundWorkTime(totalTime);
     }
 
     sizeInput.addEventListener('input', calculatePrice);

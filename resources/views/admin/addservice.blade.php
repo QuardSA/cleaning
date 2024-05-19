@@ -1,9 +1,9 @@
 <x-admin.header></x-admin.header>
-<div class="container mt-4">
+<div class="container mt-5 form-admin">
     <h1 class="text-center">
         Создание услуги
     </h1>
-    <form action="/addservice_validate" class="d-flex flex-column gap-3 mt-4 mx-auto w-50" method="POST" enctype="multipart/form-data">
+    <form action="/addservice_validate" class="d-flex flex-column gap-3 mt-4 mx-auto" method="POST">
         @csrf
         <div class="form-floating w-100">
             <input type="text" class="form-control" id="titleservice" value="{{old('titleservice')}}" placeholder="" name="titleservice">
@@ -44,7 +44,7 @@
         </div>
         <button type="submit" class="btn btn-info">Добавить</button>
     </form>
-        <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить особенность</button>
+        <button class="btn btn-primary mx-auto d-block mt-2 w-100" onclick="addfeatures()">Добавить особенность</button>
 </div>
 
 

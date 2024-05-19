@@ -22,7 +22,7 @@
                         @csrf
                         <div class="form-outline">
                             <h2 class="fw-normal text-start">Чистота без забот</h2>
-                            <label class="form-label" for="square">Укажите площадь квартиры</label>
+                            <label class="form-label" for="square">Укажите площадь помещения</label>
                             <input type="number" id="size" value="30" min="30" max="999"
                                 class="form-control form-control-lg" name="square" />
                             @error('square')
@@ -52,7 +52,8 @@
                                         id="additionalservice{{ $additionalservice->id }}" name="additionalservices[]">
                                     <label class="form-check-label"
                                         for="additionalservice{{ $additionalservice->id }}">
-                                        {{ $additionalservice->titleadditionalservices }}
+                                        {{ $additionalservice->titleadditionalservices }} |
+                                        {{ $additionalservice->cost }} руб
                                     </label>
                                 </div>
                             @empty
@@ -71,22 +72,36 @@
                         </div>
 
                         <div class="d-flex w-100 input-date">
-                            <div class="form-floating">
-                                <input type="date" class="form-control" id="date"
-                                    placeholder="{{ old('date') }}" name="date"
-                                    min="{{ now()->toDateString() }}">
-                                <label for="date">Выберите дату</label>
-                                @error('date')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            <div class="form-floating" style="min-width:130px">
-                                <input type="time" class="form-control" id="time"
-                                    placeholder="{{ old('time') }}" name="time">
-                                <label for="time">Выберите время</label>
-                                @error('time')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                            <div class="d-flex w-100 input-date">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="date"
+                                        placeholder="{{ old('date') }}" name="date"
+                                        min="{{ now()->toDateString() }}">
+                                    <label for="date">Выберите дату</label>
+                                    @error('date')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-floating" style="min-width:130px">
+                                    <select class="form-control" id="time" name="time">
+                                        <option value="08:00">08:00</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="12:00">12:00</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:00">17:00</option>
+                                        <option value="18:00">18:00</option>
+                                    </select>
+                                    <label for="time">Выберите время</label>
+                                    @error('time')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <input type="hidden" id="service_work_time" name="service_work_time" value="">
                             </div>
                             <input type="hidden" id="service_work_time" name="service_work_time" value="">
                         </div>
@@ -118,13 +133,8 @@
                         @else
                         @endif
                     </form>
-
                 </div>
-                {{-- <div class="col-md-6 mt-2">
-                    <img src="/img/cleaner2.png" class="img-fluid" alt="">
-                </div> --}}
             </div>
-
         </div>
     </div>
     <div class="container-fluid py-4" style="background-color:#f3f3f3">
@@ -148,7 +158,7 @@
                         alt="">
                     <div class="content">
                         <h3 class="text-center">Чистота</h3>
-                        <p class="text-center">Лицензированные, связанные, застрахованные и сертифицированные горничные
+                        <p class="text-center">Лицензированные и сертифицированные работники
                             прибудут и тщательно уберут ваше жилье.</p>
                     </div>
                 </div>
@@ -172,28 +182,26 @@
     <div class="slider w-75 mx-auto">
         @forelse ($services as $service)
             <div class="slide-item">
-                <a href="/object/{{ $service->id }}" class="text-decoration-none text-dark">
-                    <div class="service-card border rounded h-100">
-                        <div class="service-header border-bottom bg-info p-3">
-                            <h3 class="text-center fw-semibold text-white">{{ $service->titleservice }}</h3>
-                        </div>
-                        <div class="service-description text-center mt-3">
-                            <span class="fs-5">{{ Illuminate\Support\Str::limit($service->description, 40) }}</span>
-                        </div>
-                        <hr class="mx-auto" style="width: 95%">
-                        <ul class="list-unstyled">
-                            @foreach ($service->features as $feature)
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class='bx bx-check text-success fs-3 me-2'></i>
-                                    <span class="fs-5">{{ $feature->titlefeatures }}</span>
-                                </li>
-                            @endforeach
-                        </ul>
-                        <div class="service-cost text-end my-2 me-2">
-                            <span class="fs-5 fw-bold">от {{ $service->cost }} р</span>
-                        </div>
+                <div class="service-card border rounded" style="height:450px">
+                    <div class="service-header bg-info">
+                        <h3 class="text-center fw-semibold text-white">{{ $service->titleservice }}</h3>
                     </div>
-                </a>
+                    <div class="service-description text-center">
+                        <span class="fs-5">{{$service->description}}</span>
+                    </div>
+                    <hr class="mx-auto mt-0" style="width: 95%">
+                    <ul class="list-unstyled">
+                        @foreach ($service->features as $feature)
+                            <li class="list-group-item d-flex align-items-center">
+                                <i class='bx bx-check text-success fs-3 me-2'></i>
+                                <span class="fs-5">{{ $feature->titlefeatures }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                    <div class="service-cost text-end my-2 me-2">
+                        <span class="fs-5 fw-bold">{{ $service->cost }} руб кв/м</span>
+                    </div>
+                </div>
             </div>
         @empty
             Услуги отсутствуют
@@ -241,18 +249,19 @@
     <div class="bg-img-container-comments text-white py-5">
         <div class="container">
             <h2 class="text-center pb-3">Отзывы</h2>
-            <div class="slider w-75 mx-auto">
+            <div class="slider w-75 mx-auto" >
                 @forelse ($comments as $comment)
                     <div class="row mx-1">
                         <div class="col-md-12">
-                            <div class="card mb-3">
+                            <div class="card mb-3" style="height: 150px">
                                 <div class="card-body">
                                     <p class="card-text mt-0 fs-6">
                                         {{ Illuminate\Support\Str::limit($comment->description, 100) }}</p>
                                 </div>
-                                <div class="card-footer">
+                                <div class="card-footer d-flex justify-content-between">
                                     <small class="text-muted">{{ $comment->comments_user->name }}
-                                        {{ $comment->comments_user->surname }}</small>
+                                        {{ $comment->comments_user->surname }} </small>
+                                        <small class="text-muted">{{ $comment->created_at->format('d-m-y')}}</small>
                                 </div>
                             </div>
                         </div>
@@ -423,9 +432,9 @@
         $(document).ready(function() {
             $('.slider').slick({
                 infinite: true,
-                slidesToShow: 4,
+                slidesToShow: 3,
                 slidesToScroll: 1,
-                dots: true, // Включаем точки
+                dots: true,
                 responsive: [{
                     breakpoint: 768,
                     settings: {
@@ -434,5 +443,45 @@
                     }
                 }]
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('date');
+            const timeInput = document.getElementById('time');
+
+            dateInput.addEventListener('change', function() {
+                const selectedDate = dateInput.value;
+                fetch(`/api/booked-slots?date=${selectedDate}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Booked slots:', data);
+                        updateAvailableTimes(data);
+                    })
+                    .catch(error => console.error('Error fetching booked slots:', error));
+            });
+
+            function updateAvailableTimes(bookedSlots) {
+                const times = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00',
+                    '17:00', '18:00'
+                ];
+                timeInput.innerHTML = '';
+
+                times.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    if (bookedSlots.includes(time)) {
+                        option.disabled = true;
+                        option.textContent += ' (занято)';
+                    }
+                    timeInput.appendChild(option);
+                });
+            }
         });
     </script>

@@ -1,10 +1,10 @@
 <x-admin.header></x-admin.header>
 
-<div class="container mt-4">
+<div class="container mt-5 form-admin">
     <h1 class="text-center">
         Редактирование услуги
     </h1>
-    <form action="/service_redact_validate/{{$service->id}}" class="d-flex flex-column gap-3 mt-4 mx-auto w-50" method="POST" enctype="multipart/form-data">
+    <form action="/service_redact_validate/{{$service->id}}" class=" d-flex flex-column gap-3 mt-4 mx-auto" method="POST">
         @csrf
         @method('PUT')
         <div class="form-floating w-100">
@@ -29,7 +29,7 @@
             @enderror
         </div>
         <div class="form-floating w-100">
-            <input type="text" class="form-control" id="work_time" placeholder="{{$service->work_time}}" name="work_time">
+            <input type="text" class="form-control" id="work_time" value="{{$service->work_time}}" name="work_time">
             <label for="work_time">Время работы(в минутах за 1кв.м)</label>
             @error('work_time')
             <span class="text-danger">{{$message}}</span>
@@ -48,7 +48,7 @@
         </div>
         <button type="submit" class="btn btn-info">Редактировать</button>
     </form>
-        <button class="btn btn-primary w-50 mx-auto d-block mt-2" onclick="addfeatures()">Добавить функции</button>
+        <button class="btn btn-primary mx-auto d-block mt-2 w-100" onclick="addfeatures()">Добавить функции</button>
 </div>
 
 <script src="/script/sidebar.js"></script>

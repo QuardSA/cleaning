@@ -1,5 +1,16 @@
-<x-header></x-header>
 
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <x-links></x-links>
+</head>
+<x-header></x-header>
 <body class="d-flex flex-column" style="min-height: 102vh">
     <div class="container">
         <div class="row">
@@ -21,7 +32,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-md-8 mt-2">
+            <div class="col-md-8 mt-2 mb-4">
                 <div class="card border-info">
                     <div class="card-header border-info bg-white fw-semibold">
                         Мой профиль
@@ -96,7 +107,9 @@
             </div>
         </div>
     </div>
+    <x-footer></x-footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
-    <x-footer></x-footer>
+
+</html>

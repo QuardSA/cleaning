@@ -15,7 +15,39 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $orders = $user->user_order()->orderBy('status', 'ASC')->paginate(2);
+        foreach ($orders as $order) {
+            $order->formatted_work_time = $this->roundWorkTime($order->work_time);
+        }
         return view('personal', compact('orders'));
+    }
+
+    private function roundWorkTime($minutes)
+    {
+        $hours = $minutes / 60;
+        $floorHours = floor($hours);
+        $decimalPart = $hours - $floorHours;
+
+        if ($decimalPart <= 0.01) {
+            return $floorHours . ' ' . $this->getCorrectHoursDeclension($floorHours);
+        } elseif ($decimalPart <= 0.25) {
+            return $floorHours . ' ' . $this->getCorrectHoursDeclension($floorHours);
+        } elseif ($decimalPart <= 0.5) {
+            return $floorHours . ' ' . $this->getCorrectHoursDeclension($floorHours) . ' 30 минут';
+        } else {
+            $ceilHours = ceil($hours);
+            return $ceilHours . ' ' . $this->getCorrectHoursDeclension($ceilHours);
+        }
+    }
+
+    private function getCorrectHoursDeclension($hours)
+    {
+        if ($hours % 10 == 1 && $hours % 100 != 11) {
+            return 'часа';
+        } elseif ($hours % 10 >= 2 && $hours % 10 <= 4 && ($hours % 100 < 10 || $hours % 100 >= 20)) {
+            return 'часов';
+        } else {
+            return 'часов';
+        }
     }
 
     public function profile()
@@ -50,7 +82,7 @@ class UserController extends Controller
                 'current_password.min' => 'Пароль должен быть не менее 8 символов',
                 'new_password.min' => 'Пароль должен быть не менее 8 символов',
                 'new_password.confirmed' => 'Подтверждение пароля не совпадает',
-            ]
+            ],
         );
 
         $user = Auth::user();
@@ -63,7 +95,9 @@ class UserController extends Controller
             if (Hash::check($request->input('current_password'), $user->password)) {
                 $user->password = Hash::make($request->input('new_password'));
             } else {
-                return redirect()->back()->withErrors(['current_password' => 'Текущий пароль неверен']);
+                return redirect()
+                    ->back()
+                    ->withErrors(['current_password' => 'Текущий пароль неверен']);
             }
         }
 

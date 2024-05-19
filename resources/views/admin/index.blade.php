@@ -1,4 +1,4 @@
-<x-admin.header></x-admin.header>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-
+<x-admin.header></x-admin.header>
 <body>
     <div class="container mt-5">
         <h2 class="text-start">Панель администратора</h2>
@@ -17,7 +17,7 @@
             <div class="rounded col  bg-success bg-gradient px-0" style="">
                 <div class="inner px-2">
                     <h3 class="text-white fw-semibold mt-2">{{ $users }}</h3>
-                    <p class="text-white fs-5 mt-0 fw-semibold">Пользователи</p>
+                    <p class="text-white fs-5 mt-0 fw-semibold">Менеджеры</p>
                 </div>
                 <a href="/admin/users"
                     class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
@@ -36,12 +36,23 @@
                     <i class='bx bxs-right-arrow-circle'></i>
                 </a>
             </div>
-            <div class="rounded col  bg-warning bg-gradient px-0" style="">
+            <div class="rounded col  bg-primary bg-gradient px-0" style="">
                 <div class="inner px-2">
                     <h3 class="text-white fw-semibold mt-2">{{ $additionalservices }}</h3>
                     <p class="text-white fs-5 mt-0 fw-semibold">Доп.услуги</p>
                 </div>
                 <a href="/admin/additional_service"
+                    class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
+                    <span class="d-inline-block">Больше</span>
+                    <i class='bx bxs-right-arrow-circle'></i>
+                </a>
+            </div>
+            <div class="rounded col bg-secondary bg-gradient px-0" style="max-width: 310px">
+                <div class="inner px-2">
+                    <h3 class="text-white fw-semibold mt-2">{{ $faqs }}</h3>
+                    <p class="text-white fs-5 mt-0 fw-semibold">FAQ</p>
+                </div>
+                <a href="/admin/faq"
                     class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
                     <span class="d-inline-block">Больше</span>
                     <i class='bx bxs-right-arrow-circle'></i>
@@ -59,6 +70,7 @@
             </div>
         </div>
         <div class="row mt-5">
+            <div class="col-lg-6"></div>
             <div class="col-lg-6">
                 <div class="order_chart border-none shadow rounded p-3">
                     <h3 class="text-center">Продажи</h3>
@@ -87,7 +99,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-lg-6">
+            {{-- <div class="col-lg-6">
                 <div class="order_chart border-none shadow rounded p-3">
                     <h3 class="text-center">Отчёты</h3>
                     <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
@@ -109,7 +121,7 @@
                         @csrf
                         <select class="form-select" id="user" name="user">
                             <option value="">Отправитель</option>
-                            @foreach($usersWithRole2 as $user)
+                            @foreach($usersWithRole3 as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
                             @endforeach
                         </select>
@@ -117,7 +129,7 @@
                         <button type="submit" class="btn btn-success">Применить</button>
                     </form>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 

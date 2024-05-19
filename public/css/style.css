@@ -278,6 +278,46 @@ button.ghost {
 	transform: translateX(20%);
 }
 
+
+
+/*admin*/
+.box-link{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.box-link:hover{
+    box-shadow: inset 10rem 10rem rgba(0, 0, 0, 0.2);
+    transition-duration: 300ms;
+}
+
+.badge {
+    border-radius: 0;
+    font-size: 12px;
+    line-height: 1;
+    padding: .375rem .5625rem;
+    font-weight: normal;
+}
+
+.edit:hover{
+    color: rgb(3, 90, 3);
+    scale: 1.1;
+    transition-duration: 300ms;
+}
+
+.cancel:hover{
+    color: rgb(90, 3, 3);
+    scale: 1.1;
+    transition-duration: 300ms;
+}
+ @media(max-width:767px) {
+    .form-admin{
+        width: 100% !important;
+    }
+ }
+ @media(min-width:768px) {
+    .form-admin{
+        width: 30% !important;
+    }
+ }
 /* Sidebar-admin */
 
 .logo .menu-icon{
@@ -302,34 +342,4 @@ nav.open .sidebar{
         min-width: 100%;
         left: 0;
     }
-}
-
-/*admin*/
-.box-link{
-    background-color: rgba(0, 0, 0, 0.1);
-}
-.box-link:hover{
-    box-shadow: inset 10rem 10rem rgba(0, 0, 0, 0.2);
-    transition-duration: 300ms;
-}
-
-.badge {
-    border-radius: 0;
-    font-size: 12px;
-    line-height: 1;
-    padding: .375rem .5625rem;
-    font-weight: normal;
-}
-
-
-.edit:hover{
-    color: rgb(3, 90, 3);
-    scale: 1.1;
-    transition-duration: 300ms;
-}
-
-.cancel:hover{
-    color: rgb(90, 3, 3);
-    scale: 1.1;
-    transition-duration: 300ms;
 }

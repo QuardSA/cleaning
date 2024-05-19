@@ -1,44 +1,18 @@
 <x-admin.header></x-admin.header>
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container mt-5">
-    <h2 class="text-start">Пользователи</h2>
-    <form method="GET">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="user_id">Пользователь</label>
-                    <select name="user_id" id="user_id" class="form-control">
-                        <option value="">Все пользователи</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user->id }}">
-                                {{ $user->name }} {{ $user->surname }} {{ $user->lastname }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="role">Роль</label>
-                    <select name="role" id="role" class="form-control">
-                        <option value="">Все роли</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->id }}">
-                                {{ $role->titlerole }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Применить фильтр</button>
-        <a href="/admin/users" class="btn btn-secondary mt-2">Сбросить фильтр</a>
-    </form>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#createUserModal"
+    class="d-flex text-decoration-none text-dark align-items-center gap-2 bg-white border-0">
+    <i class='bx bx-plus-circle bx-sm'></i>
+    <span class="fs-5">Добавить менеджера</span>
+</button>
+    <h2 class="text-start mt-3">Менеджеры</h2>
+
     <div class="table-responsive mt-3">
         <table class="table">
             <thead>
                 <tr>
                     <th>ФИО</th>
                     <th>Почта</th>
-                    <th>Роль</th>
                     <th></th>
                 </tr>
             </thead>
@@ -47,7 +21,6 @@
                     <tr>
                         <td>{{ $user->surname }} {{ $user->name }} {{ $user->lastname }}</td>
                         <td>{{ $user->email }}</td>
-                        <td>{{ $user->user_role->titlerole }}</td>
                         <td class="d-flex gap-2">
                             <button type="button" class="edit-btn bg-white border-0" data-bs-toggle="modal"
                                 data-bs-target="#editUserModal{{ $user->id }}">
@@ -117,20 +90,6 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-floating">
-                                <select class="form-select" id="floatingSelect"
-                                    aria-label="Floating label select example" name="role">
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}"
-                                            {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->titlerole }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('role')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                                <label for="floatingSelect">Роль</label>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
@@ -141,6 +100,60 @@
             </div>
         </div>
     @endforeach
+    <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createUserModalLabel">Добавить менеджера</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="createUserForm" method="POST" action="/users_create_validate">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="userSurname" name="surname" value="">
+                            <label for="userSurname" class="form-label">Фамилия</label>
+                            @error('surname')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="userName" name="name" value="">
+                            <label for="userName" class="form-label">Имя</label>
+                            @error('name')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="userLastname" name="lastname" value="">
+                            <label for="userLastname" class="form-label">Отчество</label>
+                            @error('lastname')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="userEmail" name="email" value="">
+                            <label for="userEmail" class="form-label">Email</label>
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="userPassword" name="password" value="">
+                            <label for="userPassword" class="form-label">Пароль</label>
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>

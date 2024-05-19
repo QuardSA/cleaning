@@ -39,7 +39,7 @@
                             <a href="/admin/users"
                                 class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
                                 <i class='bx bx-group bx-sm'></i>
-                                Пользователи
+                                Менеджеры
                             </a>
                         </li>
                         <li>
@@ -47,6 +47,13 @@
                                 class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
                                 <i class='bx bx-table bx-sm icon'></i>
                                 Услуги
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/faq"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bx-file bx-sm'></i>
+                                FAQ
                             </a>
                         </li>
                         <li>
@@ -71,16 +78,9 @@
                         </li>
                         <a href="/manager/orders"
                             class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
-                            <i class='bx bxs-dashboard bx-sm'></i>
+                            <i class='bx bx-table bx-sm'></i>
                             Заявки
                         </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/manager/faq"
-                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
-                                <i class='bx bxs-dashboard bx-sm'></i>
-                                FAQ
-                            </a>
                         </li>
                     </ul>
                 </div>

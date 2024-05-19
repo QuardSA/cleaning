@@ -1,44 +1,44 @@
 <x-admin.header></x-admin.header>
 
-<div class="container mt-4">
+<div class="container mt-5">
     <button type="button" class="bg-white border-0" data-bs-toggle="modal" data-bs-target="#createFAQModal">
         <i class='bx bx-plus-circle bx-sm'></i>
         <span class="fs-5">Добавить вопрос</span>
     </button>
-    <div class="row mt-2">
-        <div class="col">
-            <table class="table">
-                <thead>
+
+    <div class="table-responsive mt-1">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Название</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($faqs as $faq)
                     <tr>
-                        <th scope="col">Название</th>
-                        <th scope="col">Описание</th>
-                        <th scope="col">Действия</th>
+                        <td>{{ $faq->titlefaq }}</td>
+                        <td>{{ $faq->description }}</td>
+                        <td class="d-flex gap-2 h-100">
+                            <button type="button" class="edit-btn bg-white border-0" data-bs-toggle="modal"
+                                data-bs-target="#editFAQModal{{ $faq->id }}">
+                                <i class='edit bx bxs-edit bx-lg' style='color:green'></i>
+                            </button>
+                            <a href="/faq_delete/{{ $faq->id }}"><i class='cancel bx bxs-x-circle bx-lg'
+                                    style='color:red'></i></a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse ($faqs as $faq)
-                        <tr>
-                            <td>{{ $faq->titlefaq }}</td>
-                            <td>{{ $faq->description }}</td>
-                            <td class="d-flex gap-2">
-                                <button type="button" class="edit-btn bg-white border-0" data-bs-toggle="modal"
-                                    data-bs-target="#editFAQModal{{ $faq->id }}">
-                                    <i class='edit bx bxs-edit bx-sm' style='color:green'></i>
-                                </button>
-                                <a href="/faq_delete/{{ $faq->id }}"><i class='cancel bx bxs-x-circle bx-sm'
-                                        style='color:red'></i></a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center">FAQ's отсутствуют</td>
-                        </tr>
-                    @endforelse
-                    {{ $faqs->withQueryString()->links('pagination::bootstrap-5') }}
-                </tbody>
-            </table>
-        </div>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">FAQ's отсутствуют</td>
+                    </tr>
+                @endforelse
+                {{ $faqs->withQueryString()->links('pagination::bootstrap-5') }}
+            </tbody>
+        </table>
     </div>
+
 </div>
 <div class="modal fade" id="createFAQModal" tabindex="-1" aria-labelledby="createFAQModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -47,7 +47,7 @@
                 <h5 class="modal-title" id="createFAQModal">Создать FAQ</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editFAQForm" method="POST" action="/manager/faq_create">
+            <form id="editFAQForm" method="POST" action="/admin/faq_create">
                 @csrf
                 <div class="modal-body">
                     <div class="form-floating mb-3">
@@ -76,7 +76,7 @@
                     <h5 class="modal-title" id="editFAQModalLabel">Редактировать FAQ</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editFAQForm{{ $faq->id }}" method="POST" action="/manager/faq_edit/{{ $faq->id }}">
+                <form id="editFAQForm{{ $faq->id }}" method="POST" action="/admin/faq_edit/{{ $faq->id }}">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
