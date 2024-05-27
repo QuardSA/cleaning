@@ -76,6 +76,13 @@
                                 Главная
                             </a>
                         </li>
+                        <li>
+                            <a href="/manager/clients"
+                                class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
+                                <i class='bx bx-group bx-sm'></i>
+                                Клиенты
+                            </a>
+                        </li>
                         <a href="/manager/orders"
                             class="nav-link nav-style active d-flex align-items-center gap-2 rounded p-1">
                             <i class='bx bx-table bx-sm'></i>

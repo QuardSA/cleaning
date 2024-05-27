@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use ZipArchive;
 use Illuminate\Http\Request;
 use App\Models\Report;
+use App\Models\Additionalservice;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Mailing;
@@ -27,27 +29,46 @@ class ManagerController extends Controller
 {
     public function index(Request $request)
     {
-        // $reportsQuery = Report::query();
-        // if ($request->has('date') && $request->date != '') {
-        //     $reportsQuery->whereDate('created_at', $request->date);
-        // }
-        // $reports = $reportsQuery->where('user', auth()->user()->id)->get();
-        // $usersWithRole2 = User::where('role', 2)->get();
+        $authenticatedUsers = User::leftJoin('orders', 'users.id', '=', 'orders.user')
+        ->select('users.name', 'users.email', DB::raw('MAX(orders.phone) as phone'))->where('users.role', 1)->groupBy('users.name', 'users.email');
+        $guestUsers = Order::select('name', 'email', 'phone')->whereNull('user')->groupBy('name', 'email', 'phone');
+        $users = $authenticatedUsers->union($guestUsers)->count();
         $mailings = Mailingsend::all();
         $newOrdersCount = Order::where('status', '1')->count();
+        return view('manager.index', compact('newOrdersCount', 'mailings', 'users'));
+    }
 
-        return view('manager.index', compact('newOrdersCount', 'mailings'));
+    public function clients()
+    {
+        $authenticatedUsers = User::leftJoin('orders', 'users.id', '=', 'orders.user')
+        ->select('users.name', 'users.email', DB::raw('MAX(orders.phone) as phone'))->where('users.role', 1)->groupBy('users.name', 'users.email');
+        $guestUsers = Order::select('name', 'email', 'phone')->whereNull('user')->groupBy('name', 'email', 'phone');
+        $users = $authenticatedUsers->union($guestUsers)->paginate(14);
+
+        return view('manager.clients', compact('users'));
+    }
+    public function contract()
+    {
+        return view('manager.contract',);
     }
 
     public function orders(Request $request)
     {
+        $additionalservices = Additionalservice::all();
         $orderstatuses = Orderstatus::all();
 
         $query = Order::orderBy('status', 'ASC');
 
-        if ($request->filled('start_time')) {
-            $date = $request->input('start_time');
-            $query->whereDate('start_time', '=', $date);
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $query->whereBetween('start_time', [$startDate, $endDate]);
+        } elseif ($request->filled('start_date')) {
+            $startDate = $request->input('start_date');
+            $query->whereDate('start_time', '>=', $startDate);
+        } elseif ($request->filled('end_date')) {
+            $endDate = $request->input('end_date');
+            $query->whereDate('start_time', '<=', $endDate);
         }
 
         if ($request->filled('status')) {
@@ -55,10 +76,17 @@ class ManagerController extends Controller
             $query->where('status', $status);
         }
 
+        if ($request->filled('order_id')) {
+            $orderId = $request->input('order_id');
+            $query->where('id', $orderId);
+        }
+
         $orders = $query->paginate(10);
 
-        return view('manager.orders', compact('orders', 'orderstatuses'));
+        return view('manager.orders', compact('orders', 'orderstatuses','additionalservices'));
     }
+
+
 
     public function accept(Request $request, $id)
     {
@@ -71,34 +99,61 @@ class ManagerController extends Controller
         $pdf = PDF::loadView('manager.service_report', compact('order'));
         $pdfPath = storage_path('app/public/service_report_' . $order->id . '.pdf');
         $pdf->save($pdfPath);
+        $pdf_contract = PDF::loadView('manager.contract', compact('order'));
+        $pdfPath_contract = storage_path('app/public/contract_' . $order->id . '.pdf');
+        $pdf_contract->save($pdfPath_contract);
 
-        Log::info('Пользователь ' . $user->email . ' Принял заявку ', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Принял заявку',
-        ]);
+        if ($user) {
+            Log::info('Пользователь ' . $user->email . ' Принял заявку ', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'ip_address' => $request->ip(),
+                'action' => 'Принял заявку',
+            ]);
+        }
 
-        Mail::to($orderUser->email)->send(new OrderAccept($order));
+        if ($orderUser) {
+            Mail::to($orderUser->email)
+                ->send(new OrderAccept($order, $pdfPath_contract));
+        } elseif ($order->email) {
+            Mail::to($order->email)
+                ->send(new OrderAccept($order, $pdfPath_contract));
+        }
 
         return redirect()->back()->with('success', 'Заказ успешно принят');
     }
+
+
     public function done(Request $request, $id)
     {
         $order = Order::findOrFail($id);
         $order->status = 5;
         $order->save();
+
+        // Получаем текущего авторизованного пользователя
         $user = Auth::user();
+
+        // Получаем пользователя, связанного с заказом
         $orderUser = $order->order_user;
 
-        Log::info('Пользователь ' . $user->email . 'Заказ выполнен', [
-            'user_id' => $user->id,
-            'user_email' => $user->email,
-            'ip_address' => $request->ip(),
-            'action' => 'Заказ выполнен',
-        ]);
+        // Логируем действие
+        if ($user) {
+            Log::info('Пользователь ' . $user->email . ' Заказ выполнен', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'ip_address' => $request->ip(),
+                'action' => 'Заказ выполнен',
+            ]);
+        }
 
-        Mail::to($orderUser->email)->send(new OrderDone($order));
+        // Отправляем email
+        if ($orderUser) {
+            // Если заказ связан с пользователем
+            Mail::to($orderUser->email)->send(new OrderDone($order));
+        } else {
+            // Если заказ был создан гостем
+            Mail::to($order->email)->send(new OrderDone($order));
+        }
 
         return redirect()->back()->with('success', 'Заказ выполнен');
     }
@@ -120,7 +175,12 @@ class ManagerController extends Controller
             'ip_address' => $request->ip(),
             'action' => 'Отклонил заявку',
         ]);
-        Mail::to($orderUser->email)->send(new OrderDenied($order, $reason));
+        if ($orderUser) {
+            Mail::to($orderUser->email)->send(new OrderDenied($order, $reason));
+        } else {
+            Mail::to($order->email)->send(new OrderDenied($order, $reason));
+        }
+
 
         return redirect()->back()->with('success', 'Заказ успешно отклонен');
     }
@@ -191,57 +251,29 @@ class ManagerController extends Controller
     {
         $order = Order::findOrFail($id);
         $pdfPath = storage_path('app/public/service_report_' . $order->id . '.pdf');
+        $pdfPath_contract = storage_path('app/public/contract_' . $order->id . '.pdf');
 
         if (!file_exists($pdfPath)) {
             $pdf = PDF::loadView('manager.service_report', compact('order'));
             $pdf->save($pdfPath);
         }
+        if (!file_exists($pdfPath_contract)) {
+            $pdf_contract = PDF::loadView('manager.contract', compact('order'));
+            $pdf_contract->save($pdfPath_contract);
+        }
 
-        return response()->download($pdfPath);
+        $zip = new ZipArchive;
+        $zipFileName = 'order_' . $order->id . '.zip';
+        $zipFilePath = storage_path('app/public/' . $zipFileName);
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+            $zip->addFile($pdfPath, 'service_report_' . $order->id . '.pdf');
+            $zip->addFile($pdfPath_contract, 'contract_' . $order->id . '.pdf');
+            $zip->close();
+
+            return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        } else {
+            return response()->json(['error' => 'Failed to create zip file'], 500);
+        }
     }
-    // public function report()
-    // {
-    //     $user = auth()->user();
-    //     $currentDateTime = now()->format('d-m-y');
-    //     $username = $user->name;
-
-    //     $reportFilename = "Отчёт_{$currentDateTime}_{$username}.xlsx";
-
-    //     $report = new ReportExport;
-
-    //     Excel::store($report, $reportFilename, 'local');
-
-    //     if (!Storage::exists($reportFilename)) {
-    //         return 'File does not exist in storage';
-    //     }
-
-    //     $report = new Report;
-    //     $report->file = $reportFilename;
-    //     $report->user = $user->id;
-    //     $report->save();
-
-    //     return redirect()->back()->with('success', 'Отчёт добавлен');
-    // }
-    // public function downloadReport($filename)
-    // {
-    //     if (!Storage::exists($filename)) {
-    //         return 'File does not exist in storage';
-    //     }
-    //     return Storage::download($filename);
-    // }
-    // public function deleteReport($id)
-    // {
-    //     $report = Report::find($id);
-
-    //     if ($report) {
-    //         if (Storage::exists($report->file)) {
-    //             Storage::delete($report->file);
-    //         }
-
-    //         $report->delete();
-    //         return redirect()->back()->with('success', 'Отчёт удалён');
-    //     } else {
-    //         return redirect()->back()->with('error', 'Отчёт не найден');
-    //     }
-    // }
 }

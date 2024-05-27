@@ -13,4 +13,9 @@ class Additionalservice extends Model
     {
         return $this->hasMany(Order::class, 'order');
     }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_additional_service');
+    }
 }

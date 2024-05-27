@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Service;
-use App\Models\Feature;
 use App\Models\Order;
 use App\Models\Report;
 use App\Models\Additionalservice;
@@ -24,15 +23,6 @@ class AdminController extends Controller
         // Carbon::setLocale('ru');
 
         $newOrdersCount = Order::where('status', '1')->count();
-
-        $reportsQuery = Report::query();
-        if ($request->has('user') && $request->user != '') {
-            $reportsQuery->where('user', $request->user);
-        }
-        if ($request->has('date') && $request->date != '') {
-            $reportsQuery->whereDate('created_at', $request->date);
-        }
-        $reports = $reportsQuery->get();
         $usersWithRole3 = User::where('role', 3)->get();
 
         $faqs = Faq::all()->count();
@@ -82,7 +72,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services', 'reports', 'usersWithRole3', 'additionalservices', 'faqs'), [
+        return view('admin.index', compact('orders', 'newOrdersCount', 'users', 'services', 'usersWithRole3', 'additionalservices', 'faqs'), [
             'labels' => json_encode($labels),
             'data' => json_encode($data),
             'uniqueMonths' => $uniqueMonths,
@@ -92,7 +82,7 @@ class AdminController extends Controller
 
     public function filterData(Request $request)
     {
-        $orders = Order::query();
+        $orders = Order::where('status', 5)->query();
 
         if ($request->has('month') && $request->has('year')) {
             $month = $request->month;
@@ -123,14 +113,16 @@ class AdminController extends Controller
     }
     public function service()
     {
+        $additionalServices = AdditionalService::all();
         $services = Service::paginate(10);
-        return view('admin.service', compact('services'));
+        return view('admin.service', compact('services', 'additionalServices'));
     }
 
 
     public function addservice()
     {
-        return view('admin.addservice');
+        $additionalServices = AdditionalService::all();
+        return view('admin.addservice', compact('additionalServices'));
     }
 
     public function addservice_validate(Request $request)
@@ -168,13 +160,8 @@ class AdminController extends Controller
             'ip_address' => $request->ip(),
             'action' => 'Создание услуги',
         ]);
-
-        $titleFeatures = $request->input('titlefeatures');
-        foreach ($titleFeatures as $titleFeature) {
-            $feature = new Feature();
-            $feature->titlefeatures = $titleFeature;
-            $feature->save();
-            $service->features()->attach($feature);
+        if ($request->filled('additionalservices')) {
+            $service->additionalServices()->attach($request->input('additionalservices'));
         }
 
         return redirect('/admin/service')->with('success', 'Услуга успешно создана');
@@ -219,14 +206,9 @@ class AdminController extends Controller
             'ip_address' => $request->ip(),
             'action' => 'Редактирование услуги',
         ]);
-        $service->features()->detach();
-
-        $titleFeatures = $request->input('titlefeatures');
-        foreach ($titleFeatures as $titleFeature) {
-            $feature = new Feature();
-            $feature->titlefeatures = $titleFeature;
-            $feature->save();
-            $service->features()->attach($feature);
+        $service->additionalServices()->detach();
+        if ($request->filled('additionalservices')) {
+            $service->additionalServices()->attach($request->input('additionalservices'));
         }
 
         return redirect('/admin/service')->with('success', 'Услуга успешно отредактирована');
@@ -401,9 +383,9 @@ class AdminController extends Controller
             'user_id' => $user->id,
             'user_email' => $user->email,
             'ip_address' => $request->ip(),
-            'action' => 'Создание услуги',
+            'action' => 'Создание доп.услуги',
         ]);
-        return redirect('/admin/additional_service')->with('success', 'Услуга успешно создана');
+        return redirect('/admin/additional_service')->with('success', 'Дополнительная услуга успешно создана');
     }
     public function additionalservice_delete($id)
     {
@@ -415,9 +397,9 @@ class AdminController extends Controller
             'user_id' => $user->id,
             'user_email' => $user->email,
             'ip_address' => request()->ip(),
-            'action' => 'Удаление услуги',
+            'action' => 'Удаление доп.услуги',
         ]);
-        return redirect()->back()->with('success', 'Вы успешно удалили услугу');
+        return redirect()->back()->with('success', 'Вы успешно удалили дополнительную услугу');
     }
     public function additionalservice_redact($id)
     {
@@ -450,9 +432,9 @@ class AdminController extends Controller
             'user_id' => $user->id,
             'user_email' => $user->email,
             'ip_address' => $request->ip(),
-            'action' => 'Редактирование услуги',
+            'action' => 'Редактирование доп.услуги',
         ]);
-        return redirect('/admin/additional_service')->with('success', 'Услуга успешно отредактирована');
+        return redirect('/admin/additional_service')->with('success', 'Дополнительная услуга успешно отредактирована');
     }
     public function faq()
     {

@@ -3,6 +3,17 @@
 <div class="container mt-5">
     <h2 class="text-start">Панель Менеджера</h2>
     <div class="row gap-2 mt-3 justify-content-start">
+        <div class="rounded col bg-success bg-gradient px-0" style="max-width: 310px">
+            <div class="inner px-2">
+                <h3 class="text-white fw-semibold mt-2">{{ $users }}</h3>
+                <p class="text-white fs-5 mt-0 fw-semibold">Клиенты</p>
+            </div>
+            <a href="/manager/clients"
+                class=" box-link border-none rounded-bottom d-block text-white fs-5 text-decoration-none text-center">
+                <span class="d-inline-block">Больше</span>
+                <i class='bx bxs-right-arrow-circle'></i>
+            </a>
+        </div>
         <div class="rounded col bg-primary bg-gradient px-0" style="max-width: 310px">
             <div class="inner px-2">
                 <h3 class="text-white fw-semibold mt-2">{{ $newOrdersCount }}</h3>
@@ -15,36 +26,7 @@
             </a>
         </div>
     </div>
-    {{-- <a href="/export" class="btn btn-primary mt-3">Создать отчёт</a> --}}
     <div class="row mt-5">
-        {{-- <div class="col-lg-6">
-            <div class="order_chart border-none shadow rounded p-3">
-                <h3 class="text-center">Отчёты</h3>
-                <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
-                    @forelse ($reports as $report)
-                        <div class="border rounded p-1 d-flex align-items-center mt-1">
-                            <div class="d-flex flex-grow-1 align-items-center gap-1">
-                                <i class='bx bx-file bx-md'></i>
-                                <span>{{ $report->file }}</span>
-                            </div>
-                            <a href="/downloadReport/{{ $report->file }}" class="text-success">
-                                <i class='bx bxs-download bx-md'></i>
-                            </a>
-                            <a href="/deleteReport/{{ $report->id }}" class="text-danger">
-                                <i class='cancel bx bxs-x-circle bx-md'></i>
-                            </a>
-                        </div>
-                    @empty
-                        <span class="text-center">Отчётов нет</span>
-                    @endforelse
-                </div>
-                <form class="d-flex gap-2 mt-1" method="GET">
-                    @csrf
-                    <input type="date" class="form-control" id="date" name="date">
-                    <button type="submit" class="btn btn-success">Применить</button>
-                </form>
-            </div>
-        </div> --}}
         <div class="col-lg-6">
             <div class="order_chart border-none shadow rounded p-3">
                 <h3 class="text-center">Рассылка</h3>

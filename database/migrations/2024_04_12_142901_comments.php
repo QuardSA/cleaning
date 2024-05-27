@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user')->constrained('users')->onDelete('cascade');
+            $table->unsignedTinyInteger('rating')->default(1);
             $table->string('description',100);
             $table->timestamps();
         });

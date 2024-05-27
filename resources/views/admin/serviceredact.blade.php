@@ -35,17 +35,6 @@
             <span class="text-danger">{{$message}}</span>
             @enderror
         </div>
-        <div id="featurescontainer" class="d-flex flex-column gap-3">
-            @foreach ($service->features as $feature)
-                <div class="form-floating w-100">
-                    <input type="text" class="form-control" id="titlefeatures" placeholder="" value="{{$feature->titlefeatures}}" name="titlefeatures[]">
-                    <label for="titlefeatures">Особенность</label>
-                </div>
-                @error('titlefeatures')
-                <span class="text-danger">{{$message}}</span>
-                @enderror
-            @endforeach
-        </div>
         <button type="submit" class="btn btn-info">Редактировать</button>
     </form>
         <button class="btn btn-primary mx-auto d-block mt-2 w-100" onclick="addfeatures()">Добавить функции</button>

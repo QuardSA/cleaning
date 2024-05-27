@@ -31,7 +31,7 @@
                         </td>
                     </tr>
                 @empty
-                    <td colspan="4" class="text-center">Пользователи отсутствуют</td>
+                    <td colspan="4" class="text-center">Модераторы отсутствуют</td>
                 @endforelse
                 {{ $users->withQueryString()->links('pagination::bootstrap-5') }}
             </tbody>

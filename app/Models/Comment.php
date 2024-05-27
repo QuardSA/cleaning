@@ -15,4 +15,9 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class, 'user', 'id');
     }
+    public static function averageRating($decimals = 2)
+    {
+        $average = self::avg('rating');
+        return round($average, $decimals);
+    }
 }

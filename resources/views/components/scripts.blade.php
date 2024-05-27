@@ -11,3 +11,4 @@
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous">
 </script>
 <script src="/script/bootstrap.esm.min.js"></script>
+<script src="https://unpkg.com/imask"></script>

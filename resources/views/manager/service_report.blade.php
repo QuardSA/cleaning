@@ -54,6 +54,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -61,10 +62,16 @@
                 {{ \Carbon\Carbon::parse($order->start_time)->format('d.m.Y') }}</h1>
         </div>
         <p>Исполнитель: ООО "Чистый Дом", ИНН 7727233711, КПП 772701001, улица Ветошникова, 99, Уфа, Республика
-            Башкортостан,тел. +7 (937) 321-51-40</p>
-        <p>Заказчик: {{ $order->order_user->name }} {{ $order->order_user->surname }} {{ $order->order_user->lastname }}
+            Башкортостан, тел. +7 (937) 321-51-40</p>
+        <p>Заказчик:
+            @if ($order->order_user)
+                {{ $order->order_user->name }} {{ $order->order_user->surname }} {{ $order->order_user->lastname }}
+            @else
+                {{ $order->name }} {{ $order->surname ?? '' }}
+            @endif
         </p>
-        {{-- <p>Основание: Договор: Основной договор</p> --}}
+        <p>Основание: Договор оказания услуг №{{ $order->id }} от
+            {{ \Carbon\Carbon::parse($order->updated_at)->format('d.m.Y') }}</p>
 
         <table class="details">
             <thead>
@@ -73,8 +80,8 @@
                     <th>Работы, услуги</th>
                     <th>Кол-во</th>
                     <th>Ед.</th>
-                    <th>Цена</th>
-                    <th>Сумма</th>
+                    <th>Цена руб.</th>
+                    <th>Сумма руб.</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,7 +119,6 @@
         </div>
         <p>Всего наименований {{ $totalItems }}, на сумму {{ number_format($totalCost, 2, ',', ' ') }} руб.</p>
 
-
         <div class="footer">
             <p>Вышеперечисленные услуги выполнены полностью и в срок. Заказчик претензий по объему, качеству и срокам
                 оказания услуги не имеет.</p>
@@ -120,5 +126,7 @@
             <p>Заказчик: _____________________________</p>
         </div>
     </div>
+
 </body>
+
 </html>

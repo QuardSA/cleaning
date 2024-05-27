@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Exports\Report;
 use App\Imports\ReportsImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Service;
+use App\Models\Additionalservice;
 use App\http\Controllers\AdminController;
 use App\http\Controllers\AuthorizationController;
 use App\http\Controllers\MailingController;
@@ -14,8 +16,13 @@ use App\http\Controllers\LogController;
 use App\Http\Middleware\CheckRole;
 
 Route::get('/signout', [AuthorizationController::class, "signout"])->middleware('CheckAuth');
+Route::get('api/services/{service}/additional_services', function (Service $service) {
+    $connectedAdditionalServiceIds = $service->additionalServices->pluck('id');
+    $availableAdditionalServices = Additionalservice::whereNotIn('id', $connectedAdditionalServiceIds)->get();
 
-// Route::get('/downloadReport/{filename}', [ManagerController::class, "downloadReport"]);
+    return response()->json($availableAdditionalServices);
+});
+
 Route::middleware(['Redirect'])->group(function () {
     Route::get('/', [MainController::class, "index"]);
     Route::get('/api/booked-slots', [MainController::class, 'getBookedSlots']);
@@ -59,11 +66,11 @@ Route::middleware(['CheckRole:2'])->group(function () {
     Route::put('/additionalservice_validate/{id}', [AdminController::class, "additionalservice_validate"]);
     Route::delete('/admin/service_delete/{id}', [AdminController::class, "service_delete"])->name('sevice_delete');
     Route::delete('/admin/additionalservice_delete/{id}', [AdminController::class, "additionalservice_delete"])->name('additionalservice_delete');
-
 });
 Route::middleware(['CheckRole:3'])->group(function () {
     Route::get('/manager', [ManagerController::class, "index"]);
-    Route::get('/manager', [ManagerController::class, "index"]);
+    Route::get('/manager/contract', [ManagerController::class, "contract"]);
+    Route::get('/manager/clients', [ManagerController::class, "clients"]);
     Route::post('/mailing', [ManagerController::class, "mailing"]);
     Route::post('/mailing_edit/{id}', [ManagerController::class, "mailing_edit"]);
     Route::get('/mailing_repeat/{id}', [ManagerController::class, "mailing_repeat"]);
@@ -73,6 +80,4 @@ Route::middleware(['CheckRole:3'])->group(function () {
     Route::post('/manager/orders/{id}/done', [ManagerController::class, "done"])->name('orders.done');
     Route::post('/manager/orders/{id}/deny', [ManagerController::class, "deny"])->name('orders.deny');
     Route::get('/download/{id}', [ManagerController::class, 'downloadPDF'])->name('orders.download');
-    // Route::get('/export', [ManagerController::class, "report"]);
-    // Route::get('/deleteReport/{id}', [ManagerController::class, "deleteReport"]);
 });

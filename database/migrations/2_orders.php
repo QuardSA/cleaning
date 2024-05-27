@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user')->constrained('users')->onDelete('cascade');
-            $table->foreignId('service')->constrained('services');
+            $table->foreignId('user')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('service')->constrained('services')->onDelete('cascade');
             $table->foreignId('status')->constrained('orderstatuses')->onDelete('cascade');
-            $table->string('phone',12);
-            $table->string('address',100);
+            $table->string('phone', 16);
+            $table->string('address', 100);
             $table->integer('square');
             $table->integer('cost');
             $table->float('work_time');
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

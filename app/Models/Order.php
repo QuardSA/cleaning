@@ -11,16 +11,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user',
-        'service',
-        'status',
-        'cost',
-        'square',
-        'phone',
-        'address',
-        'work_time',
-        'start_time',
-        'end_time',
+        'square', 'service', 'cost', 'work_time', 'phone', 'address', 'status', 'start_time', 'end_time', 'user', 'name', 'email'
     ];
 
     protected $dates = ['start_time', 'end_time'];

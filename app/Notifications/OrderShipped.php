@@ -2,56 +2,52 @@
 
 namespace App\Notifications;
 
+
+namespace App\Notifications;
+
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\Order;
 
 class OrderShipped extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct(Order $order)
+    protected $order;
+    protected $user;
+
+    public function __construct($order, $user = null)
     {
         $this->order = $order;
+        $this->user = $user;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
     public function toMail($notifiable)
     {
-        return (new MailMessage())
-            ->subject('Ваш заказ успешно размещен')
+        $name = $this->user ? $this->user->name : $this->order->name;
+        $surname = $this->user ? $this->user->surname : $this->order->surname;
+        $lastname = $this->user ? $this->user->lastname : '';
+
+        return (new MailMessage)
+            ->subject('Заказ успешно размещен')
             ->view('emails.notifications', [
-                'user' => $notifiable,
                 'order' => $this->order,
+                'name' => $name,
+                'surname' => $surname,
+                'lastname' => $lastname,
             ]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toArray($notifiable)
     {
         return [
-                //
-            ];
+            'order_id' => $this->order->id,
+            'order_cost' => $this->order->cost,
+        ];
     }
 }

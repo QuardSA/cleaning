@@ -99,37 +99,6 @@
                     </form>
                 </div>
             </div>
-            {{-- <div class="col-lg-6">
-                <div class="order_chart border-none shadow rounded p-3">
-                    <h3 class="text-center">Отчёты</h3>
-                    <div class="container border rounded d-flex flex-column overflow-auto" style="height:32vh">
-                        @forelse ($reports as $report)
-                            <div class="border rounded p-1 d-flex align-items-center mt-1">
-                                <div class="d-flex flex-grow-1 align-items-center">
-                                    <i class='bx bx-file bx-md'></i>
-                                    <span>{{ $report->file }}</span>
-                                </div>
-                                <a href="/downloadReport/{{ $report->file }}" class="text-success">
-                                    <i class='bx bxs-download bx-md'></i>
-                                </a>
-                            </div>
-                        @empty
-                        <span class="text-center">Отчётов нет</span>
-                        @endforelse
-                    </div>
-                    <form class="d-flex gap-2 mt-1" method="GET" id="">
-                        @csrf
-                        <select class="form-select" id="user" name="user">
-                            <option value="">Отправитель</option>
-                            @foreach($usersWithRole3 as $user)
-                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                        <input type="date" class="form-control" id="date" name="date">
-                        <button type="submit" class="btn btn-success">Применить</button>
-                    </form>
-                </div>
-            </div> --}}
         </div>
     </div>
 

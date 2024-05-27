@@ -2,25 +2,26 @@
 
 namespace App\Models;
 
-use App\Models\Feature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class service extends Model
 {
-    protected $fillable=[
+    protected $fillable = [
         'titleservice',
         'description',
         'photo',
         'cost',
     ];
 
-    public function features()
+    public function service()
     {
-        return $this->belongsToMany(Feature::class);
+        return $this->hasMany(Order::class, 'service', 'id');
     }
 
-    public function service(){
-        return $this->hasMany(Order::class, 'service','id');
+    public function additionalServices()
+    {
+        return $this->belongsToMany(Additionalservice::class, 'service_additional_service');
     }
+
 }
