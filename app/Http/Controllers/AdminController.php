@@ -20,7 +20,6 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        // Carbon::setLocale('ru');
 
         $newOrdersCount = Order::where('status', '1')->count();
         $usersWithRole3 = User::where('role', 3)->get();
@@ -118,13 +117,6 @@ class AdminController extends Controller
         return view('admin.service', compact('services', 'additionalServices'));
     }
 
-
-    public function addservice()
-    {
-        $additionalServices = AdditionalService::all();
-        return view('admin.addservice', compact('additionalServices'));
-    }
-
     public function addservice_validate(Request $request)
     {
         $request->validate(
@@ -167,11 +159,6 @@ class AdminController extends Controller
         return redirect('/admin/service')->with('success', 'Услуга успешно создана');
     }
 
-    public function service_redact($id)
-    {
-        $service = Service::findOrFail($id);
-        return view('admin.serviceredact', compact('service'));
-    }
 
     public function service_redact_validate(Request $request, $id)
     {
@@ -351,10 +338,7 @@ class AdminController extends Controller
         $additionalservices = Additionalservice::paginate(10);
         return view('admin.additional_service', compact('additionalservices'));
     }
-    public function add_additional_service()
-    {
-        return view('admin.add_additional_service');
-    }
+
 
     public function add_additional_service_validate(Request $request)
     {
@@ -401,11 +385,7 @@ class AdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Вы успешно удалили дополнительную услугу');
     }
-    public function additionalservice_redact($id)
-    {
-        $additionalservice = Additionalservice::findOrFail($id);
-        return view('admin.additional_service_redact', compact('additionalservice'));
-    }
+
 
     public function additionalservice_validate(Request $request, $id)
     {

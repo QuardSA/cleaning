@@ -45,7 +45,7 @@
                                 <div class="card-body">
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item"><strong>Заказ на число:</strong>
-                                            {{ $order->start_time }}
+                                            {{ \Carbon\Carbon::parse($order->start_time)->format('d.m.Y') }}
                                         </li>
                                         <li class="list-group-item"><strong>Услуга:</strong>
                                             {{ $order->order_service->titleservice }}</li>

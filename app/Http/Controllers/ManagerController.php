@@ -54,7 +54,9 @@ class ManagerController extends Controller
 
     public function orders(Request $request)
     {
+
         $additionalservices = Additionalservice::all();
+
         $orderstatuses = Orderstatus::all();
 
         $query = Order::orderBy('status', 'ASC');
@@ -84,6 +86,7 @@ class ManagerController extends Controller
         $orders = $query->paginate(10);
 
         return view('manager.orders', compact('orders', 'orderstatuses','additionalservices'));
+        
     }
 
 

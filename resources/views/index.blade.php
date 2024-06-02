@@ -171,7 +171,7 @@
                     <img src="https://cleaninghousemaids.com/wp-content/uploads/2016/01/homepage-img-3.png"
                         alt="">
                     <div class="content">
-                        <h3 class="text-center">Расслабтесь</h3>
+                        <h3 class="text-center">Расслабьтесь</h3>
                         <p class="text-center">Устройтесь поудобнее, расслабьтесь и наслаждайтесь, не шевеля пальцем,
                             чтобы навести порядок в доме.</p>
                     </div>
@@ -192,13 +192,13 @@
                     </div>
                     <div class="row p-3">
                         <div class="col-lg-12">
-                            <h6>Что входит</h6>
                             <ul class="list-group">
                                 @foreach ($service->additionalservices as $additionalService)
                                     <li class="list-group-item">{{ $additionalService->titleadditionalservices }}</li>
                                 @endforeach
                             </ul>
                         </div>
+                        <span class="text-end mt-2">{{ $service->cost}} руб/кв.м</span>
                     </div>
                 </div>
             </div>
