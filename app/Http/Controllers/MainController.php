@@ -120,12 +120,6 @@ class MainController extends Controller
         $additionalServices = AdditionalService::whereIn('id', $request->input('additionalservices', []))->get();
         $availableAdditionalServices = $service->additionalServices->pluck('id')->toArray();
 
-        // foreach ($additionalServices as $additionalService) {
-        //     if (!in_array($additionalService->id, $availableAdditionalServices)) {
-        //         return redirect()->back()->with('error', 'Выбранная дополнительная услуга недоступна для данной услуги.');
-        //     }
-        // }
-
         $square = $request->input('square');
         $date = $request->input('date');
         $phone = $request->input('phone');

@@ -81,7 +81,7 @@ class AdminController extends Controller
 
     public function filterData(Request $request)
     {
-        $orders = Order::where('status', 5)->query();
+        $orders = Order::where('status', 5);
 
         if ($request->has('month') && $request->has('year')) {
             $month = $request->month;
@@ -110,6 +110,7 @@ class AdminController extends Controller
             'data' => $data,
         ]);
     }
+
     public function service()
     {
         $additionalServices = AdditionalService::all();

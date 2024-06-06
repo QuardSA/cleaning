@@ -86,7 +86,7 @@ class ManagerController extends Controller
         $orders = $query->paginate(10);
 
         return view('manager.orders', compact('orders', 'orderstatuses','additionalservices'));
-        
+
     }
 
 
@@ -132,14 +132,8 @@ class ManagerController extends Controller
         $order = Order::findOrFail($id);
         $order->status = 5;
         $order->save();
-
-        // Получаем текущего авторизованного пользователя
         $user = Auth::user();
-
-        // Получаем пользователя, связанного с заказом
         $orderUser = $order->order_user;
-
-        // Логируем действие
         if ($user) {
             Log::info('Пользователь ' . $user->email . ' Заказ выполнен', [
                 'user_id' => $user->id,
@@ -149,18 +143,14 @@ class ManagerController extends Controller
             ]);
         }
 
-        // Отправляем email
         if ($orderUser) {
-            // Если заказ связан с пользователем
             Mail::to($orderUser->email)->send(new OrderDone($order));
         } else {
-            // Если заказ был создан гостем
             Mail::to($order->email)->send(new OrderDone($order));
         }
 
         return redirect()->back()->with('success', 'Заказ выполнен');
     }
-
 
     public function deny(Request $request, $id)
     {

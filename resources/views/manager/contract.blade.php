@@ -76,9 +76,9 @@
 <body>
     <div class="contract">
         <div class="header">
-            <div class="contract-number">ДОГОВОР №{{ $order->id }}</div>
+            <div class="contract-number">ДОГОВОР №____</div>
             <div class="contract-title">возмездного оказания услуг</div>
-            <div class="contract-date">г.Уфа<br>{{ \Carbon\Carbon::parse($order->updated_at)->format('d.m.Y') }}</div>
+            <div class="contract-date">г.Уфа<br>_________</div>
         </div>
         @php
             $mainServiceCost = $order->cost - $order->additionalServices->sum('cost');
@@ -89,18 +89,12 @@
         @endphp
         <p>Общество с ограниченной ответственностью "Чистый дом" в лице Директора Смирнова А.А, действующего на
             основании Устава, именуемый в дальнейшем "Исполнитель", с одной стороны, и
-            гражданин @if ($order->order_user)
-                {{ $order->order_user->name }} {{ $order->order_user->surname }} {{ $order->order_user->lastname }}
-            @else
-                {{ $order->name }} {{ $order->surname ?? '' }}
-                @endif, именуемый(ая) в дальнейшем "Заказчик", с другой стороны, являющиеся
+            гражданин ______, именуемый(ая) в дальнейшем "Заказчик", с другой стороны, являющиеся
                 сторонами договора, заключили настоящий трудовой договор о нижеследующем:</p>
 
         <h2>1. Предмет договора</h2>
         <p>1.1. Исполнитель обязуется по заданию Заказчика оказать следующие услуги:
-            {{ $order->order_service->titleservice }},@foreach ($order->additionalServices as $index => $additionalService)
-                {{ $additionalService->titleadditionalservices }}
-            @endforeach.</p>
+____
 
         <h2>2. Права и обязанности сторон</h2>
         <p>2.1. Исполнитель обязан оказать услуги в полном объёме с надлежащим качеством.</p>
@@ -115,7 +109,7 @@
 
         <h2>3. Стоимость услуг и расчеты сторон</h2>
         <p>3.1. Общая стоимость услуг Заказчика по настоящему договору составляет
-            {{ number_format($totalCost, 2, ',', ' ') }} руб., стоимость услуг.
+            ______ руб., стоимость услуг.
         </p>
         <p>3.2. Оплата производится единовременно в конце оказания услуг.</p>
         <p>3.3. При оплате с Заказчика производятся все установленные законодательством РФ начисления и удержания, в
@@ -154,8 +148,8 @@
             <br>
             <div class="executor">
                 <strong>Заказчик:</strong><br>
-                Адресс: {{ $order->address }}<br>
-                Телефон: {{ $order->phone }}<br>
+                Адресс: ______<br>
+                Телефон: _______<br>
                 <br>
                 <strong>_____________/_________</strong><br>
                 <strong>ФИО</strong>
